@@ -1,0 +1,213 @@
+import requests
+import pandas as pd
+import openai
+import hashlib
+import jwt
+import uuid
+import re
+from urllib.parse import urlencode
+
+openai.api_key = "your_openai_api_key"
+
+def get_gpt_prediction(prompt):
+    response = openai.Completion.create(
+        model="gpt-3.5-turbo",
+        prompt=prompt,
+        max_tokens=50,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+    message = response.choices[0].text.strip()
+    return message
+
+def process_data_and_request_prediction(data):
+    prompt = f"주식 데이터 분석: {data}. 이 정보를 바탕으로 오를 주식과 구매 및 판매 전략을 제공하세요."
+    prediction = get_gpt_prediction(prompt)
+    return prediction
+
+def get_upbit_headers(api_key, secret_key, query=None):
+    payload = {
+        "access_key": api_key,
+        "nonce": str(uuid.uuid4()),
+    }
+    if query:
+        query_string = urlencode(query).encode()
+        m = hashlib.sha512()
+        m.update(query_string)
+        query_hash = m.hexdigest()
+        payload["query_hash"] = query_hash
+        payload["query_hash_alg"] = "SHA512"
+
+    jwt_token = jwt.encode(payload, secret_key)
+    authorization_token = f"Bearer {jwt_token}"
+    headers = {"Authorization": authorization_token}
+    return headers
+
+def buy_stock(ticker, amount, api_key, secret_key):
+    url = "https://api.upbit.com/v1/orders"
+    query = {
+        "market": ticker,
+        "side": "bid",
+        "volume": amount,
+        "ord_type": "market",
+    }
+    headers = get_upbit_headers(api_key, secret_key, query)
+    response = requests.post(url, headers=headers, params=query)
+
+    if response.status_code == 201:
+        print(f"{ticker} 매수 성공: {amount}개")
+    else:
+        print(f"{ticker} 매수 실패: {response.json()}")
+
+def sell_stock(ticker, amount, api_key, secret_key):
+    url = "https://api.upbit.com/v1/orders"
+    query = {
+        "market": ticker,
+        "side": "ask",
+        "volume": amount,
+        "ord_type": "market",
+    }
+    headers = get_upbit_headers(api_key, secret_key, query)
+    response = requests.post(url, headers=headers, params=query)
+
+    if response.status_code == 201:
+        print(f"{ticker} 매도 성공: {amount}개")
+    else:
+        print(f"{ticker} 매도 실패: {response.json()}")
+
+
+def execute_trade_strategy(prediction, api_key, secret_key):
+    print(f"예측된 전략: {prediction}")
+
+# 예측된 전략에서 티커, 거래 유형, 거래량 추출
+trade_info = extract_trade_info(prediction)
+
+# 추출된 거래 정보를 바탕으로 거래 수행
+ticker = trade_info["ticker"]
+trade_type = trade_info["trade_type"]
+amount = trade_info["amount"]
+
+if trade_type == "매수":
+    # 총 자산 대비 투자 비율 설정 (예: 20%)
+    investment_percentage = 0.2
+
+    # 업비트 계좌 정보 가져오기
+    balance_url = "https://api.upbit.com/v1/accounts"
+    balance_headers = get_upbit_headers(api_key, secret_key)
+    balance_response = requests.get(balance_url, headers=balance_headers)
+    balance_data = balance_response.json()
+
+    # KRW 잔액 추출
+    krw_balance = 0
+    for account in balance_data:
+        if account["currency"] == "KRW":
+            krw_balance = float(account["balance"])
+            break
+
+    # 투자 가능한 KRW 금액 추출
+    available_krw = krw_balance * investment_percentage
+
+    # 투자할 금액과 티커 현재 가격을 바탕으로 매수량 계산
+    url = "https://api.upbit.com/v1/candles/minutes/10"
+    querystring = {"market": ticker, "count": "1"}
+    headers = {"Accept": "application/json"}
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    data = response.json()[0]
+    price = data["trade_price"]
+    buy_amount = int(available_krw / price)
+
+    # 매수 수행
+    buy_stock(ticker, buy_amount, api_key, secret_key)
+
+elif trade_type == "매도":
+    sell_stock(ticker, amount, api_key, secret_key)
+
+else:
+    print("예측된 전략에 거래 유형이 없습니다.")
+
+
+# 업비트 API 키 및 시크릿 키 설정
+upbit_api_key = "your_upbit_api_key"
+upbit_secret_key = "your_upbit_secret_key"
+
+# 가져올 종목 리스트
+ticker_list = ["KRW-BTC", "KRW-ETH", "KRW-XRP"]
+
+for ticker in ticker_list:
+
+# 업비트 API를 통해 데이터 읽어오기
+url = "https://api.upbit.com/v1/candles/minutes/10"
+querystring = {"market": ticker, "count": "1"}
+headers = {"Accept": "application/json"}
+response = requests.request("GET", url, headers=headers, params=querystring)
+data = response.json()[0]
+
+# 업비트 API를 통해 코인 재무 정보 읽어오기
+financials_url = f"https://api.upbit.com/v1/financials/last"
+financials_querystring = {"market": ticker}
+financials_response = requests.request("GET", financials_url, headers=headers, params=financials_querystring)
+financials_data = financials_response.json()
+
+# 업비트 API를 통해 코인 시황 정보 읽어오기
+ticker_info_url = f"https://api.upbit.com/v1/ticker?markets={ticker}"
+ticker_info_response = requests.request("GET", ticker_info_url, headers=headers)
+ticker_info_data = ticker_info_response.json()[0]
+
+# 데이터 처리 및 GPT API로부터 예측 얻기
+prompt = f"주식 데이터 분석: 종목명: {ticker}, 현재가격: {data['trade_price']} KRW, 24시간 거래량: {data['candle_acc_trade_volume']} BTC, 현재 시가총액: {ticker_info_data['market_cap']}, PER: {financials_data[0]['PER']}, PBR: {financials_data[0]['PBR']}. 이 정보를 바탕으로 오를 주식과 구매 및 판매 전략을 제공하세요."
+predicted_strategy = get_gpt_prediction(prompt)
+
+# 예측된 전략에서 티커, 거래 유형, 거래량 추출
+trade_info = extract_trade_info(predicted_strategy)
+
+# 추출된 거래 정보를 바탕으로 거래 수행
+trade_type = trade_info["trade_type"]
+amount = trade_info["amount"]
+
+if trade_type == "매수":
+    # 총 자산 대비 투자량 계산
+    asset_balance = get_asset_balance(upbit_api_key, upbit_secret_key)
+    total_asset = asset_balance + get_account_balance(upbit_api_key, upbit_secret_key)
+    percent = 0.1 # 10% 투자
+    invest_amount = int(total_asset * percent / data['trade_price'])
+    if invest_amount < int(amount):
+        amount = invest_amount
+    buy_stock(ticker, amount, upbit_api_key, upbit_secret_key)
+elif trade_type == "매도":
+    sell_stock(ticker, amount, upbit_api_key, upbit_secret_key)
+else:
+    print(f"{ticker}: 예측된 전략에 거래 유형이 없습니다.")
+
+# 업비트 API를 통해 최근 뉴스 및 기사 정보 가져오기
+news_url = "https://api.upbit.com/v1/upbit_news"
+news_querystring = {"count": "100", "page": "1", "codes": ticker}
+news_headers = {"Accept": "application/json"}
+news_response = requests.request(
+    "GET", news_url, headers=news_headers, params=news_querystring
+)
+news_data = news_response.json()
+
+# 최근 뉴스 및 기사 정보에서 포지티브한 시그널 개수 추출
+positive_signals = 0
+for article in news_data:
+    title = article["title"]
+    content = article["content"]
+    score = get_sentiment_score(title + " " + content)
+    if score > 0.2:
+        positive_signals += 1
+
+# 포지티브한 시그널 개수가 3개 이상이면 매수 점수 추가
+if positive_signals >= 3:
+    positive_score = (positive_signals - 10) / 10 + 1
+else:
+    positive_score = 1
+
+# 추출된 거래 정보를 바탕으로 거래 수행
+if trade_type == "매수":
+    amount = int(amount) * positive_score
+    buy_stock(ticker, amount, upbit_api_key, upbit_secret_key)
+elif trade_type == "매도":
+    sell_stock(ticker, amount, upbit_api_key, upbit_secret_key)
+else:
+    print(f"{ticker}: 예측된 전략에 거래 유형이 없습니다.")
