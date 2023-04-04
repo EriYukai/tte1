@@ -1,10 +1,6 @@
 function getRandomColor() {
     return `hsl(${Math.random() * 360}, 100%, 50%)`;
 }
-
-
-  
-  
   
   function showPosition(position) {
     const lat = position.coords.latitude;
@@ -28,8 +24,13 @@ function getRandomColor() {
     raindrop.style.animationDuration = (Math.random() * 1 + 1) + "s";
     raindrop.style.animationName = "raindropRise";
 
+    if (!raindrop) {
+        return null;
+    }
+
     return raindrop;
 }
+
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -392,3 +393,4 @@ function hideFunction(functionName) {
 }
 
 
+  
