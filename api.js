@@ -57,7 +57,7 @@ function getNearbyRestaurants(latitude, longitude) {
   const xhr = new XMLHttpRequest();
   xhr.open(
     "GET",
-    `https://cors-anywhere.herokuapp.com/${apiUrl}?query=음식점&display=30&sort=recent&start=1&radius=2000&coordinate=${longitude},${latitude}`
+    `https://openapi.naver.com/${apiUrl}?query=음식점&display=30&sort=recent&start=1&radius=2000&coordinate=${longitude},${latitude}`
   );  
   xhr.setRequestHeader("X-Naver-Client-Id", clientId);
   xhr.setRequestHeader("X-Naver-Client-Secret", clientSecret);
