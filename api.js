@@ -9,6 +9,9 @@ const geolocationOptions = {
   maximumAge: 0
 };
 
+// OpenAI API key 입력
+const apiKey = "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";
+
 // 페이지가 로드될 때, 이전에 위치 정보 제공에 동의한 적이 있다면 위치 정보 제공을 요구하지 않음
 if (localStorage.getItem("locationPermissionGranted") === "true") {
   // 위치 정보 제공에 동의한 경우의 처리
