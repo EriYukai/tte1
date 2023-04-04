@@ -1,15 +1,7 @@
 const clientId = "V_9Dy9NsieatgDWEMzdy"; // 클라이언트 아이디
 const clientSecret = "8vrTehmebq"; // 시크릿
-const apiUrl = "https://openapi.naver.com/v1/search/local.json"; // API 엔드포인트
-const locationApiUrl = "https://api.ipgeolocation.io/ipgeo?apiKey={apiKey}"; // 위치 API 엔드포인트
-const restaurantApiUrl = "https://openapi.naver.com/v1/search/local.json"; // 음식점 API 엔드포인트
-const trendApiUrl = "https://api.naver.com/v1/datalab/search"; // 트랜드 API 엔드포인트
+const apiUrl = "https://openapi.naver.com/v1/search/local.json"; // 음식점 API 엔드포인트
 const gptApiUrl = "https://api.openai.com/v1/engines/davinci-codex/completions"; // Chat GPT API 엔드포인트
-const apiKey = "your_api_key"; // 위치 API 키
-const clientIdHeader = "X-Naver-Client-Id";
-const clientSecretHeader = "X-Naver-Client-Secret";
-const apiKeyHeader = "x-naver-client-id";
-const apiSecretHeader = "x-naver-client-secret";
 
 const geolocationOptions = {
   enableHighAccuracy: true,
@@ -33,8 +25,23 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
 // 위치 정보 제공에 동의한 경우 처리
 function showPosition(position) {
   // 위치 정보를 사용하여 처리하는 로직
-  // ...
-
+  function showPosition(position) {
+    // 현재 위치 정보를 이용하여 지도에 마커를 표시하는 코드
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    const map = new naver.maps.Map('map', {
+      center: new naver.maps.LatLng(latitude, longitude),
+      zoom: 15
+    });
+    const marker = new naver.maps.Marker({
+      position: new naver.maps.LatLng(latitude, longitude),
+      map: map
+    });
+  
+    // 가까운 음식점을 찾아서 출력하는 코드
+    getNearbyRestaurants(latitude, longitude);
+  }
+  
   // 위치 정보 제공에 동의한 것으로 표시
   localStorage.setItem("locationPermissionGranted", "true");
   localStorage.setItem("latitude", position.coords.latitude);
@@ -81,8 +88,39 @@ function displayRestaurantInfo(restaurant) {
   console.log("음식점 전화번호:", restaurant.telephone);
   console.log("음식점 카테고리:", restaurant.category);
   console.log("음식점 위도:", restaurant.mapx);
-  console.log("음식점 경도:", restaurant.mapy);
+console.log("음식점 경도:", restaurant.mapy);
 }
 
+// 위치 정보 제공에 동의하지 않은 경우 처리
+function handleLocationPermissionDenied() {
+// 위치 정보를 사용할 수 없는 경우 처리
+// ...
 
+// 위치 정보 제공에 동의하지 않은 것으로 표시
+localStorage.setItem("locationPermissionGranted", "false");
+}
 
+// Chat GPT API 호출 예시
+function getGptResponse(restaurant) {
+  const prompt = `제가 추천하는 ${restaurant.title}은(는) ${restaurant.category} 전문점입니다. 여기에서는 ${restaurant.menuInfo} 등이 인기 메뉴입니다. 또한, ${restaurant.address}에 위치해 있으며, 전화번호는 ${restaurant.telephone}입니다. 이 음식점을 추천해드리는 이유는 ${restaurant.title}의 맛이 좋기 때문입니다. 이 음식점을 방문하시면 꼭 드셔보세요!`;
+  
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", gptApiUrl);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.setRequestHeader("Authorization", `Bearer ${apiKey}`);
+  xhr.onreadystatechange = function () {
+    if (this.readyState === 4 && this.status === 200) {
+      const response = JSON.parse(this.responseText);
+      console.log(response.choices[0].text);
+    }
+  };
+  const requestBody = {
+    prompt,
+    temperature: 0.7,
+    max_tokens: 60,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+  };
+  xhr.send(JSON.stringify(requestBody));
+}
