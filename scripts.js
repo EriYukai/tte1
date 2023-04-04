@@ -4,6 +4,8 @@ function getRandomColor() {
 
 
   
+  
+  
   function showPosition(position) {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
@@ -41,13 +43,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (recommendationButton) {
     setInterval(() => {
-      const raindrop = createRaindrop();
-      body.appendChild(raindrop);
-      setTimeout(() => {
-          raindrop.remove();
-      }, 1000);
-  }, 30);
-  
+        const raindrop = createRaindrop(recommendationButton);
+        body.appendChild(raindrop);
+        setTimeout(() => {
+            raindrop.remove();
+        }, 1000);
+    }, 30);
+  }
 
   // 뭐먹지 버튼에 반짝이는 테두리 추가
   const shimmerBorder = document.createElement("div");
@@ -397,3 +399,5 @@ function hideFunction(functionName) {
   window[functionName] = function() {};
 }
 
+
+ 
