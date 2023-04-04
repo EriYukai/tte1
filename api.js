@@ -1,7 +1,7 @@
 const clientId = "V_9Dy9NsieatgDWEMzdy"; // 클라이언트 아이디
 const clientSecret = "8vrTehmebq"; // 시크릿
 const apiUrl = "https://openapi.naver.com/v1/search/local.json"; // 음식점 API 엔드포인트
-const corsProxyUrl = "https://cors-anywhere.herokuapp.com/"; // cors-anywhere 프록시 서버
+const corsProxyUrl = "https://cors.bridged.cc/"; // cors-anywhere 프록시 서버
 const gptApiUrl = "https://api.openai.com/v1/engines/davinci-codex/completions"; // Chat GPT API 엔드포인트
 
 const geolocationOptions = {
