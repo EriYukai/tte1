@@ -12,7 +12,7 @@ function getRandomColor() {
   }
   
 
-function createRaindrop() {
+  function createRaindrop() {
     const recommendationButton = document.getElementById("recommendation-button");
     const buttonRect = recommendationButton.getBoundingClientRect();
 
@@ -30,6 +30,7 @@ function createRaindrop() {
 
     return raindrop;
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const body = document.querySelector("body");
@@ -389,11 +390,5 @@ function hideClass(className) {
 function hideFunction(functionName) {
   window[functionName] = function() {};
 }
-
-
-  
-
-
-
 
 
