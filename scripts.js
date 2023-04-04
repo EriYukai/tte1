@@ -1,6 +1,10 @@
 function getRandomColor() {
     return `hsl(${Math.random() * 360}, 100%, 50%)`;
 }
+
+
+  
+  
   
   function showPosition(position) {
     const lat = position.coords.latitude;
@@ -34,24 +38,27 @@ function getRandomColor() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    const body = document.querySelector("body");
-    const recommendationButton = document.getElementById("recommendation-button");
+  const body = document.querySelector("body");
+  const recommendationButton = document.getElementById("recommendation-button");
 
+  if (recommendationButton) {
     setInterval(() => {
-        const raindrop = createRaindrop();
+        const raindrop = createRaindrop(recommendationButton);
         body.appendChild(raindrop);
         setTimeout(() => {
             raindrop.remove();
         }, 1000);
     }, 30);
+  }
 
-    // 뭐먹지 버튼에 반짝이는 테두리 추가
-    const shimmerBorder = document.createElement("div");
-    shimmerBorder.classList.add("shimmer-border");
-    recommendationButton.appendChild(shimmerBorder);
-    shimmerBorder.style.width = "calc(100% + 20px)";
-    shimmerBorder.style.height = "calc(100% + 20px)";
+  // 뭐먹지 버튼에 반짝이는 테두리 추가
+  const shimmerBorder = document.createElement("div");
+  shimmerBorder.classList.add("shimmer-border");
+  recommendationButton.appendChild(shimmerBorder);
+  shimmerBorder.style.width = "calc(100% + 20px)";
+  shimmerBorder.style.height = "calc(100% + 20px)";
 });
+
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -393,4 +400,4 @@ function hideFunction(functionName) {
 }
 
 
-  
+ 
