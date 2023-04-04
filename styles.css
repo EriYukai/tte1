@@ -1,1 +1,523 @@
+/* 기본 스타일 */
+body {
+    margin: 0;
+    font-family: 'NanumGaRamYeonGgoc', Arial, sans-serif;
+    position: relative;
+    background-color: #222;
+    color: #fff;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+h1 {
+    margin: 0;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* 타이틀 */
+header h1 {
+    font-size: 1.2em;
+    color: rgb(0, 0, 0);
+    animation: blinker 2s linear infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  @keyframes blinker {
+    0% {
+      font-size: 1.2em;
+      color: rgb(252, 251, 251);
+      text-shadow: 0 0 10px rgba(253, 253, 253, 0.979), 0 0 20px rgba(191, 52, 204, 0.712);
+    }
+    50% {
+      font-size: 1.3em;
+      color: rgb(219, 102, 161);
+      text-shadow: 0 0 10px rgb(255, 142, 227), 0 0 30px rgba(255, 188, 246, 0.986);
+    }
+    100% {
+      font-size: 1.2em;
+      color: rgb(255, 250, 251);
+      text-shadow: 0 0 10px rgba(243, 239, 239, 0.89), 0 0 20px rgba(255, 192, 239, 0.911);
+    }
+  }
+  
+  
+  .blinking {
+    animation: blinker 2s linear infinite;
+  }
+  
+
+
+/* 컨텐츠 에리어 */
+.content-area {
+    position: fixed;
+    top: calc(20px + 2em);
+    left: calc(10px + 4em);
+    bottom: calc(120px + 3em);
+    right: calc(10px + 4em);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 2px solid white;
+    border-radius: 15px;
+    box-sizing: border-box;
+    padding: 0;
+    animation: blinker2 2s linear infinite, shimmer 2s infinite;
+  }
+  
+  .content-area img {
+    max-width: 200%;
+    max-height: 200%;
+    object-fit: contain;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  @keyframes blinker2 {
+    0% {
+      font-size: 1em;
+    }
+    50% {
+      font-size: 1.05em;
+    }
+    100% {
+      font-size: 1em;
+    }
+}
+
+
+
+#menu-button {
+    position: fixed;
+    font-size: 20px;
+    top: 10px;
+    left: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: #fff;
+
+    border: 2px solid white;
+    border-radius: 15px;
+    box-sizing: border-box;
+
+    background-image: linear-gradient(45deg, #ffa4d1, #e63cbb);
+    box-shadow: 0 0 10px rgb(255, 197, 226);
+    animation: shimmer 2s infinite, rotate 10s linear infinite;
+    transform-origin: center center;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 123, 255, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2), 0 0 30px rgba(118, 74, 188, 0.5);
+    }
+    100% {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 123, 255, 0.5);
+    }
+  }
+  
+  @keyframes rotate {
+    0% {
+      transform: rotate(0);
+    }
+    30% {
+        transform: rotate(15deg);
+    }
+    70% {
+        transform: rotate(-15deg);
+    }
+    100% {
+      transform: rotate(0);
+    }
+  }
+  
+
+
+
+.content-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+#recommendation-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #ff64cb;
+    color: #fff;
+    font-size: 24px;
+    border-radius: 5px;
+    width: 50%;
+    position: fixed;
+    bottom: 10%;
+    left: 25%;
+    display: block;
+    background-image: linear-gradient(45deg, #ff8fd0, #c70275);
+    overflow: hidden;
+    z-index: 10;
+    font-family: 'NanumGaRamYeonGgoc', Arial, sans-serif;
+    text-shadow: 0px 0px 10px rgb(54, 54, 54);
+    animation: fontGrow 2s infinite;
+}
+
+@keyframes fontGrow {
+    0% {
+        font-size: 24px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 123, 255, 0.5);
+    }
+    50% {
+        font-size: 36px;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.2), 0 0 30px rgba(118, 74, 188, 0.5);
+    }
+    100% {
+        font-size: 24px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 123, 255, 0.5);
+    }
+}
+
+
+/* 반짝이는 테두리 스타일 */
+.shimmer-border {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 2px solid transparent;
+    border-radius: 7px;
+    z-index: 2;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5));
+    background-size: 150% 150%;
+    background-clip: content-box, border-box;
+    padding: 10px;
+    animation: shimmerBorder 2s infinite;
+}
+
+/* 레이저 포인터 효과 스타일 */
+@keyframes shimmerBorder {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+
+.shimmer-dot {
+    position: fixed;
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%;
+    opacity: 1;
+    animation: shimmerTrail 1s infinite;
+    transform: translate(-50%, -50%);
+    z-index: -10;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8),
+                0 0 10px rgba(255, 255, 255, 0.6),
+                0 0 15px rgba(255, 255, 255, 0.4),
+                0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+@keyframes shimmerTrail {
+    0% {
+        opacity: 1;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.8),
+                    0 0 10px rgba(255, 255, 255, 0.6),
+                    0 0 15px rgba(255, 255, 255, 0.4),
+                    0 0 20px rgba(255, 255, 255, 0.2);
+    }
+    100% {
+        opacity: 0;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0),
+                    0 0 10px rgba(255, 255, 255, 0),
+                    0 0 15px rgba(255, 255, 255, 0),
+                    0 0 20px rgba(255, 255, 255, 0);
+    }
+}
+
+.fading-dot {
+    opacity: 1;
+    animation: fadeOut 0.5s forwards;
+  }
+  
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+
+
+
+/* 물방울 효과 스타일 */
+@keyframes raindropRise {
+    0% {
+        opacity: 0.3;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-1500%);
+    }
+}
+
+.raindrop {
+    position: absolute;
+    width: 3px;
+    height: 10px;
+    border-radius: 50%;
+    animation-name: raindropRise;
+    animation-timing-function: linear;
+    z-index: 3; /* 추가: z-index 값을 설정 */
+}
+
+
+
+
+
+
+/* 반응형 디자인 */
+@media (max-width: 767px) {
+    header {
+        flex-direction: column;
+    }
+
+    h1 {
+        margin-bottom: 10px;
+    }
+}
+
+/* 기존 스타일 및 반응형 디자인 코드 생략 */
+
+/* 메뉴 목록 스타일 */
+#menu-list {
+    position: fixed;
+    top: 70px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+}
+
+#menu-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#menu-list li {
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#menu-list li:last-child {
+    margin-bottom: 0;
+}
+
+/* 메뉴 목록 애니메이션 */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 메뉴 목록이 표시될 때 애니메이션 적용 */
+#menu-list:not(.hidden) {
+    animation: fadeIn 0.5s;
+}
+
+/* 메뉴 목록이 숨겨진 상태일 때 */
+.hidden {
+    display: none;
+}
+
+/* 메뉴 버튼 및 뭐먹지 버튼에 폰트 적용 */
+#menu-button,
+#recommendation-button {
+    font-family: 'NanumGaRamYeonGgoc', Arial, sans-serif;
+    z-index: 1;
+}
+
+
+
+/* 뭐먹지 버튼 클릭 */
+
+.recommendation-button-overlay.active {
+    animation: flash 2s forwards;
+}
+
+@keyframes flash {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 1);
+  opacity: 0;
+  z-index: 100;
+  pointer-events: none;
+  transition: opacity 2s;
+}
+
+.overlay.visible {
+  pointer-events: auto;
+}
+
+.fade-out {
+  animation: fadeOut 1s; /* 페이드 아웃 효과 시간 설정 */
+}
+
+.fade-in {
+  animation: fadeIn 1s; /* 페이드 인 효과 시간 설정 */
+}
+
+@keyframes fadeOut {
+0% {
+    opacity: 0;
+}
+100% {
+    opacity: 1;
+}
+}
+
+@keyframes fadeIn {
+0% {
+    opacity: 1;
+}
+100% {
+    opacity: 0;
+}
+}
+
+
+/* 버튼 컨테이너 스타일 */
+.button-container {
+  display: flex;
+  flex-direction: row; /* 가로 방향으로 정렬 */
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 새로운 버튼 스타일 */
+.new-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ff64cb;
+  color: #fff;
+  font-size: 24px;
+  border-radius: 5px;
+  width: 40%;
+  position: fixed;
+  bottom: 10%;
+  left: 20%;
+  display: block;
+  background-image: linear-gradient(45deg, #ffd050, #df9903);
+  overflow: hidden;
+  z-index: 10;
+  font-weight: bold;
+  font-family: 'NanumGaRamYeonGgoc', Arial, sans-serif;
+  text-shadow: 0px 0px 10px rgba(219, 168, 0, 0.822);
+  animation: fontGrow 2s infinite, buttonGlow 2s infinite;
+}
+
+
+@keyframes buttonGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(218, 255, 8, 0.6), 0 0 40px rgba(238, 255, 0, 0.4), 0 0 60px rgba(255, 188, 4, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgb(250, 255, 183), 0 0 40px rgba(245, 255, 153, 0.4), 0 0 60px rgba(255, 227, 134, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 238, 0, 0.6), 0 0 20px rgba(229, 255, 0, 0.4), 0 0 30px rgba(255, 208, 0, 0.2);
+  }
+}
+
+.new-button:hover {
+  background-color: #3e8e41;
+}
+
+/* 새로운 버튼2 스타일 */
+.new-button2 {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #3fa06b;
+  color: #fff;
+  font-size: 24px;
+  border-radius: 5px;
+  width: 15%;
+  position: fixed;
+  bottom: 10%;
+  right: 20%;
+  display: block;
+  font-weight: bold;
+  background-image: linear-gradient(45deg, #91d4b5, #30865e);
+  overflow: hidden;
+  z-index: 10;
+  font-family: 'NanumGaRamYeonGgoc', Arial, sans-serif;
+  text-shadow: 0px 0px 10px rgb(54, 54, 54);
+  animation: fontGrow 2s infinite, rotate2 6s infinite;
+}
+
+@keyframes rotate2 {
+  0% {
+    transform: rotate(0);
+  }
+  30% {
+      transform: rotate(10deg);
+  }
+  70% {
+      transform: rotate(-10deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+
+.new-button2:hover {
+  background-color: #3e8e41;
+}
 
