@@ -1,6 +1,7 @@
 const clientId = "V_9Dy9NsieatgDWEMzdy"; // 클라이언트 아이디
 const clientSecret = "8vrTehmebq"; // 시크릿
 const apiUrl = "https://openapi.naver.com/v1/search/local.json"; // 음식점 API 엔드포인트
+const corsProxyUrl = "https://cors-anywhere.herokuapp.com/"; // cors-anywhere 프록시 서버
 const gptApiUrl = "https://api.openai.com/v1/engines/davinci-codex/completions"; // Chat GPT API 엔드포인트
 
 const geolocationOptions = {
@@ -57,7 +58,7 @@ function getNearbyRestaurants(latitude, longitude) {
   const xhr = new XMLHttpRequest();
   xhr.open(
     "GET",
-    `https://openapi.naver.com/${apiUrl}?query=음식점&display=30&sort=recent&start=1&radius=2000&coordinate=${longitude},${latitude}`
+    `${corsProxyUrl}${apiUrl}?query=음식점&display=30&sort=recent&start=1&radius=2000&coordinate=${longitude},${latitude}`
   );  
   xhr.setRequestHeader("X-Naver-Client-Id", clientId);
   xhr.setRequestHeader("X-Naver-Client-Secret", clientSecret);
