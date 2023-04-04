@@ -1,288 +1,293 @@
 function getRandomColor() {
-    return `hsl(${Math.random() * 360}, 100%, 50%)`;
+  return `hsl(${Math.random() * 360}, 100%, 50%)`;
 }
 
 
-  
-  
-  
-  function showPosition(position) {
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
+
+
+
+function showPosition(position) {
+  const lat = position.coords.latitude;
+  const lon = position.coords.longitude;
+}
+
+
+function createRaindrop() {
+  const recommendationButton = document.getElementById("recommendation-button");
+  const buttonRect = recommendationButton.getBoundingClientRect();
+
+  const raindrop = document.createElement("div");
+  raindrop.classList.add("raindrop");
+  raindrop.style.backgroundColor = getRandomColor();
+
+  const xPosition = buttonRect.left + Math.random() * recommendationButton.offsetWidth;
+  const yPosition = buttonRect.top + Math.random() * recommendationButton.offsetHeight;
+  raindrop.style.left = xPosition + "px";
+  raindrop.style.top = yPosition + "px";
+
+  raindrop.style.animationDuration = (Math.random() * 1 + 1) + "s";
+  raindrop.style.animationName = "raindropRise";
+
+  if (!raindrop) {
+      return null;
   }
-  
 
-  function createRaindrop() {
-    const recommendationButton = document.getElementById("recommendation-button");
-    const buttonRect = recommendationButton.getBoundingClientRect();
-
-    const raindrop = document.createElement("div");
-    raindrop.classList.add("raindrop");
-    raindrop.style.backgroundColor = getRandomColor();
-
-    const xPosition = buttonRect.left + Math.random() * recommendationButton.offsetWidth;
-    const yPosition = buttonRect.top + Math.random() * recommendationButton.offsetHeight;
-    raindrop.style.left = xPosition + "px";
-    raindrop.style.top = yPosition + "px";
-
-    raindrop.style.animationDuration = (Math.random() * 1 + 1) + "s";
-    raindrop.style.animationName = "raindropRise";
-
-    if (!raindrop) {
-        return null;
-    }
-
-    return raindrop;
+  return raindrop;
 }
 
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  const body = document.querySelector("body");
-  const recommendationButton = document.getElementById("recommendation-button");
+const body = document.querySelector("body");
+const recommendationButton = document.getElementById("recommendation-button");
 
-  if (recommendationButton) {
-    setInterval(() => {
-        const raindrop = createRaindrop(recommendationButton);
-        body.appendChild(raindrop);
-        setTimeout(() => {
-            raindrop.remove();
-        }, 1000);
-    }, 30);
-  }
+if (recommendationButton) {
+  setInterval(() => {
+      const raindrop = createRaindrop(recommendationButton);
+      body.appendChild(raindrop);
+      setTimeout(() => {
+          raindrop.remove();
+      }, 1000);
+  }, 30);
+}
 
-  // 뭐먹지 버튼에 반짝이는 테두리 추가
-  const shimmerBorder = document.createElement("div");
-  shimmerBorder.classList.add("shimmer-border");
-  recommendationButton.appendChild(shimmerBorder);
-  shimmerBorder.style.width = "calc(100% + 20px)";
-  shimmerBorder.style.height = "calc(100% + 20px)";
+// 뭐먹지 버튼에 반짝이는 테두리 추가
+const shimmerBorder = document.createElement("div");
+shimmerBorder.classList.add("shimmer-border");
+recommendationButton.appendChild(shimmerBorder);
+shimmerBorder.style.width = "calc(100% + 20px)";
+shimmerBorder.style.height = "calc(100% + 20px)";
 });
 
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    if (localStorage.getItem("locationPermissionGranted") === "true") {
-        getNearbyRestaurants(localStorage.getItem("latitude"), localStorage.getItem("longitude"));
-      }
+  if (localStorage.getItem("locationPermissionGranted") === "true") {
+      getNearbyRestaurants(localStorage.getItem("latitude"), localStorage.getItem("longitude"));
+    }
 
-    const menuButton = document.getElementById('menu-button');
-    const menuList = document.getElementById('menu-list');
-  
-    let menuOpen = false;
-  
-    menuButton.addEventListener('click', function () {
-      if (!menuOpen) {
-        menuList.style.display = 'block';
-        menuOpen = true;
-      } else {
-        menuList.style.display = 'none';
-        menuOpen = false;
-      }
-    });
+  const menuButton = document.getElementById('menu-button');
+  const menuList = document.getElementById('menu-list');
+
+  let menuOpen = false;
+
+  menuButton.addEventListener('click', function () {
+    if (!menuOpen) {
+      menuList.style.display = 'block';
+      menuOpen = true;
+    } else {
+      menuList.style.display = 'none';
+      menuOpen = false;
+    }
+  });
 });
-  
+
 function createShimmerDot(angle, radius) {
-    const shimmerDot = document.createElement("div");
-    shimmerDot.classList.add("shimmer-dot");
+  const shimmerDot = document.createElement("div");
+  shimmerDot.classList.add("shimmer-dot");
 
-    setShimmerDotSize(shimmerDot);
-    
-    const recommendationButton = document.getElementById("recommendation-button");
-    const buttonRect = recommendationButton.getBoundingClientRect();
+  setShimmerDotSize(shimmerDot);
+  
+  const recommendationButton = document.getElementById("recommendation-button");
+  const buttonRect = recommendationButton.getBoundingClientRect();
 
-    const x = Math.cos(angle) * radius + buttonRect.left + radius - shimmerDot.offsetWidth / 2;
-    const y = Math.sin(angle) * radius + buttonRect.top + radius - shimmerDot.offsetHeight / 2;
+  const x = Math.cos(angle) * radius + buttonRect.left + radius - shimmerDot.offsetWidth / 2;
+  const y = Math.sin(angle) * radius + buttonRect.top + radius - shimmerDot.offsetHeight / 2;
 
-    shimmerDot.style.left = x + "px";
-    shimmerDot.style.top = y + "px";
+  shimmerDot.style.left = x + "px";
+  shimmerDot.style.top = y + "px";
 
 
-    return shimmerDot;
+  return shimmerDot;
 }
 
 function updateShimmerDot(shimmerDot, progress) {
-    const recommendationButton = document.getElementById("recommendation-button");
-    const buttonRect = recommendationButton.getBoundingClientRect();
+  const recommendationButton = document.getElementById("recommendation-button");
+  const buttonRect = recommendationButton.getBoundingClientRect();
 
-    let x, y;
+  let x, y;
 
-    const left = buttonRect.left;
-    const right = buttonRect.right;
-    const top = buttonRect.top;
-    const bottom = buttonRect.bottom;
+  const left = buttonRect.left;
+  const right = buttonRect.right;
+  const top = buttonRect.top;
+  const bottom = buttonRect.bottom;
 
-    const width = right - left;
-    const height = bottom - top;
+  const width = right - left;
+  const height = bottom - top;
 
-    const perimeter = 2 * (width + height);
-    const distance = progress * perimeter;
+  const perimeter = 2 * (width + height);
+  const distance = progress * perimeter;
 
-    if (distance <= width) {
-        x = left + distance;
-        y = top;
-    } else if (distance <= width + height) {
-        x = right;
-        y = top + (distance - width);
-    } else if (distance <= 2 * width + height) {
-        x = right - (distance - width - height);
-        y = bottom;
-    } else {
-        x = left;
-        y = top + (2 * width + 2 * height - distance);
-    }
+  if (distance <= width) {
+      x = left + distance;
+      y = top;
+  } else if (distance <= width + height) {
+      x = right;
+      y = top + (distance - width);
+  } else if (distance <= 2 * width + height) {
+      x = right - (distance - width - height);
+      y = bottom;
+  } else {
+      x = left;
+      y = top + (2 * width + 2 * height - distance);
+  }
 
-    shimmerDot.style.left = x + "px";
-    shimmerDot.style.top = y + "px";
+  shimmerDot.style.left = x + "px";
+  shimmerDot.style.top = y + "px";
 
-    addFadingDot(x, y);
+  addFadingDot(x, y);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    const body = document.querySelector("body");
-    const recommendationButton = document.getElementById("recommendation-button");
+  const body = document.querySelector("body");
+  const recommendationButton = document.getElementById("recommendation-button");
 
-    let shimmerDot;
-    let updateInterval;
+  let shimmerDot;
+  let updateInterval;
 
-    function startShimmerDotAnimation() {
-        if (shimmerDot) {
-            shimmerDot.remove();
-        }
+  function startShimmerDotAnimation() {
+      if (shimmerDot) {
+          shimmerDot.remove();
+      }
 
-        const buttonRect = recommendationButton.getBoundingClientRect();
-        shimmerDot = createShimmerDot(0, buttonRect);
-        body.appendChild(shimmerDot);
+      const buttonRect = recommendationButton.getBoundingClientRect();
+      shimmerDot = createShimmerDot(0, buttonRect);
+      body.appendChild(shimmerDot);
 
-        let progress = 0;
-        const duration = 1500; // 2초 동안 한바퀴 도는 시간
-        const interval = 5; // milliseconds
+      let progress = 0;
+      const duration = 1500; // 2초 동안 한바퀴 도는 시간
+      const interval = 5; // milliseconds
 
-        if (updateInterval) {
-            clearInterval(updateInterval);
-        }
+      if (updateInterval) {
+          clearInterval(updateInterval);
+      }
 
-        updateInterval = setInterval(() => {
-            const buttonRect = recommendationButton.getBoundingClientRect();
-            const width = buttonRect.width;
-            const height = buttonRect.height;
-            const perimeter = 2 * (width + height);
+      updateInterval = setInterval(() => {
+          const buttonRect = recommendationButton.getBoundingClientRect();
+          const width = buttonRect.width;
+          const height = buttonRect.height;
+          const perimeter = 2 * (width + height);
 
-            // 한 번의 간격동안 이동할 거리를 계산합니다.
-            const distancePerInterval = (interval / duration) * perimeter;
+          // 한 번의 간격동안 이동할 거리를 계산합니다.
+          const distancePerInterval = (interval / duration) * perimeter;
 
-            progress += distancePerInterval / perimeter;
-            if (progress >= 1) {
-                progress = 0;
-            }
-            updateShimmerDot(shimmerDot, progress);
-        }, interval);
-    }
+          progress += distancePerInterval / perimeter;
+          if (progress >= 1) {
+              progress = 0;
+          }
+          updateShimmerDot(shimmerDot, progress);
+      }, interval);
+  }
 
-    startShimmerDotAnimation();
+  startShimmerDotAnimation();
 
-    window.addEventListener('resize', () => {
-        stopShimmerDotAnimation();
-        setTimeout(() => {
-            startShimmerDotAnimation();
-            setShimmerDotSize(shimmerDot);
-        }, 100);
-    });
+  function stopShimmerDotAnimation() {
+    clearInterval(updateInterval);
+}
 
-    recommendationButton.addEventListener('transitionend', () => {
-        const buttonRect = recommendationButton.getBoundingClientRect();
-        updateShimmerDot(shimmerDot, progress, buttonRect);
-    });
+
+  window.addEventListener('resize', () => {
+      stopShimmerDotAnimation();
+      setTimeout(() => {
+          startShimmerDotAnimation();
+          setShimmerDotSize(shimmerDot);
+      }, 100);
+  });
+
+  recommendationButton.addEventListener('transitionend', () => {
+      const buttonRect = recommendationButton.getBoundingClientRect();
+      updateShimmerDot(shimmerDot, progress, buttonRect);
+  });
 });
 
 function setShimmerDotSize(shimmerDot) {
-    const recommendationButton = document.getElementById("recommendation-button");
-    const buttonRect = recommendationButton.getBoundingClientRect();
+  const recommendationButton = document.getElementById("recommendation-button");
+  const buttonRect = recommendationButton.getBoundingClientRect();
 
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
 
-    const minSize = 6; // 최소 크기
-    const maxSize = 25; // 최대 크기
+  const minSize = 6; // 최소 크기
+  const maxSize = 25; // 최대 크기
 
-    // 창의 크기를 기준으로 적절한 크기를 계산합니다.
-    const size = Math.max(minSize, Math.min(maxSize, Math.min(windowWidth, windowHeight) / 36));
+  // 창의 크기를 기준으로 적절한 크기를 계산합니다.
+  const size = Math.max(minSize, Math.min(maxSize, Math.min(windowWidth, windowHeight) / 36));
 
-    // 크기와 관련된 스타일 속성을 설정합니다.
-    shimmerDot.style.width = size + "px";
-    shimmerDot.style.height = size + "px";
-    shimmerDot.style.borderRadius = "0%";
-    shimmerDot.style.boxShadow = `
-      0 0 ${size / 2}px rgba(255, 255, 255, 0.8),
-      0 0 ${size}px rgba(255, 255, 255, 0.6),
-      0 0 ${size * 1.5}px rgba(255, 255, 255, 0.4),
-      0 0 ${size * 2}px rgba(255, 255, 255, 0.2)
-    `;
+  // 크기와 관련된 스타일 속성을 설정합니다.
+  shimmerDot.style.width = size + "px";
+  shimmerDot.style.height = size + "px";
+  shimmerDot.style.borderRadius = "0%";
+  shimmerDot.style.boxShadow = `
+    0 0 ${size / 2}px rgba(255, 255, 255, 0.8),
+    0 0 ${size}px rgba(255, 255, 255, 0.6),
+    0 0 ${size * 1.5}px rgba(255, 255, 255, 0.4),
+    0 0 ${size * 2}px rgba(255, 255, 255, 0.2)
+  `;
 }
 
 function createFadingDot(x, y) {
-    const fadingDot = document.createElement("div");
-    fadingDot.classList.add("shimmer-dot", "fading-dot");
-    
-    fadingDot.style.left = x + "px";
-    fadingDot.style.top = y + "px";
+  const fadingDot = document.createElement("div");
+  fadingDot.classList.add("shimmer-dot", "fading-dot");
+  
+  fadingDot.style.left = x + "px";
+  fadingDot.style.top = y + "px";
 
-    setShimmerDotSize(fadingDot); // 새로운 점의 크기와 스타일 설정
+  setShimmerDotSize(fadingDot); // 새로운 점의 크기와 스타일 설정
 
-    return fadingDot;
+  return fadingDot;
 }
 
 function addFadingDot(x, y) {
-    const body = document.querySelector("body");
-    const fadingDot = createFadingDot(x, y);
-    body.appendChild(fadingDot);
+  const body = document.querySelector("body");
+  const fadingDot = createFadingDot(x, y);
+  body.appendChild(fadingDot);
 
-    setTimeout(() => {
-        fadingDot.remove();
-    }, 35);
+  setTimeout(() => {
+      fadingDot.remove();
+  }, 35);
 }
 
-  // 버튼클릭 이벤트
+// 버튼클릭 이벤트
 const button = document.getElementById("recommendation-button");
 
 
 button.addEventListener("click", function() {
 
-    if (localStorage.getItem("locationPermissionGranted") === "true") {
-        const latitude = localStorage.getItem("latitude");
-        const longitude = localStorage.getItem("longitude");
-        getNearbyRestaurants(latitude, longitude);
-      } else {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          showPosition(position);
-          getNearbyRestaurants(position.coords.latitude, position.coords.longitude);
-        });
-      }
+  if (localStorage.getItem("locationPermissionGranted") === "true") {
+      const latitude = localStorage.getItem("latitude");
+      const longitude = localStorage.getItem("longitude");
+      getNearbyRestaurants(latitude, longitude);
+    } else {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        showPosition(position);
+        getNearbyRestaurants(position.coords.latitude, position.coords.longitude);
+      });
+    }
 
-      const audio = new Audio("ok.mp3");
-      audio.volume = 0.2; // 볼륨을 10%로 설정
-      audio.play();
+    const audio = new Audio("ok.mp3");
+    audio.volume = 0.2; // 볼륨을 10%로 설정
+    audio.play();
 
 
 
-  // 오버레이 페이드 인 효과 시작
-  let overlay = document.getElementById("overlay");
-  overlay.classList.add("fade-out");
+// 오버레이 페이드 인 효과 시작
+let overlay = document.getElementById("overlay");
+overlay.classList.add("fade-out");
+
+setTimeout(function() {
+  overlay.classList.add("fade-in");
+  overlay.classList.remove("fade-out");
 
   setTimeout(function() {
-    overlay.classList.add("fade-in");
-    overlay.classList.remove("fade-out");
+    overlay.classList.remove("fade-in");
+  }, 1000); // 2000ms (2초) 후에 페이드 인 효과가 끝납니다.
+}, 1000); // 2000ms (2초) 후에 페이드 인 효과를 시작합니다.
 
-    setTimeout(function() {
-      overlay.classList.remove("fade-in");
-    }, 1000); // 2000ms (2초) 후에 페이드 인 효과가 끝납니다.
-  }, 1000); // 2000ms (2초) 후에 페이드 인 효과를 시작합니다.
+// 현재 버튼 요소 가져오기
+const currentButton = document.getElementById("recommendation-button");
 
-  // 현재 버튼 요소 가져오기
-  const currentButton = document.getElementById("recommendation-button");
-
-  // 버튼 숨기기
-  currentButton.style.display = "none";
+// 버튼 숨기기
+currentButton.style.display = "none";
 
 // 새 버튼 생성
 const newButton = document.createElement("button");
@@ -299,9 +304,9 @@ newButton2.innerHTML = "&#x21bb;";
 
 // 버튼2 클릭 이벤트
 newButton2.addEventListener("click", function() {
-    location.reload();
-  });
-  
+  location.reload();
+});
+
 
 // 버튼 컨테이너 생성
 const buttonContainer = document.createElement("div");
@@ -315,89 +320,89 @@ const body = document.querySelector("body");
 body.appendChild(buttonContainer);
 
 
-  // 숨겨진 클래스와 함수 호출
-  hideClass("raindrop");
-  hideClass("shimmer-border");
-  hideClass("shimmer-dot");
-  hideClass("fading-dot");
-  hideFunction("createRaindrop");
-  hideFunction("createShimmerDot");
-  hideFunction("updateShimmerDot");
-  hideFunction("setShimmerDotSize");
-  hideFunction("createFadingDot");
-  hideFunction("addFadingDot");
+// 숨겨진 클래스와 함수 호출
+hideClass("raindrop");
+hideClass("shimmer-border");
+hideClass("shimmer-dot");
+hideClass("fading-dot");
+hideFunction("createRaindrop");
+hideFunction("createShimmerDot");
+hideFunction("updateShimmerDot");
+hideFunction("setShimmerDotSize");
+hideFunction("createFadingDot");
+hideFunction("addFadingDot");
 
 
 
-  // 위치 정보 확인 및 주변 음식점 이미지 표시 로직
-  function getLocation() {
-    if (localStorage.getItem("locationPermissionGranted") === "true") {
-      showPosition({coords: {latitude: localStorage.getItem("latitude"), longitude: localStorage.getItem("longitude")}});
-    } else {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    }
+// 위치 정보 확인 및 주변 음식점 이미지 표시 로직
+function getLocation() {
+  if (localStorage.getItem("locationPermissionGranted") === "true") {
+    showPosition({coords: {latitude: localStorage.getItem("latitude"), longitude: localStorage.getItem("longitude")}});
+  } else {
+    navigator.geolocation.getCurrentPosition(showPosition);
   }
-  
-  function showPosition(position) {
-    localStorage.setItem("locationPermissionGranted", "true");
-    localStorage.setItem("latitude", position.coords.latitude);
-    localStorage.setItem("longitude", position.coords.longitude);
-  
-    getNearbyRestaurants(position.coords.latitude, position.coords.longitude);
-  }
+}
 
-  function displayRestaurantInfo(restaurant) {
-    const restaurantName = restaurant.title;
-    const restaurantImageUrl = restaurant.image || 'images/ys.jpg'; // 기본 이미지를 설정합니다.
-  
-    // 이미지를 삽입할 div를 선택합니다.
-    const contentArea = document.querySelector(".content-area");
-    contentArea.innerHTML = ""; // 이전 이미지를 제거합니다.
-  
-    // 선택된 음식점의 대표 이미지를 불러와서 컨텐츠 페이지에 표시하는 코드
-    imageElement.src = restaurantImageUrl;
-    imageElement.alt = restaurantName;
-  
-    // 이미지를 content-area div에 추가합니다.
-    contentArea.appendChild(imageElement);
+function showPosition(position) {
+  localStorage.setItem("locationPermissionGranted", "true");
+  localStorage.setItem("latitude", position.coords.latitude);
+  localStorage.setItem("longitude", position.coords.longitude);
+
+  getNearbyRestaurants(position.coords.latitude, position.coords.longitude);
+}
+
+function displayRestaurantInfo(restaurant) {
+  const restaurantName = restaurant.title;
+  const restaurantImageUrl = restaurant.image || 'images/ys.jpg'; // 기본 이미지를 설정합니다.
+
+  // 이미지를 삽입할 div를 선택합니다.
+  const contentArea = document.querySelector(".content-area");
+  contentArea.innerHTML = ""; // 이전 이미지를 제거합니다.
+
+  // 선택된 음식점의 대표 이미지를 불러와서 컨텐츠 페이지에 표시하는 코드
+  imageElement.src = restaurantImageUrl;
+  imageElement.alt = restaurantName;
+
+  // 이미지를 content-area div에 추가합니다.
+  contentArea.appendChild(imageElement);
 
 
-    const restaurantAddress = restaurant.address;
-    const restaurantPhone = restaurant.telephone;
-    const defaultImageUrl = "./images/ys.jpg";
+  const restaurantAddress = restaurant.address;
+  const restaurantPhone = restaurant.telephone;
+  const defaultImageUrl = "./images/ys.jpg";
 
-  
-    // 음식점 이미지 출력
-    const imageElement = document.querySelector("#restaurant-image-tag");
-    imageElement.src = restaurantImageUrl;
-  
-    // 음식점 이름 출력
-    const nameElement = document.querySelector("#restaurant-name");
-    nameElement.textContent = restaurantName;
-  
-    // 음식점 주소 출력
-    const addressElement = document.querySelector("#restaurant-address");
-    addressElement.textContent = restaurantAddress;
-  
-    // 음식점 전화번호 출력
-    const phoneElement = document.querySelector("#restaurant-phone");
-    phoneElement.textContent = restaurantPhone;
 
-  }
-  
+  // 음식점 이미지 출력
+  const imageElement = document.querySelector("#restaurant-image-tag");
+  imageElement.src = restaurantImageUrl;
+
+  // 음식점 이름 출력
+  const nameElement = document.querySelector("#restaurant-name");
+  nameElement.textContent = restaurantName;
+
+  // 음식점 주소 출력
+  const addressElement = document.querySelector("#restaurant-address");
+  addressElement.textContent = restaurantAddress;
+
+  // 음식점 전화번호 출력
+  const phoneElement = document.querySelector("#restaurant-phone");
+  phoneElement.textContent = restaurantPhone;
+
+}
+
 
 });
 
 function hideClass(className) {
-  const elements = document.getElementsByClassName(className);
-  for (let i = 0; i < elements.length; i++) {
-    elements[i].style.display = "none";
-  }
+const elements = document.getElementsByClassName(className);
+for (let i = 0; i < elements.length; i++) {
+  elements[i].style.display = "none";
+}
 }
 
 function hideFunction(functionName) {
-  window[functionName] = function() {};
+window[functionName] = function() {};
 }
 
 
- 
+
