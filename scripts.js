@@ -2,6 +2,13 @@ function getRandomColor() {
   return `hsl(${Math.random() * 360}, 100%, 50%)`;
 }
 
+function init() {
+  if (localStorage.getItem("locationPermissionGranted") === "true") {
+    getNearbyRestaurants(localStorage.getItem("latitude"), localStorage.getItem("longitude"));
+  }
+  // ... 나머지 코드 ...
+}
+
 
 function getLocation() {
     if (navigator.geolocation) {
