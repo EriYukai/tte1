@@ -52,28 +52,36 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
   getNearbyRestaurants(position.coords.latitude, position.coords.longitude);
 
 
-function getNearbyRestaurants(latitude, longitude) {
-  const xhr = new XMLHttpRequest();
-  xhr.open(
-    "GET",
-    `https://cors.bridged.cc/${apiUrl}?query=음식점&display=30&sort=recent&start=1&radius=2000&coordinate=${longitude},${latitude}`
-  );  
-  xhr.setRequestHeader("X-Naver-Client-Id", clientId);
-  xhr.setRequestHeader("X-Naver-Client-Secret", clientSecret);
-  xhr.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-      const response = JSON.parse(this.responseText);
-      if (response.items.length > 0) {
-        const randomIndex = Math.floor(Math.random() * response.items.length);
-        const selectedRestaurant = response.items[randomIndex];
+async function getNearbyRestaurants(latitude, longitude) {
+  try {
+    const response = await fetch(
+      `${corsProxyUrl}${apiUrl}?query=음식점&display=30&sort=recent&start=1&radius=2000&coordinate=${longitude},${latitude}`,
+      {
+        method: 'GET',
+        headers: {
+          'X-Naver-Client-Id': clientId,
+          'X-Naver-Client-Secret': clientSecret
+        }
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.items.length > 0) {
+        const randomIndex = Math.floor(Math.random() * data.items.length);
+        const selectedRestaurant = data.items[randomIndex];
         displayRestaurantInfo(selectedRestaurant);
       } else {
-        console.error("No restaurants found.");
+        console.error('No restaurants found.');
       }
+    } else {
+      console.error('Failed to fetch data from API');
     }
-  };
-  xhr.send();
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }
+
 
 function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.title;
