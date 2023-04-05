@@ -1,8 +1,8 @@
 const url = `https://dapi.kakao.com/v2/local/search/keyword.json?y=${latitude}&x=${longitude}&radius=2000&query=음식점&page=1&size=30&sort=distance`;
 const headers = {
-  Authorization: `KakaoAK ${a5f5f6ab161a7b4e31d6bd02bd4547e6}`
+  Authorization: `KakaoAK ${14f09bd760730c467aa000cb14fbb7e0}`
 };
-const KAKAO_API_KEY = "a5f5f6ab161a7b4e31d6bd02bd4547e6";
+const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
 const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
 
 fetch(url, { headers })
