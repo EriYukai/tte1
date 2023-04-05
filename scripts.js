@@ -40,6 +40,7 @@ function createRaindrop() {
 document.addEventListener("DOMContentLoaded", function () {
 const body = document.querySelector("body");
 const recommendationButton = document.getElementById("recommendation-button");
+  getLocation();
 
 if (recommendationButton) {
   setInterval(() => {
