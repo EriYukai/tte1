@@ -3,13 +3,37 @@ function getRandomColor() {
 }
 
 
-
-
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
 
 function showPosition(position) {
-  const lat = position.coords.latitude;
-  const lon = position.coords.longitude;
+    // 위치 정보를 사용하여 다른 작업을 수행할 수 있습니다.
+    console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
 }
+
+function showError(error) {
+    // 위치 정보를 가져오지 못한 경우 오류 메시지를 표시합니다.
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+        case error.TIMEOUT:
+            alert("The request to get user location timed out.");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            break;
+    }
+}
+
 
 
 function createRaindrop() {
