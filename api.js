@@ -101,22 +101,20 @@ async function getNearbyRestaurants(latitude, longitude) {
 
 
 function displayRestaurantInfo(restaurant) {
-  const restaurantName = restaurant.title;
-  const defaultImageUrl = "./images/ys.jpg"; // 여기에 기본 이미지 URL을 설정하세요
-  const restaurantImageUrl = defaultImageUrl; // restaurant.image가 없으므로 기본 이미지 URL을 사용합니다.
+  const restaurantName = restaurant.place_name;
+  const restaurantImageUrl = restaurant.thumbnail_url || "./images/ys.jpg";
 
-  // 선택된 음식점의 대표 이미지를 불러와서 컨텐츠 페이지에 표시하는 코드
   const imageElement = document.querySelector("#restaurant-image-tag");
   imageElement.src = restaurantImageUrl;
 
-  // API에서 가져온 음식점 정보 출력
   console.log("음식점 이름:", restaurantName);
-  console.log("음식점 주소:", restaurant.address);
-  console.log("음식점 전화번호:", restaurant.telephone);
-  console.log("음식점 카테고리:", restaurant.category);
-  console.log("음식점 위도:", restaurant.mapx);
-console.log("음식점 경도:", restaurant.mapy);
+  console.log("음식점 주소:", restaurant.address_name);
+  console.log("음식점 전화번호:", restaurant.phone);
+  console.log("음식점 카테고리:", restaurant.category_name);
+  console.log("음식점 위도:", restaurant.y);
+  console.log("음식점 경도:", restaurant.x);
 }
+
 
 // 위치 정보 제공에 동의하지 않은 경우 처리
 function handleLocationPermissionDenied() {
