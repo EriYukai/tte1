@@ -45,25 +45,26 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
 }
 
 // 위치 정보 제공에 동의한 경우 처리
-  function showPosition(position) {
-    // 현재 위치 정보를 이용하여 지도에 마커를 표시하는 코드
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-const container = document.getElementById('map');
-const options = {
-  center: new kakao.maps.LatLng(latitude, longitude),
-  level: 3
-};
-const map = new kakao.maps.Map(container, options);
-const marker = new kakao.maps.Marker({
-  position: new kakao.maps.LatLng(latitude, longitude)
-});
-marker.setMap(map);
+function showPosition(position) {
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
 
-  
-    // 가까운 음식점을 찾아서 출력하는 코드
-    getNearbyRestaurants(latitude, longitude);
-  }
+  // 기존 코드를 삭제하고 새로운 코드를 추가하세요.
+  const container = document.getElementById('map');
+  const options = {
+    center: new kakao.maps.LatLng(latitude, longitude),
+    level: 3
+  };
+  const map = new kakao.maps.Map(container, options);
+  const marker = new kakao.maps.Marker({
+    position: new kakao.maps.LatLng(latitude, longitude)
+  });
+  marker.setMap(map);
+
+  // 가까운 음식점을 찾아서 출력하는 코드
+  getNearbyRestaurants(latitude, longitude);
+}
+
   
   // 위치 정보 제공에 동의한 것으로 표시
   localStorage.setItem("locationPermissionGranted", "true");
