@@ -49,14 +49,17 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
     // 현재 위치 정보를 이용하여 지도에 마커를 표시하는 코드
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-    const map = new naver.maps.Map('map', {
-      center: new naver.maps.LatLng(latitude, longitude),
-      zoom: 15
-    });
-    const marker = new naver.maps.Marker({
-      position: new naver.maps.LatLng(latitude, longitude),
-      map: map
-    });
+const container = document.getElementById('map');
+const options = {
+  center: new kakao.maps.LatLng(latitude, longitude),
+  level: 3
+};
+const map = new kakao.maps.Map(container, options);
+const marker = new kakao.maps.Marker({
+  position: new kakao.maps.LatLng(latitude, longitude)
+});
+marker.setMap(map);
+
   
     // 가까운 음식점을 찾아서 출력하는 코드
     getNearbyRestaurants(latitude, longitude);
