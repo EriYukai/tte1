@@ -27,8 +27,6 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
 }
 
 // 위치 정보 제공에 동의한 경우 처리
-function showPosition(position) {
-  // 위치 정보를 사용하여 처리하는 로직
   function showPosition(position) {
     // 현재 위치 정보를 이용하여 지도에 마커를 표시하는 코드
     const latitude = position.coords.latitude;
@@ -52,7 +50,7 @@ function showPosition(position) {
   localStorage.setItem("longitude", position.coords.longitude);
 
   getNearbyRestaurants(position.coords.latitude, position.coords.longitude);
-}
+
 
 function getNearbyRestaurants(latitude, longitude) {
   const xhr = new XMLHttpRequest();
