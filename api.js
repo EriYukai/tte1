@@ -1,7 +1,17 @@
-const clientId = "V_9Dy9NsieatgDWEMzdy"; // 클라이언트 아이디
-const clientSecret = "8vrTehmebq"; // 시크릿
-const apiUrl = "https://openapi.naver.com/v1/search/local.json"; // 음식점 API 엔드포인트
-const corsProxyUrl = "https://cors.bridged.cc/"; // cors-anywhere 프록시 서버
+const url = `https://dapi.kakao.com/v2/local/search/keyword.json?y=${latitude}&x=${longitude}&radius=2000&query=음식점&page=1&size=30&sort=distance`;
+const headers = {
+  Authorization: `KakaoAK ${YOUR_KAKAO_API_KEY}`
+};
+
+fetch(url, { headers })
+  .then(response => response.json())
+  .then(data => {
+    // 결과 처리
+  })
+  .catch(error => {
+    console.error("Error:", error);
+  });
+
 const gptApiUrl = "https://api.openai.com/v1/engines/davinci-codex/completions"; // Chat GPT API 엔드포인트
 
 const geolocationOptions = {
@@ -12,6 +22,12 @@ const geolocationOptions = {
 
 // OpenAI API key 입력
 const apiKey = "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";
+
+// 카카오 지도
+const map = new kakao.maps.Map(document.getElementById('map'), {
+  center: new kakao.maps.LatLng(latitude, longitude),
+  level: 3
+});
 
 // 페이지가 로드될 때, 이전에 위치 정보 제공에 동의한 적이 있다면 위치 정보 제공을 요구하지 않음
 if (localStorage.getItem("locationPermissionGranted") === "true") {
