@@ -74,34 +74,29 @@ function showPosition(position) {
   getNearbyRestaurants(position.coords.latitude, position.coords.longitude);
 
 
-async function getNearbyRestaurants(latitude, longitude) {
-  try {
-    const response = await fetch(
-      `${KAKAO_SEARCH_API_URL}?query=음식점&category_group_code=FD6&page=1&size=15&sort=distance&x=${longitude}&y=${latitude}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `KakaoAK ${KAKAO_API_KEY}`
-        }
-      }
-    );
+function getNearbyRestaurants(latitude, longitude) {
+    const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
+    const KAKAO_APP_KEY = "a5f5f6ab161a7b4e31d6bd02bd4547e6"; // REST API 키를 사용합니다.
+    const category_group_code = "FD6"; // 음식점 카테고리 코드
+    const radius = 5000; // 반경 2km 내 검색
 
-    if (response.ok) {
-      const data = await response.json();
-      if (data.documents.length > 0) {
-        const randomIndex = Math.floor(Math.random() * data.documents.length);
-        const selectedRestaurant = data.documents[randomIndex];
-        displayRestaurantInfo(selectedRestaurant);
-      } else {
-        console.error('No restaurants found.');
-      }
-    } else {
-      console.error('Failed to fetch data from API');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
+    const url = `${KAKAO_SEARCH_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
+
+    fetch(url, {
+        headers: {
+            Authorization: `KakaoAK ${KAKAO_APP_KEY}`,
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            // 검색 결과를 사용하여 다른 작업을 수행할 수 있습니다.
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+        });
 }
+
 
 
 function displayRestaurantInfo(restaurant) {
