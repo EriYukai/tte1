@@ -36,7 +36,9 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
     },
   });
 } else {
-  navigator.geolocation.getCurrentPosition(showPosition);
+  navigator.geolocation.getCurrentPosition(function(position) {
+    showPosition(position);
+  });  
 }
 
 // 위치 정보 제공에 동의한 경우 처리
@@ -56,7 +58,7 @@ function showPosition(position) {
   });
   marker.setMap(map);
 
-  // 가까운 음식점을 찾아서 출력하는 코드
+  // 가까운 음식점을 찾아서 출력하는 코드.
   getNearbyRestaurants(latitude, longitude);
 }
 
