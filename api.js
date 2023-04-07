@@ -13,6 +13,11 @@ fetch(url, { headers })
     console.error("Error:", error);
   });
 
+  function initMap() {
+    // initMap 함수의 내용을 여기에 작성하세요.
+  }
+  
+
 const gptApiUrl = "https://api.openai.com/v1/engines/davinci-codex/completions"; // Chat GPT API 엔드포인트
 
 const geolocationOptions = {
@@ -35,10 +40,18 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
     },
   });
 } else {
-  navigator.geolocation.getCurrentPosition(function(position) {
-    showPosition(position);
-  });  
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      showPosition(position);
+    },
+    (error) => {
+      console.log("Geolocation error:", error);
+    }
+  );
 }
+
 
 // 위치 정보 제공에 동의한 경우 처리
 function showPosition(position) {
