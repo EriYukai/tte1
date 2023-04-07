@@ -1,6 +1,6 @@
 const url = `https://dapi.kakao.com/v2/local/search/keyword.json?y=${latitude}&x=${longitude}&radius=2000&query=음식점&page=1&size=30&sort=distance`;
 const headers = {
-  Authorization: `KakaoAK ${14f09bd760730c467aa000cb14fbb7e0}`
+  Authorization: `KakaoAK 14f09bd760730c467aa000cb14fbb7e0`
 };
 const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
 const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
@@ -25,11 +25,6 @@ const geolocationOptions = {
 // OpenAI API key 입력
 const apiKey = "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";
 
-// 카카오 지도
-const map = new kakao.maps.Map(document.getElementById('map'), {
-  center: new kakao.maps.LatLng(latitude, longitude),
-  level: 3
-});
 
 // 페이지가 로드될 때, 이전에 위치 정보 제공에 동의한 적이 있다면 위치 정보 제공을 요구하지 않음
 if (localStorage.getItem("locationPermissionGranted") === "true") {
@@ -70,8 +65,6 @@ function showPosition(position) {
   localStorage.setItem("locationPermissionGranted", "true");
   localStorage.setItem("latitude", position.coords.latitude);
   localStorage.setItem("longitude", position.coords.longitude);
-
-  getNearbyRestaurants(position.coords.latitude, position.coords.longitude);
 
 
 function getNearbyRestaurants(latitude, longitude) {
