@@ -1,7 +1,8 @@
+const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
 const headers = {
   Authorization: `KakaoAK ${KAKAO_API_KEY}`,
 };
-const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
+
 const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
 
 const url = 'https://dapi.kakao.com/v2/local/search/keyword.json?query=맛집';
