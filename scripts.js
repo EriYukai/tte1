@@ -10,6 +10,18 @@ function init() {
 }
 
 
+function initMap() {
+  const container = document.getElementById('map');
+  const options = {
+    center: new kakao.maps.LatLng(37.566826, 126.9786567),
+    level: 3,
+  };
+
+  const map = new kakao.maps.Map(container, options);
+  getLocation(map);
+}
+
+
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -368,21 +380,28 @@ hideFunction("addFadingDot");
 
 
 // 위치 정보 확인 및 주변 음식점 이미지 표시 로직
-function getLocation() {
-  if (localStorage.getItem("locationPermissionGranted") === "true") {
-    showPosition({coords: {latitude: localStorage.getItem("latitude"), longitude: localStorage.getItem("longitude")}});
+function getLocation(map) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => showPosition(position, map),
+      (error) => console.error(error)
+    );
   } else {
-    navigator.geolocation.getCurrentPosition(showPosition);
+    console.error("Geolocation is not supported by this browser.");
   }
 }
 
-function showPosition(position) {
-  localStorage.setItem("locationPermissionGranted", "true");
-  localStorage.setItem("latitude", position.coords.latitude);
-  localStorage.setItem("longitude", position.coords.longitude);
 
-  getNearbyRestaurants(position.coords.latitude, position.coords.longitude);
+function showPosition(position, map) {
+  const lat = position.coords.latitude;
+  const lng = position.coords.longitude;
+
+  const latlng = new kakao.maps.LatLng(lat, lng);
+  const marker = new kakao.maps.Marker({ position: latlng });
+
+  marker.setMap(map);
 }
+
 
 function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.title;
