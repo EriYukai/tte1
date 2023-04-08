@@ -4,6 +4,8 @@ const headers = {
 const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
 const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
 
+const url = 'https://dapi.kakao.com/v2/local/search/keyword.json?query=맛집';
+
 fetch(url, { headers })
   .then(response => response.json())
   .then(data => {
@@ -13,9 +15,10 @@ fetch(url, { headers })
     console.error("Error:", error);
   });
 
-  function initMap() {
-    // initMap 함수의 내용을 여기에 작성하세요.
-  }
+function initMap() {
+  // initMap 함수의 내용을 여기에 작성하세요.
+}
+
   
 
 const gptApiUrl = "https://api.openai.com/v1/engines/davinci-codex/completions"; // Chat GPT API 엔드포인트
