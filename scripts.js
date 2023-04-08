@@ -87,9 +87,6 @@ function createRaindrop() {
   return raindrop;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  getLocation();
-});
 
 document.addEventListener("DOMContentLoaded", function () {
 const body = document.querySelector("body");
@@ -410,6 +407,11 @@ function showPosition(position, map) {
 
   marker.setMap(map);
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  getLocation();
+});
 
 
 function displayRestaurantInfo(restaurant) {
