@@ -1,5 +1,5 @@
 const headers = {
-  Authorization: `KakaoAK 14f09bd760730c467aa000cb14fbb7e0`
+  Authorization: `KakaoAK ${KAKAO_API_KEY}`,
 };
 const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
 const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
@@ -80,17 +80,17 @@ function showPosition(position) {
   
   // 위치 정보 제공에 동의한 것으로 표시
   localStorage.setItem("locationPermissionGranted", "true");
-  localStorage.setItem("latitude", position.coords.latitude);
-  localStorage.setItem("longitude", position.coords.longitude);
+  localStorage.setItem("latitude", latitude);
+  localStorage.setItem("longitude", longitude);
+
 
 
 function getNearbyRestaurants(latitude, longitude) {
+    const url = `${KAKAO_SEARCH_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
     const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
     const KAKAO_APP_KEY = "a5f5f6ab161a7b4e31d6bd02bd4547e6"; // REST API 키를 사용합니다.
     const category_group_code = "FD6"; // 음식점 카테고리 코드
     const radius = 5000; // 반경 2km 내 검색
-
-    const url = `${KAKAO_SEARCH_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
 
     fetch(url, {
         headers: {
@@ -158,3 +158,7 @@ function getGptResponse(restaurant) {
   };
   xhr.send(JSON.stringify(requestBody));
 }
+
+kakao.maps.load(() => {
+  initMap();
+});
