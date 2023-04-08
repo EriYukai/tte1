@@ -11,47 +11,56 @@ function init() {
 
 
 function initMap() {
-  const container = document.getElementById('map');
-  const options = {
-    center: new kakao.maps.LatLng(37.566826, 126.9786567),
-    level: 3,
-  };
-
-  const map = new kakao.maps.Map(container, options);
-  getLocation(map);
-}
-
-
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition, showError);
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
+  // 사용자의 위치를 얻기 위한 geolocation API 사용
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition, showError);
+  } else {
+    alert("Geolocation is not supported by this browser.");
+  }
 }
 
 function showPosition(position) {
-    // 위치 정보를 사용하여 다른 작업을 수행할 수 있습니다.
-    console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
+  var lat = position.coords.latitude;
+  var lng = position.coords.longitude;
+
+  // 지도를 초기화하고 사용자의 위치에 마커를 표시
+  var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+    mapOption = {
+      center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
+      level: 3 // 지도의 확대 레벨
+    };
+
+  // 지도를 생성
+  var map = new kakao.maps.Map(mapContainer, mapOption);
+
+  // 마커를 생성하고 지도에 표시
+  var markerPosition  = new kakao.maps.LatLng(lat, lng);
+  var marker = new kakao.maps.Marker({
+    position: markerPosition
+  });
+  marker.setMap(map);
+
+  // 지도 중심좌표를 사용자 위치로 이동
+  map.setCenter(new kakao.maps.LatLng(lat, lng));
 }
 
 function showError(error) {
-    // 위치 정보를 가져오지 못한 경우 오류 메시지를 표시합니다.
-    switch (error.code) {
-        case error.PERMISSION_DENIED:
-            alert("User denied the request for Geolocation.");
-            break;
-        case error.POSITION_UNAVAILABLE:
-            alert("Location information is unavailable.");
-            break;
-        case error.TIMEOUT:
-            alert("The request to get user location timed out.");
-            break;
-        case error.UNKNOWN_ERROR:
-            alert("An unknown error occurred.");
-            break;
-    }
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      alert("User denied the request for Geolocation.");
+      break;
+    case error.POSITION_UNAVAILABLE:
+      alert("Location information is unavailable.");
+      break;
+    case error.TIMEOUT:
+      alert("The request to get user location timed out.");
+      break;
+    case error.UNKNOWN_ERROR:
+      alert("An unknown error occurred.");
+      break;
+  }
 }
+
 
 
 
