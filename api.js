@@ -19,6 +19,7 @@ fetch(url, { headers })
   
 
 const gptApiUrl = "https://api.openai.com/v1/engines/davinci-codex/completions"; // Chat GPT API 엔드포인트
+const url = 'https://dapi.kakao.com/v2/local/search/keyword.json?query=맛집';
 
 const geolocationOptions = {
   enableHighAccuracy: true,
