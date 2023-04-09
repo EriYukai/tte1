@@ -1,5 +1,4 @@
 const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
-const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
 const url = "https://dapi.kakao.com/v2/local/search/keyword.json?query=맛집";
 
 const headers = {
@@ -15,11 +14,6 @@ fetch(url, { headers })
   .catch(error => {
     console.error("Error:", error);
   });
-
-function initMap() {
-  // initMap 함수의 내용을 여기에 작성하세요.
-}
-
   
 
 const gptApiUrl = "https://api.openai.com/v1/engines/davinci-codex/completions"; // Chat GPT API 엔드포인트
@@ -76,14 +70,11 @@ function showPosition(position) {
 
   // 가까운 음식점을 찾아서 출력하는 코드.
   getNearbyRestaurants(latitude, longitude);
-}
 
-  
-  // 위치 정보 제공에 동의한 것으로 표시
   localStorage.setItem("locationPermissionGranted", "true");
-  localStorage.setItem("latitude", latitude);
-  localStorage.setItem("longitude", longitude);
-
+  localStorage.setItem("latitude", position.coords.latitude);
+  localStorage.setItem("longitude", position.coords.longitude);
+}
 
 
 function getNearbyRestaurants(latitude, longitude) {
