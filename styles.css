@@ -293,6 +293,22 @@ header h1 {
 
 
 
+#gpt-response-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  max-width: 300px;
+  background-color: #ffffff;
+  border: 1px solid #888;
+  border-radius: 5px;
+  padding: 10px;
+  display: none; /* 기본적으로 숨김 */
+}
+
+.gpt-response-text {
+  word-wrap: break-word;
+  font-size: 14px;
+}
 
 
 
