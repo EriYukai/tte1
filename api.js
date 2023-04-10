@@ -84,15 +84,23 @@ function getNearbyRestaurants(latitude, longitude) {
   const radius = 5000; // 반경 2km 내 검색
   const url = `${KAKAO_SEARCH_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
 
-  fetch(url, { headers: { 'Authorization': `KakaoAK ${KAKAO_API_KEY}` } })
-  .then((response) => response.json())
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
+  const headers = {
+    Authorization: `KakaoAK ${KAKAO_API_KEY}`,
+    "Content-Type": "application/json;charset=UTF-8",
+    "Accept": "application/json",
+    "KA": "sdk/1.38.0 os/javascript lang/en-US device/Win32 origin/https%3A%2F%2Feriyukai.github.io"
+  };
+  
+  fetch(url, { headers })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 }
+
 
 
 
