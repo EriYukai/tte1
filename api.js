@@ -15,7 +15,7 @@ function searchRestaurants(query) {
     .then((data) => {
       console.log(data);
     })
-    
+
     .catch((error) => {
       console.error("Error:", error);
     });
@@ -50,14 +50,11 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
   );
 }
 
-
-
 // 위치 정보 제공에 동의한 경우 처리
 function showPosition(position) {
   const latitude = position.coords.latitude;
   const longitude = position.coords.longitude;
 
-  // 기존 코드를 삭제하고 새로운 코드를 추가하세요.
   const container = document.getElementById('map');
   const options = {
     center: new kakao.maps.LatLng(latitude, longitude),
@@ -77,28 +74,20 @@ function showPosition(position) {
   localStorage.setItem("longitude", position.coords.longitude);
 }
 
-
 function getNearbyRestaurants(latitude, longitude) {
   const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
   const category_group_code = "FD6"; // 음식점 카테고리 코드
   const radius = 5000; // 반경 2km 내 검색
   const url = `${KAKAO_SEARCH_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
 
-    fetch(url, {
-        headers: {
-            Authorization: `KakaoAK ${KAKAO_API_KEY}`, // 수정된 부분
-        },
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            // 검색 결과를 사용하여 다른 작업을 수행할 수 있습니다.
-            console.log(data);
-        })
-        .catch((error) => {
-            console.error("Error fetching data:", error);
-        });
-}
-
+  fetch(url, { headers: { 'Authorization': `KakaoAK ${KAKAO_API_KEY}` } })
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
 
 
 
@@ -181,4 +170,5 @@ function showError(error) {
       console.log("An unknown error occurred.");
       break;
   }
+}
 }
