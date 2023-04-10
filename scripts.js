@@ -10,14 +10,6 @@ function init() {
 }
 
 
-function initMap() {
-  // 사용자의 위치를 얻기 위한 geolocation API 사용
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition, showError);
-  } else {
-    alert("Geolocation is not supported by this browser.");
-  }
-}
 
 function showPosition(position) {
   var lat = position.coords.latitude;

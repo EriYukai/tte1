@@ -1,40 +1,39 @@
 const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
-const url = "https://dapi.kakao.com/v2/local/search/keyword.json?query=맛집";
+const KAKAO_APP_KEY = "a5f5f6ab161a7b4e31d6bd02bd4547e6";
 
-const headers = {
-  Authorization: `KakaoAK ${KAKAO_API_KEY}`,
-};
+searchRestaurants("맛집");
 
+function searchRestaurants(query) {
+  const url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${query}`;
 
-fetch(url, { headers })
-  .then(response => response.json())
-  .then(data => {
-    // 결과 처리
-  })
-  .catch(error => {
-    console.error("Error:", error);
-  });
-  
+  const headers = {
+    Authorization: `KakaoAK ${KAKAO_API_KEY}`,
+  };
 
-const gptApiUrl = "https://api.openai.com/v1/engines/davinci-codex/completions"; // Chat GPT API 엔드포인트
+  fetch(url, { headers })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
 
 const geolocationOptions = {
   enableHighAccuracy: true,
   timeout: 5000,
-  maximumAge: 0
+  maximumAge: 0,
 };
-
-// OpenAI API key 입력
-const apiKey = "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";
-
 
 // 페이지가 로드될 때, 이전에 위치 정보 제공에 동의한 적이 있다면 위치 정보 제공을 요구하지 않음
 if (localStorage.getItem("locationPermissionGranted") === "true") {
   // 위치 정보 제공에 동의한 경우의 처리
   showPosition({
     coords: {
-      latitude: localStorage.getItem("latitude"),
-      longitude: localStorage.getItem("longitude"),
+      latitude: parseFloat(localStorage.getItem("latitude")),
+      longitude: parseFloat(localStorage.getItem("longitude")),
     },
   });
 } else {
@@ -46,9 +45,11 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
     },
     (error) => {
       console.log("Geolocation error:", error);
-    }
+    },
+    geolocationOptions
   );
 }
+
 
 
 // 위치 정보 제공에 동의한 경우 처리
@@ -78,15 +79,14 @@ function showPosition(position) {
 
 
 function getNearbyRestaurants(latitude, longitude) {
-    const url = `${KAKAO_SEARCH_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
-    const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
-    const KAKAO_APP_KEY = "a5f5f6ab161a7b4e31d6bd02bd4547e6"; // REST API 키를 사용합니다.
-    const category_group_code = "FD6"; // 음식점 카테고리 코드
-    const radius = 5000; // 반경 2km 내 검색
+  const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
+  const category_group_code = "FD6"; // 음식점 카테고리 코드
+  const radius = 5000; // 반경 2km 내 검색
+  const url = `${KAKAO_SEARCH_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
 
     fetch(url, {
         headers: {
-            Authorization: `KakaoAK ${KAKAO_APP_KEY}`,
+            Authorization: `KakaoAK ${KAKAO_API_KEY}`, // 수정된 부분
         },
     })
         .then((response) => response.json())
@@ -98,6 +98,7 @@ function getNearbyRestaurants(latitude, longitude) {
             console.error("Error fetching data:", error);
         });
 }
+
 
 
 
@@ -154,3 +155,30 @@ function getGptResponse(restaurant) {
 kakao.maps.load(() => {
   initMap();
 });
+
+
+function initMap() {
+  // 사용자의 위치를 얻기 위한 geolocation API 사용
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition, showError);
+  } else {
+    alert("Geolocation is not supported by this browser.");
+  }
+}
+
+function showError(error) {
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      console.log("User denied the request for Geolocation.");
+      break;
+    case error.POSITION_UNAVAILABLE:
+      console.log("Location information is unavailable.");
+      break;
+    case error.TIMEOUT:
+      console.log("The request to get user location timed out.");
+      break;
+    case error.UNKNOWN_ERROR:
+      console.log("An unknown error occurred.");
+      break;
+  }
+}
