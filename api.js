@@ -8,8 +8,8 @@ function searchRestaurants(query) {
 
   const headers = {
     Authorization: `KakaoAK ${KAKAO_API_KEY}`,
-    "Content-Type": "application/json",
-    "User-Agent": "오늘뭐먹지?/1.0",
+    "Content-Type": "application/json;charset=UTF-8",
+    "Accept": "application/json",
   };
 
   fetch(url, { headers })
@@ -21,6 +21,7 @@ function searchRestaurants(query) {
       console.error("Error:", error);
     });
 }
+
   
 const geolocationOptions = {
   enableHighAccuracy: true,
