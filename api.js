@@ -10,7 +10,9 @@ function searchRestaurants(query) {
     Authorization: `KakaoAK ${KAKAO_API_KEY}`,
     "Content-Type": "application/json;charset=UTF-8",
     "Accept": "application/json",
+    "KA": "sdk/1.38.0 os/javascript lang/en-US device/Win32 origin/https%3A%2F%2Feriyukai.github.io"
   };
+  
 
   fetch(url, { headers })
     .then((response) => response.json())
