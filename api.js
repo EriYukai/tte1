@@ -98,27 +98,33 @@ async function getNearbyRestaurants(latitude, longitude) {
   };
   
   fetch(url, { headers })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
 
-      // 점수가 가장 높은 음식점 선택
-      const restaurants = data.documents;
-      const scores = restaurants.map(getScoreForRestaurant);
-      const maxScoreIndex = scores.reduce((maxIndex, score, index, scores) => {
-        return score > scores[maxIndex] ? index : maxIndex;
-      }, 0);
-      const recommendedRestaurant = restaurants[maxScoreIndex];
+    if (!data.documents || data.documents.length === 0) {
+      console.error("Error: No nearby restaurants found.");
+      return;
+    }
 
-      // 음식점 정보 출력
-      displayRestaurantInfo(recommendedRestaurant);
+    // 점수가 가장 높은 음식점 선택
+    const restaurants = data.documents;
+    const scores = restaurants.map(getScoreForRestaurant);
+    const maxScoreIndex = scores.reduce((maxIndex, score, index, scores) => {
+      return score > scores[maxIndex] ? index : maxIndex;
+    }, 0);
+    const recommendedRestaurant = restaurants[maxScoreIndex];
 
-      // Chat GPT API 호출
-      getGptResponse(recommendedRestaurant);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+    // 음식점 정보 출력
+    displayRestaurantInfo(recommendedRestaurant);
+
+    // Chat GPT API 호출
+    getGptResponse(recommendedRestaurant);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+
 }
 
 function getScoreForRestaurant(restaurant) {
