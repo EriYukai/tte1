@@ -86,17 +86,15 @@ const recommendationButton = document.getElementById("recommendation-button");
 
 if (recommendationButton) {
   setInterval(() => {
-    const raindrop = createRaindrop(recommendationButton);
+    const raindrop = createRaindrop();
     recommendationButton.appendChild(raindrop);
-    const newNode = document.createElement('div');
-    newNode.innerHTML = someVariable; // 이 부분은 someVariable의 내용에 따라 변경해야 할 수도 있습니다.
-    parent.appendChild(newNode);
 
     setTimeout(() => {
       raindrop.remove();
     }, 1000);
   }, 30);
 }
+
 
 
 // 뭐먹지 버튼에 반짝이는 테두리 추가
