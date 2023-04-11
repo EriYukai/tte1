@@ -258,7 +258,7 @@ function showError(error) {
 }
 
 
-async function displayRestaurantInfo(restaurant) {
+function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.place_name;
 
   // 음식점 카테고리가 "음식점"일 때는 대표 이미지 가져오기
@@ -312,5 +312,6 @@ async function displayRestaurantInfo(restaurant) {
   console.log("최종 점수:", score);
   console.log("추천 이유:", reason);
 }
+
 
 
