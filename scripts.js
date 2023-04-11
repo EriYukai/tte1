@@ -88,14 +88,17 @@ if (recommendationButton) {
   setInterval(() => {
     const raindrop = createRaindrop(recommendationButton);
     recommendationButton.appendChild(raindrop);
+    
+    const someVariable = getRandomPhrase();
     const newNode = document.createElement('div');
-    newNode.innerHTML = someVariable; // 이 부분은 someVariable의 내용에 따라 변경해야 할 수도 있습니다.
+    newNode.innerHTML = someVariable;
     parent.appendChild(newNode);
-
+  
     setTimeout(() => {
       raindrop.remove();
     }, 1000);
   }, 30);
+  
 }
 
 
