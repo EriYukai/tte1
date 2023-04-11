@@ -57,8 +57,11 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
   );
 }
 
-// 위치 정보 제공에 동의한 경우 처리
 function showPosition(position) {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const date = today.getDate();
+
   const latitude = position.coords.latitude;
   const longitude = position.coords.longitude;
 
@@ -80,6 +83,7 @@ function showPosition(position) {
   localStorage.setItem("latitude", position.coords.latitude);
   localStorage.setItem("longitude", position.coords.longitude);
 }
+
 
 
 
