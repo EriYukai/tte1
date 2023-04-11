@@ -1,6 +1,3 @@
-const parent = document.querySelector("#parent-element"); // parent-element는 실제로 존재하는 DOM 요소의 ID여야 합니다.
-
-
 function getRandomColor() {
   return `hsl(${Math.random() * 360}, 100%, 50%)`;
 }
@@ -84,23 +81,23 @@ function createRaindrop() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  const body = document.querySelector("body");
-  const recommendationButton = document.getElementById("recommendation-button");
+const body = document.querySelector("body");
+const recommendationButton = document.getElementById("recommendation-button");
 
-  if (recommendationButton) {
-    setInterval(() => {
-      const raindrop = createRaindrop();
-      recommendationButton.appendChild(raindrop);
+if (recommendationButton) {
+  setInterval(() => {
+    const raindrop = createRaindrop(recommendationButton);
+    recommendationButton.appendChild(raindrop);
+    const newNode = document.createElement('div');
+    newNode.innerHTML = someVariable; // 이 부분은 someVariable의 내용에 따라 변경해야 할 수도 있습니다.
+    parent.appendChild(newNode);
 
-      const newNode = document.createElement('div');
-      newNode.innerHTML = "내용을 여기에 입력하세요.";
-      body.appendChild(newNode);
+    setTimeout(() => {
+      raindrop.remove();
+    }, 1000);
+  }, 30);
+}
 
-      setTimeout(() => {
-        raindrop.remove();
-      }, 1000);
-    }, 30);
-  }
 
 // 뭐먹지 버튼에 반짝이는 테두리 추가
 const shimmerBorder = document.createElement("div");
