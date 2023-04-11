@@ -101,6 +101,25 @@ function getNearbyRestaurants(latitude, longitude) {
     });
 }
 
+async function getRestaurantImage(placeUrl) {
+  const KAKAO_PLACE_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
+  const query = "음식점";
+
+  const headers = {
+    Authorization: `KakaoAK ${KAKAO_API_KEY}`,
+    "Content-Type": "application/json;charset=UTF-8",
+    "Accept": "application/json",
+    "KA": "sdk/1.38.0 os/javascript lang/en-US device/Win32 origin/https%3A%2F%2Feriyukai.github.io"
+  };
+
+  const url = `${KAKAO_PLACE_API_URL}?query=${query}&page=1&size=1&sort=accuracy&query=${encodeURIComponent(placeUrl)}`;
+  
+  const response = await fetch(url, { headers });
+  const data = await response.json();
+
+  const imageUrl = data.documents[0].place_photo[0].thumbnail_url;
+  return imageUrl;
+}
 
 
 
