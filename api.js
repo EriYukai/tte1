@@ -147,7 +147,6 @@ async function getRestaurantImage(placeUrl) {
   return imageUrl;
 }
 
-const restaurantImageUrl = restaurant.place_url ? await getRestaurantImage(restaurant.place_url) : "./images/ys.jpg";
 
 
 
@@ -245,3 +244,26 @@ function showError(error) {
       break;
   }
 }
+
+async function displayRestaurantInfo(restaurant) {
+  const restaurantName = restaurant.place_name;
+
+  // 음식점 카테고리가 "음식점"일 때는 대표 이미지 가져오기
+  // 음식점 카테고리가 "카페"일 때는 기본 이미지 경로 할당
+  const restaurantImageUrl = restaurant.category_group_code === "FD6" 
+    ? restaurant.thumbnail_url || "./images/ys.jpg"
+    : "./images/cafe.jpg";
+
+  const imageElement = document.querySelector("#restaurant-image-tag");
+  imageElement.src = restaurantImageUrl;
+
+  console.log("음식점 이름:", restaurantName);
+  console.log("음식점 주소:", restaurant.address_name);
+  console.log("음식점 전화번호:", restaurant.phone);
+  console.log("음식점 카테고리:", restaurant.category_name);
+  console.log("음식점 위도:", restaurant.y);
+  console.log("음식점 경도:", restaurant.x);
+
+  const imageUrl = restaurant.place_url ? await getRestaurantImage(restaurant.place_url) : "./images/ys.jpg";
+}
+
