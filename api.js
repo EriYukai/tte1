@@ -132,11 +132,15 @@ async function getNearbyRestaurants(latitude, longitude) {
 }
 
 function getScoreForRestaurant(restaurant) {
+  if (!restaurant) {
+    console.log("음식점 정보가 없습니다.");
+    return 0;
+  }
   // 기념일 점수
   const today = new Date();
   const month = today.getMonth() + 1;
   const date = today.getDate();
-  const isAnniversary = restaurant.title.includes(`${month}월 ${date}일`);
+  const isAnniversary = restaurant.place_name.includes(`${month}월 ${date}일`);
   const anniversaryScore = isAnniversary ? 1 : 0;
 
   // 시간 점수
@@ -159,28 +163,28 @@ function getScoreForRestaurant(restaurant) {
   console.log("최종 점수:", score);
   
   return score;
-  }
+}
 
-
-async function getRestaurantImage(placeUrl) {
+async function getRestaurantImage(placeName) {
   const KAKAO_PLACE_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
-  const query = "음식점";
+  const query = encodeURIComponent(placeName);
 
   const headers = {
     Authorization: `KakaoAK ${KAKAO_API_KEY}`,
     "Content-Type": "application/json;charset=UTF-8",
-    "Accept": "application/json",
-    "KA": "sdk/1.38.0 os/javascript lang/en-US device/Win32 origin/https%3A%2F%2Feriyukai.github.io"
+    Accept: "application/json",
+    KA: "sdk/1.38.0 os/javascript lang/en-US device/Win32 origin/https%3A%2F%2Feriyukai.github.io",
   };
 
-  const url = `${KAKAO_PLACE_API_URL}?query=${query}&page=1&size=1&sort=accuracy&query=${encodeURIComponent(placeUrl)}`;
-  
+  const url = `${KAKAO_PLACE_API_URL}?query=${query}&page=1&size=1&sort=accuracy`;
+
   const response = await fetch(url, { headers });
   const data = await response.json();
 
-  const imageUrl = data.documents[0].place_photo[0].thumbnail_url;
+  const imageUrl = data.documents[0]?.place_photo?.[0]?.thumbnail_url || "./images/ys.jpg";
   return imageUrl;
 }
+
 
 
 
