@@ -257,7 +257,6 @@ function showError(error) {
   }
 }
 
-
 function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.place_name;
 
@@ -277,6 +276,11 @@ function displayRestaurantInfo(restaurant) {
   console.log("음식점 위도:", restaurant.y);
   console.log("음식점 경도:", restaurant.x);
 
+  // 현재 월과 일 정보 가져오기
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const date = today.getDate();
+  
   const isAnniversary = restaurant.place_name.includes(`${month}월 ${date}일`);
   const isLunchTime = hour >= 11 && hour <= 14;
   const isDinnerTime = hour >= 17 && hour <= 21;
@@ -312,6 +316,4 @@ function displayRestaurantInfo(restaurant) {
   console.log("최종 점수:", score);
   console.log("추천 이유:", reason);
 }
-
-
 
