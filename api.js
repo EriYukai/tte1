@@ -101,11 +101,55 @@ async function getNearbyRestaurants(latitude, longitude) {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+
+      // 점수가 가장 높은 음식점 선택
+      const restaurants = data.documents;
+      const scores = restaurants.map(getScoreForRestaurant);
+      const maxScoreIndex = scores.reduce((maxIndex, score, index, scores) => {
+        return score > scores[maxIndex] ? index : maxIndex;
+      }, 0);
+      const recommendedRestaurant = restaurants[maxScoreIndex];
+
+      // 음식점 정보 출력
+      displayRestaurantInfo(recommendedRestaurant);
+
+      // Chat GPT API 호출
+      getGptResponse(recommendedRestaurant);
     })
     .catch((error) => {
       console.error("Error:", error);
     });
 }
+
+function getScoreForRestaurant(restaurant) {
+  // 기념일 점수
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const date = today.getDate();
+  const isAnniversary = restaurant.title.includes(`${month}월 ${date}일`);
+  const anniversaryScore = isAnniversary ? 1 : 0;
+
+  // 시간 점수
+  const hour = today.getHours();
+  const isLunchTime = hour >= 11 && hour <= 14;
+  const isDinnerTime = hour >= 17 && hour <= 21;
+  const timeScore = isLunchTime || isDinnerTime ? 1 : 0;
+
+  // 인기 트렌드 점수
+  const naverTrendScore = Math.random() * 0.5;
+
+  // 최종 점수
+  const score = anniversaryScore + timeScore + naverTrendScore;
+
+  console.log("음식점 이름:", restaurant.place_name);
+  console.log("음식점 카테고리:", restaurant.category_name);
+  console.log("기념일 점수:", anniversaryScore);
+  console.log("시간 점수:", timeScore);
+  console.log("인기 트렌드 점수:", naverTrendScore);
+  console.log("최종 점수:", score);
+  
+  return score;
+  }
 
 
 async function getRestaurantImage(placeUrl) {

@@ -422,7 +422,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.title;
-  const restaurantImageUrl = restaurant.image || 'images/ys.jpg'; // 기본 이미지를 설정합니다.
 
   // 이미지를 삽입할 div를 선택합니다.
   const contentArea = document.querySelector(".content-area");
@@ -438,7 +437,6 @@ function displayRestaurantInfo(restaurant) {
 
   const restaurantAddress = restaurant.address;
   const restaurantPhone = restaurant.telephone;
-  const defaultImageUrl = "./images/ys.jpg";
 
 
   // 음식점 이미지 출력
