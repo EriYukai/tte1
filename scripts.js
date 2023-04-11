@@ -97,6 +97,7 @@ if (recommendationButton) {
 
 
 
+
 // 뭐먹지 버튼에 반짝이는 테두리 추가
 const shimmerBorder = document.createElement("div");
 shimmerBorder.classList.add("shimmer-border");
