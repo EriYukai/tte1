@@ -200,6 +200,7 @@ function showError(error) {
   }
 }
 
+
 async function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.place_name;
 
@@ -209,8 +210,7 @@ async function displayRestaurantInfo(restaurant) {
     ? restaurant.thumbnail_url || "./images/ys.jpg"
     : "./images/cafe.jpg";
 
-  const imageElement = document.querySelector("#restaurant-image-tag");
-  imageElement.src = restaurantImageUrl;
+  document.querySelector("#restaurant-image-tag").src = restaurantImageUrl;
 
   console.log("음식점 이름:", restaurantName);
   console.log("음식점 주소:", restaurant.address_name);
@@ -220,5 +220,6 @@ async function displayRestaurantInfo(restaurant) {
   console.log("음식점 경도:", restaurant.x);
 
   const imageUrl = restaurant.place_url ? await getRestaurantImage(restaurant.place_url) : "./images/ys.jpg";
+  
 }
 
