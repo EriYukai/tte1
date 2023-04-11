@@ -18,11 +18,14 @@ function searchRestaurants(query) {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+      const restaurant = data.documents[0]; // 가장 첫 번째 검색 결과 이용
+      displayRestaurantInfo(restaurant); // displayRestaurantInfo 함수 호출
     })
     .catch((error) => {
       console.error("Error:", error);
     });
 }
+
 
   
 const geolocationOptions = {
