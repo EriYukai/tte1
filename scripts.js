@@ -81,31 +81,41 @@ function createRaindrop() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-const body = document.querySelector("body");
-const recommendationButton = document.getElementById("recommendation-button");
+  const body = document.querySelector("body");
+  const recommendationButton = document.getElementById("recommendation-button");
 
-if (recommendationButton) {
-  setInterval(() => {
-    const raindrop = createRaindrop();
-    recommendationButton.appendChild(raindrop);
+  const raindrops = [];
+  const MAX_RAINDROPS = 50;
 
-    setTimeout(() => {
-      raindrop.remove();
-    }, 1000);
-  }, 30);
-}
+  for (let i = 0; i < MAX_RAINDROPS; i++) {
+    const raindrop = document.createElement("div");
+    raindrop.classList.add("raindrop");
+    raindrops.push(raindrop);
+  }
 
+  function updateRaindrops() {
+    for (let i = 0; i < raindrops.length; i++) {
+      const raindrop = raindrops[i];
+      if (!raindrop.parentNode) {
+        recommendationButton.appendChild(raindrop);
+        raindrop.style.left = `${Math.random() * 100}%`;
+        raindrop.style.animationDelay = `${Math.random() * 3}s`;
+      }
+    }
+    requestAnimationFrame(updateRaindrops);
+  }
 
-
-
-// 뭐먹지 버튼에 반짝이는 테두리 추가
-const shimmerBorder = document.createElement("div");
-shimmerBorder.classList.add("shimmer-border");
-recommendationButton.appendChild(shimmerBorder);
-shimmerBorder.style.width = "calc(100% + 20px)";
-shimmerBorder.style.height = "calc(100% + 20px)";
-});
-
+  function removeRaindrop(raindrop) {
+    raindrop.remove();
+  }
+  const shimmerBorder = document.createElement("div");
+  shimmerBorder.classList.add("shimmer-border");
+  recommendationButton.appendChild(shimmerBorder);
+  shimmerBorder.style.width = "calc(100% + 20px)";
+  shimmerBorder.style.height = "calc(100% + 20px)";
+  
+  updateRaindrops();
+  });
 
 document.addEventListener('DOMContentLoaded', function () {
 
