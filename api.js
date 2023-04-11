@@ -119,7 +119,8 @@ async function getRestaurantImage(placeUrl) {
 
   const imageUrl = data.documents[0].place_photo[0].thumbnail_url;
   return imageUrl;
-} // added missing closing brace
+}
+
 
 const restaurantImageUrl = restaurant.place_url ? await getRestaurantImage(restaurant.place_url) : "./images/ys.jpg";
 
