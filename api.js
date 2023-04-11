@@ -78,28 +78,6 @@ function showPosition(position) {
   localStorage.setItem("longitude", position.coords.longitude);
 }
 
-function getNearbyRestaurants(latitude, longitude) {
-  const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
-  const category_group_code = "FD6"; // 음식점 카테고리 코드
-  const radius = 5000; // 반경 2km 내 검색
-  const url = `${KAKAO_SEARCH_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
-
-  const headers = {
-    Authorization: `KakaoAK ${KAKAO_API_KEY}`,
-    "Content-Type": "application/json;charset=UTF-8",
-    "Accept": "application/json",
-    "KA": "sdk/1.38.0 os/javascript lang/en-US device/Win32 origin/https%3A%2F%2Feriyukai.github.io"
-  };
-  
-  fetch(url, { headers })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}
 
 
 
