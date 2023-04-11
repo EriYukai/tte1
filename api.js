@@ -273,7 +273,40 @@ async function displayRestaurantInfo(restaurant) {
   console.log("음식점 위도:", restaurant.y);
   console.log("음식점 경도:", restaurant.x);
 
-  const imageUrl = restaurant.place_url ? await getRestaurantImage(restaurant.place_url) : "./images/ys.jpg";
+  const isAnniversary = restaurant.place_name.includes(`${month}월 ${date}일`);
+  const isLunchTime = hour >= 11 && hour <= 14;
+  const isDinnerTime = hour >= 17 && hour <= 21;
 
+  let reason = "";
+  let score = 0;
+
+  if (isAnniversary) {
+    score++;
+    reason = "오늘은 기념일이어서 ";
+  }
+  if (isLunchTime || isDinnerTime) {
+    score++;
+    reason += "지금은 점심이나 저녁시간이어서 ";
+  }
+  const naverTrendScore = Math.random() * 0.5;
+  score += naverTrendScore;
+
+  reason += `${restaurantName}은(는)`;
+
+  if (score >= 2.5) {
+    reason += " 추천할 만한 음식점입니다.";
+  } else {
+    reason += " 추천하기에는 좀 부족한 음식점입니다.";
+  }
+
+  const contentArea = document.querySelector('.content-area');
+  const balloon = document.createElement('div');
+  balloon.className = 'balloon';
+  balloon.innerText = reason;
+  contentArea.insertBefore(balloon, contentArea.firstChild);
+
+  console.log("최종 점수:", score);
+  console.log("추천 이유:", reason);
 }
+
 
