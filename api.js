@@ -1,6 +1,8 @@
 const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
 const KAKAO_APP_KEY = "a5f5f6ab161a7b4e31d6bd02bd4547e6";
 
+const gptApiUrl = "https://api.openai.com/v1/chat/completions";
+const apiKey = "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"; // 여기에 실제 GPT API 키를 입력해주세요.
 
 
 function searchRestaurants(query) {
@@ -119,10 +121,6 @@ async function getNearbyRestaurants(latitude, longitude) {
     // 음식점 정보 출력
     displayRestaurantInfo(recommendedRestaurant);
 
-    // Chat GPT API 호출
-    const gptApiUrl = "https://api.openai.com/v1/chat/completions";
-    const apiKey = "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"; // 여기에 실제 GPT API 키를 입력해주세요.
-    
     getGptResponse(recommendedRestaurant);
   })
   .catch((error) => {
