@@ -263,7 +263,10 @@ function showError(error) {
 
 function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.place_name;
-
+  const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
+  const category_group_code = "FD6"; // 음식점 카테고리 코드
+  const radius = 5000; // 반경 2km 내 검색
+  
   // 음식점 카테고리가 "음식점"일 때는 대표 이미지 가져오기
   // 음식점 카테고리가 "카페"일 때는 기본 이미지 경로 할당
   const restaurantImageUrl = restaurant.category_group_code === "FD6" 
