@@ -1,7 +1,7 @@
 const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
 const KAKAO_APP_KEY = "a5f5f6ab161a7b4e31d6bd02bd4547e6";
 
-const apiKey = "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"; // 여기에 실제 GPT API 키를 입력해주세요.
+const apiKey = "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"; // 여기에 실제 GPT API 키를 입력해주세요.
 const gptApiUrl = "https://api.openai.com/v1/chat/completions";
 
 
