@@ -85,7 +85,82 @@ function showPosition(position) {
 }
 
 
-//주석처리
+async function getNearbyRestaurants(latitude, longitude) {
+  const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
+  const category_group_code = "FD6"; // 음식점 카테고리 코드
+  const radius = 5000; // 반경 2km 내 검색
+  const url = `${KAKAO_SEARCH_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
+
+  const headers = {
+    Authorization: `KakaoAK ${KAKAO_API_KEY}`,
+    "Content-Type": "application/json;charset=UTF-8",
+    "Accept": "application/json",
+    "KA": "sdk/1.38.0 os/javascript lang/en-US device/Win32 origin/https%3A%2F%2Feriyukai.github.io"
+  };
+  
+  fetch(url, { headers })
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+
+    if (!data.documents || data.documents.length === 0) {
+      console.error("Error: No nearby restaurants found.");
+      return;
+    }
+
+    // 점수가 가장 높은 음식점 선택
+    const restaurants = data.documents;
+    const scores = restaurants.map(getScoreForRestaurant);
+    const maxScoreIndex = scores.reduce((maxIndex, score, index, scores) => {
+      return score > scores[maxIndex] ? index : maxIndex;
+    }, 0);
+    const recommendedRestaurant = restaurants[maxScoreIndex];
+
+    // 음식점 정보 출력
+    displayRestaurantInfo(recommendedRestaurant);
+
+    // Chat GPT API 호출
+    getGptResponse(recommendedRestaurant);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+
+}
+
+function getScoreForRestaurant(restaurant) {
+  if (!restaurant) {
+    console.log("음식점 정보가 없습니다.");
+    return 0;
+  }
+  // 기념일 점수
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const date = today.getDate();
+  const isAnniversary = restaurant.place_name.includes(`${month}월 ${date}일`);
+  const anniversaryScore = isAnniversary ? 1 : 0;
+
+  // 시간 점수
+  const hour = today.getHours();
+  const isLunchTime = hour >= 11 && hour <= 14;
+  const isDinnerTime = hour >= 17 && hour <= 21;
+  const timeScore = isLunchTime || isDinnerTime ? 1 : 0;
+
+  // 인기 트렌드 점수
+  const naverTrendScore = Math.random() * 0.5;
+
+  // 최종 점수
+  const score = anniversaryScore + timeScore + naverTrendScore;
+
+  console.log("음식점 이름:", restaurant.place_name);
+  console.log("음식점 카테고리:", restaurant.category_name);
+  console.log("기념일 점수:", anniversaryScore);
+  console.log("시간 점수:", timeScore);
+  console.log("인기 트렌드 점수:", naverTrendScore);
+  console.log("최종 점수:", score);
+  
+  return score;
+}
 
 async function getRestaurantImage(placeName) {
   const KAKAO_PLACE_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
@@ -188,7 +263,7 @@ function displayRestaurantInfo(restaurant) {
   const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
   const category_group_code = "FD6"; // 음식점 카테고리 코드
   const radius = 5000; // 반경 2km 내 검색
-
+  
   // 음식점 카테고리가 "음식점"일 때는 대표 이미지 가져오기
   // 음식점 카테고리가 "카페"일 때는 기본 이미지 경로 할당
   const restaurantImageUrl = restaurant.category_group_code === "FD6" 
