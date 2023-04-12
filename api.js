@@ -199,7 +199,7 @@ localStorage.setItem("locationPermissionGranted", "false");
 async function getGptResponse(restaurant) {
   const prompt = `제가 추천하는 ${restaurant.title}은(는) ${restaurant.category} 전문점입니다. 여기에서는 ${restaurant.menuInfo} 등이 인기 메뉴입니다. 또한, ${restaurant.address}에 위치해 있으며, 전화번호는 ${restaurant.telephone}입니다. 이 음식점을 추천해드리는 이유는 ${restaurant.title}의 맛이 좋기 때문입니다. 이 음식점을 방문하시면 꼭 드셔보세요!`;
 
-  const response = await fetch('/.netlify/functions/generate-text', {
+  const response = await fetch('./functions/generate-text.js', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
