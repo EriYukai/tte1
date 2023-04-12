@@ -4,7 +4,7 @@ exports.handler = async function (event, context) {
   // GPT API 호출에 필요한 정보
   const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
   const KAKAO_APP_KEY = "a5f5f6ab161a7b4e31d6bd02bd4547e6";
-  const apiKey = "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"; // 여기에 실제 GPT API 키를 입력해주세요.
+  const apiKey = "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"; // 여기에 실제 GPT API 키를 입력해주세요.
   const gptApiUrl = "https://openapi.naver.com/v1/search/webkr";
 
   // 클라이언트로부터 받은 데이터
