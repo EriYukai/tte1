@@ -1,7 +1,7 @@
 const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
 const KAKAO_APP_KEY = "a5f5f6ab161a7b4e31d6bd02bd4547e6";
 
-searchRestaurants("맛집");
+
 
 function searchRestaurants(query) {
   const url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${query}`;

@@ -325,7 +325,7 @@ button.addEventListener("click", function() {
     audio.volume = 0.2; // 볼륨을 10%로 설정
     audio.play();
 
-
+    searchRestaurants("음식점");
 
 // 오버레이 페이드 인 효과 시작
 let overlay = document.getElementById("overlay");
