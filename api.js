@@ -120,7 +120,7 @@ async function getNearbyRestaurants(latitude, longitude) {
     displayRestaurantInfo(recommendedRestaurant);
 
     // Chat GPT API 호출
-    const gptApiUrl = "https://your-gpt-api-endpoint.com";
+    const gptApiUrl = "https://api.openai.com/v1/chat/completions";
     const apiKey = "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"; // 여기에 실제 GPT API 키를 입력해주세요.
     
     getGptResponse(recommendedRestaurant);
