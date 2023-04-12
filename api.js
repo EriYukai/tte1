@@ -196,26 +196,26 @@ localStorage.setItem("locationPermissionGranted", "false");
 }
 
 // Chat GPT API 호출
-function getGptResponse(restaurant) {
+async function getGptResponse(restaurant) {
   const prompt = `제가 추천하는 ${restaurant.title}은(는) ${restaurant.category} 전문점입니다. 여기에서는 ${restaurant.menuInfo} 등이 인기 메뉴입니다. 또한, ${restaurant.address}에 위치해 있으며, 전화번호는 ${restaurant.telephone}입니다. 이 음식점을 추천해드리는 이유는 ${restaurant.title}의 맛이 좋기 때문입니다. 이 음식점을 방문하시면 꼭 드셔보세요!`;
-  
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", gptApiUrl);
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.setRequestHeader("Authorization", `Bearer ${apiKey}`);
-  xhr.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-      const response = JSON.parse(this.responseText);
-      const responseText = response.choices[0].text;
-      console.log(responseText);
 
-      // 결과를 말풍선 영역에 표시
-      const gptResponseContainer = document.getElementById('gpt-response-container');
-      const gptResponseText = gptResponseContainer.querySelector('.gpt-response-text');
-      gptResponseText.innerText = responseText;
-      gptResponseContainer.style.display = 'block'; // 말풍선 영역을 표시
-    }
-  };
+  const response = await fetch('/.netlify/functions/generate-text', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ prompt }),
+  });
+
+  const data = await response.json();
+  const responseText = data.result;
+
+  // 결과를 말풍선 영역에 표시
+  const gptResponseContainer = document.getElementById('gpt-response-container');
+  const gptResponseText = gptResponseContainer.querySelector('.gpt-response-text');
+  gptResponseText.innerText = responseText;
+  gptResponseContainer.style.display = 'block'; // 말풍선 영역을 표시
+}
   const requestBody = {
     prompt,
     temperature: 0.7,
@@ -225,7 +225,6 @@ function getGptResponse(restaurant) {
     presence_penalty: 0,
   };
   xhr.send(JSON.stringify(requestBody));
-}
 
 kakao.maps.load(() => {
   initMap();
