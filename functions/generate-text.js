@@ -5,6 +5,8 @@ exports.handler = async function (event, context) {
   const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
   const KAKAO_APP_KEY = "a5f5f6ab161a7b4e31d6bd02bd4547e6";
   const apiKey = process.env.GPT_API_KEY;
+  const gptApiUrl = "https://api.openai.com/v1/engines/gpt-3.5-turbo/completions";
+
 
   // 클라이언트로부터 받은 데이터
   const data = JSON.parse(event.body);
