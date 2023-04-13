@@ -166,23 +166,50 @@ localStorage.setItem("locationPermissionGranted", "false");
 async function getGptResponse(restaurant) {
   const prompt = `제가 추천하는 ${restaurant.place_name}은(는) ${restaurant.category_name} 전문점입니다. 여기에서는 ${restaurant.menu_info} 등이 인기 메뉴입니다. 또한, ${restaurant.address_name}에 위치해 있으며, 전화번호는 ${restaurant.phone}입니다. 이 음식점을 추천해드리는 이유는 ${restaurant.place_name}의 맛이 좋기 때문입니다. 이 음식점을 방문하시면 꼭 드셔보세요!`;
 
-  const response = await fetch('/.netlify/functions/generate-text', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ prompt }),
-  });
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      const responseText = JSON.parse(xhr.responseText).choices[0].text;
+      // 결과를 말풍선 영역에 표시
+      const gptResponseContainer = document.getElementById('gpt-response-container');
+      const gptResponseText = gptResponseContainer.querySelector('.gpt-response-text');
+      gptResponseText.innerText = responseText;
+      gptResponseContainer.style.display = 'block'; // 말풍선 영역을 표시
+    }
+  };
+
+  xhr.open('POST', '/.netlify/functions/generate-text', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+
+  const requestBody = {
+    prompt,
+    temperature: 0.7,
+    max_tokens: 60,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+  };
+  xhr.send(JSON.stringify(requestBody));
+}
+
 
   const data = await response.json();
   const responseText = data.result;
 
-  // 결과를 말풍선 영역에 표시
-  const gptResponseContainer = document.getElementById('gpt-response-container');
-  const gptResponseText = gptResponseContainer.querySelector('.gpt-response-text');
-  gptResponseText.innerText = responseText;
-  gptResponseContainer.style.display = 'block'; // 말풍선 영역을 표시
-}
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      const responseText = JSON.parse(xhr.responseText).choices[0].text;
+      // 결과를 말풍선 영역에 표시
+      const gptResponseContainer = document.getElementById('gpt-response-container');
+      const gptResponseText = gptResponseContainer.querySelector('.gpt-response-text');
+      gptResponseText.innerText = responseText;
+      gptResponseContainer.style.display = 'block'; // 말풍선 영역을 표시
+    }
+  };
+  
+  xhr.open('POST', '/.netlify/functions/generate-text', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
 
 // ... 기존 코드 ...
 
