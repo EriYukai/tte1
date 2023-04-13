@@ -1,35 +1,3 @@
-const KAKAO_API_KEY = "14f09bd760730c467aa000cb14fbb7e0";
-const KAKAO_APP_KEY = "a5f5f6ab161a7b4e31d6bd02bd4547e6";
-
-const apiKey = "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"; // 여기에 실제 GPT API 키를 입력해주세요.
-const gptApiUrl = "https://openapi.naver.com/v1/search/webkr";
-
-
-function searchRestaurants(query) {
-  const url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${query}`;
-
-  const headers = {
-    Authorization: `KakaoAK ${KAKAO_API_KEY}`,
-    "Content-Type": "application/json;charset=UTF-8",
-    "Accept": "application/json",
-    "KA": "sdk/1.38.0 os/javascript lang/en-US device/Win32 origin/https%3A%2F%2Feriyukai.github.io"
-  };
-  
-
-  fetch(url, { headers })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      const restaurant = data.documents[0]; // 가장 첫 번째 검색 결과 이용
-      displayRestaurantInfo(restaurant); // displayRestaurantInfo 함수 호출
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}
-
-
-  
 const geolocationOptions = {
   enableHighAccuracy: true,
   timeout: 5000,
@@ -199,7 +167,7 @@ localStorage.setItem("locationPermissionGranted", "false");
 async function getGptResponse(restaurant) {
   const prompt = `제가 추천하는 ${restaurant.title}은(는) ${restaurant.category} 전문점입니다. 여기에서는 ${restaurant.menuInfo} 등이 인기 메뉴입니다. 또한, ${restaurant.address}에 위치해 있으며, 전화번호는 ${restaurant.telephone}입니다. 이 음식점을 추천해드리는 이유는 ${restaurant.title}의 맛이 좋기 때문입니다. 이 음식점을 방문하시면 꼭 드셔보세요!`;
 
-  const response = await fetch('./functions/generate-text.js', {
+  const response = await fetch('/api/generate-text', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -216,6 +184,7 @@ async function getGptResponse(restaurant) {
   gptResponseText.innerText = responseText;
   gptResponseContainer.style.display = 'block'; // 말풍선 영역을 표시
 }
+
   const requestBody = {
     prompt,
     temperature: 0.7,
