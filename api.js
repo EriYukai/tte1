@@ -116,16 +116,16 @@ function getScoreForRestaurant(restaurant) {
   const timeScore = isLunchTime || isDinnerTime ? 1 : 0;
 
   // 인기 트렌드 점수
-  const naverTrendScore = Math.random() * 0.5;
+  const TrendScore = Math.random() * 0.5;
 
   // 최종 점수
-  const score = anniversaryScore + timeScore + naverTrendScore;
+  const score = anniversaryScore + timeScore + TrendScore;
 
   console.log("음식점 이름:", restaurant.place_name);
   console.log("음식점 카테고리:", restaurant.category_name);
   console.log("기념일 점수:", anniversaryScore);
   console.log("시간 점수:", timeScore);
-  console.log("인기 트렌드 점수:", naverTrendScore);
+  console.log("인기 트렌드 점수:", TrendScore);
   console.log("최종 점수:", score);
   
   return score;
@@ -304,8 +304,8 @@ function displayRestaurantInfo(restaurant) {
     score++;
     reason += "지금은 점심이나 저녁시간이어서 ";
   }
-  const naverTrendScore = Math.random() * 0.5;
-  score += naverTrendScore;
+  const TrendScore = Math.random() * 0.5;
+  score += TrendScore;
 
   reason += `${restaurantName}은(는)`;
 
