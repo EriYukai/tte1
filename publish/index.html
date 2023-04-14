@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AiBab</title>
+    <link href="https://hangeul.pstatic.net/hangeul_static/css/NanumGaRamYeonGgoc.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
+    <script src="api.js" defer></script>
+    <script
+    type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=14f09bd760730c467aa000cb14fbb7e0&libraries=services"
+  ></script>  
+</head>
+<body>
+    <header>
+        <button id="menu-button">메뉴</button>
+        <h1 class="blinking">AiBab</h1>
+    </header>
+    <nav id="menu-list" class="hidden">
+        <ul>
+            <li>자동 메뉴선정</li>
+            <li>취향 메뉴선정</li>
+            <li>테마 메뉴선정</li>
+            <li>MBTI 메뉴선정</li>
+            <li>친구 추천하기</li>
+        </ul>
+    </nav>
+    <main>
+        <div id="overlay" class="overlay"></div>
+        <div class="content-area">
+            <div id="restaurant-image">
+                <img id="restaurant-image-tag" src="" style="width:100%;height:100%;" alt="레스토랑 이미지">
+                <div id="map" style="width:100%;height:100%;"></div>
+
+            </div>
+<div id="gpt-response-container">
+    <div class="gpt-response-text"></div>
+</div>
+        </div>
+        <button id="recommendation-button">
+            <span>뭐먹지?</span>
+        </button>
+    </main>
+</body>
+</html>
