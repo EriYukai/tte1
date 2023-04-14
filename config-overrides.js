@@ -7,5 +7,9 @@ module.exports = function override(config, env) {
       plugin.options.template = path.resolve(__dirname, 'index.html');
     }
   });
+
+  // 웹팩 설정에서 entry 속성 변경
+  config.entry = path.resolve(__dirname, 'src', 'your-custom-entry-file.js');
+
   return config;
 };
