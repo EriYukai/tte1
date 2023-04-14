@@ -115,7 +115,7 @@ function getScoreForRestaurant(restaurant) {
   const isDinnerTime = hour >= 17 && hour <= 21;
   const timeScore = isLunchTime || isDinnerTime ? 1 : 0;
 
-  // 인기 트렌드 점수
+  // 인기 트렌드 포인트
   const TrendScore = Math.random() * 0.5;
 
   // 최종 점수
