@@ -199,6 +199,7 @@ async function getGptResponse(restaurant) {
 
 
 
+
   const data = await response.json();
   const responseText = data.result;
 
