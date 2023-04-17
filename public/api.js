@@ -48,6 +48,7 @@ function showPosition(position) {
 
   // 가까운 음식점을 찾아서 출력하는 코드.
   getNearbyRestaurants(latitude, longitude);
+  const restaurants = data;
 
   localStorage.setItem("locationPermissionGranted", "true");
   localStorage.setItem("latitude", position.coords.latitude);
@@ -65,6 +66,7 @@ async function getNearbyRestaurants(latitude, longitude) {
     });
 
     const data = await response.json();
+    console.log(data); // 데이터 확인
 
     if (!data.documents || data.documents.length === 0) {
       console.error("Error: No nearby restaurants found.");
