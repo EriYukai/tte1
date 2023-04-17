@@ -27,33 +27,36 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
   );
 }
 
-function showPosition(position) {
-  const today = new Date();
-  const month = today.getMonth() + 1;
-  const date = today.getDate();
+async function showPosition(position) {
+  try {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
 
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
+    // 카카오 맵 생성 및 마커 설정
+    const container = document.getElementById("map");
+    const options = {
+      center: new kakao.maps.LatLng(latitude, longitude),
+      level: 3,
+    };
+    const map = new kakao.maps.Map(container, options);
+    const marker = new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(latitude, longitude),
+    });
+    marker.setMap(map);
 
-  const container = document.getElementById('map');
-  const options = {
-    center: new kakao.maps.LatLng(latitude, longitude),
-    level: 3
-  };
-  const map = new kakao.maps.Map(container, options);
-  const marker = new kakao.maps.Marker({
-    position: new kakao.maps.LatLng(latitude, longitude)
-  });
-  marker.setMap(map);
+    // 가까운 음식점을 찾아서 출력하는 코드.
+    const restaurants = await getNearbyRestaurants(latitude, longitude);
+    displayRestaurants(restaurants);
 
-  // 가까운 음식점을 찾아서 출력하는 코드.
-  getNearbyRestaurants(latitude, longitude);
-  const restaurants = data;
-
-  localStorage.setItem("locationPermissionGranted", "true");
-  localStorage.setItem("latitude", position.coords.latitude);
-  localStorage.setItem("longitude", position.coords.longitude);
+    // 위치 정보를 로컬 스토리지에 저장
+    localStorage.setItem("locationPermissionGranted", "true");
+    localStorage.setItem("latitude", latitude);
+    localStorage.setItem("longitude", longitude);
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
+
 
 async function getNearbyRestaurants(latitude, longitude) {
   try {
@@ -68,27 +71,19 @@ async function getNearbyRestaurants(latitude, longitude) {
     const data = await response.json();
     console.log(data); // 데이터 확인
 
-    if (!data.documents || data.documents.length === 0) {
-      console.error("Error: No nearby restaurants found.");
-      return;
+    // 'data.documents'가 실제로 존재하는지 확인하고, 배열인지 확인하세요.
+    if (data && data.documents && Array.isArray(data.documents)) {
+      return data.documents;
+    } else {
+      // 문제가 발생하면 빈 배열 반환
+      return [];
     }
-
-    // 점수가 가장 높은 음식점 선택
-    const restaurants = data.documents;
-    const scores = restaurants.map(getScoreForRestaurant);
-    const maxScoreIndex = scores.reduce((maxIndex, score, index, scores) => {
-      return score > scores[maxIndex] ? index : maxIndex;
-    }, 0);
-    const recommendedRestaurant = restaurants[maxScoreIndex];
-
-    // 음식점 정보 출력
-    displayRestaurantInfo(recommendedRestaurant);
-
-    getGptResponse(recommendedRestaurant);
   } catch (error) {
     console.error("Error:", error);
+    return [];
   }
 }
+
 
 
 
