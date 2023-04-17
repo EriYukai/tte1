@@ -179,7 +179,9 @@ async function getGptResponse(restaurant) {
     });
 
     const data = await response.json();
-    const responseText = data.choices[0].text;
+    console.log(data); // 데이터 구조를 확인하기 위해 콘솔에 출력
+    const responseText = data.choices[0]?.text || "데이터를 불러오지 못했습니다."; // 올바른 속성에 접근
+    
 
     // 결과를 말풍선 영역에 표시
     const gptResponseContainer = document.getElementById("gpt-response-container");
@@ -190,6 +192,7 @@ async function getGptResponse(restaurant) {
     console.error("Error:", error);
   }
 }
+
 
 
 
