@@ -57,7 +57,7 @@ function showPosition(position) {
 
 async function getNearbyRestaurants(latitude, longitude) {
   try {
-    const response = await fetch("/.netlify/functions/get-nearby-restaurants", {
+    const response = await fetch("/.netlify/functions/generate-text", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
