@@ -308,18 +308,21 @@ function addFadingDot(x, y) {
 const button = document.getElementById("recommendation-button");
 
 
-button.addEventListener("click", function() {
-
+button.addEventListener("click", async function() {
   if (localStorage.getItem("locationPermissionGranted") === "true") {
-      const latitude = localStorage.getItem("latitude");
-      const longitude = localStorage.getItem("longitude");
-      getNearbyRestaurants(latitude, longitude);
-    } else {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        showPosition(position);
-        getNearbyRestaurants(position.coords.latitude, position.coords.longitude);
-      });
-    }
+    const latitude = localStorage.getItem("latitude");
+    const longitude = localStorage.getItem("longitude");
+    const restaurants = await getNearbyRestaurants(latitude, longitude);
+    displayRestaurants(restaurants, latitude, longitude);
+  } else {
+    navigator.geolocation.getCurrentPosition(async function (position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      showPosition(position);
+      const restaurants = await getNearbyRestaurants(latitude, longitude);
+      displayRestaurants(restaurants, latitude, longitude);
+    });
+  }
 
     const audio = new Audio("ok.mp3");
     audio.volume = 0.2; // 볼륨을 10%로 설정
