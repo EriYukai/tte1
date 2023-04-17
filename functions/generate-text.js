@@ -27,6 +27,7 @@ exports.handler = async function (event, context) {
       body: JSON.stringify(data),
     };
   } catch (error) {
+    console.error(error); // 에러를 콘솔에 출력하도록 추가
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message }),
