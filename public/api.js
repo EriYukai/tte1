@@ -158,11 +158,14 @@ function handleLocationPermissionDenied() {
 localStorage.setItem("locationPermissionGranted", "false");
 }
 
-async function getGptResponse(restaurant) {
-  const prompt = `제가 추천하는 ${restaurant.place_name}은(는) ${restaurant.category_name} 전문점입니다. 여기에서는 ${restaurant.menu_info} 등이 인기 메뉴입니다. 또한, ${restaurant.address_name}에 위치해 있으며, 전화번호는 ${restaurant.phone}입니다. 이 음식점을 추천해드리는 이유는 ${restaurant.place_name}의 맛이 좋기 때문입니다. 이 음식점을 방문하시면 꼭 드셔보세요!`;
-
+async function getGptResponse(restaurants) {
+  const prompt = `다음과 같은 음식점들 중에서 추천해주세요:`;
+  const restaurantList = restaurants.map((restaurant, index) => {
+    return `음식점 ${index + 1}: ${restaurant.place_name} (카테고리: ${restaurant.category_name}, 주소: ${restaurant.address_name}, 전화번호: ${restaurant.phone}, 인기 메뉴: ${restaurant.menu_info})`;
+  }).join("\n");
+  
   const requestBody = {
-    prompt,
+    prompt: `${prompt}\n${restaurantList}\n`,
     temperature: 0.7,
     max_tokens: 60,
     top_p: 1,
@@ -170,28 +173,29 @@ async function getGptResponse(restaurant) {
     presence_penalty: 0,
   };
 
-  try {
-    const response = await fetch("/.netlify/functions/generate-text", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    });
+try {
+  const response = await fetch("/.netlify/functions/generate-text", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+  });
 
-    const data = await response.json();
-    console.log(data); // 데이터 구조를 확인하기 위해 콘솔에 출력
-    const responseText = data.choices[0]?.text || "데이터를 불러오지 못했습니다."; // 올바른 속성에 접근
+  const data = await response.json();
+  console.log(data); // 데이터 구조를 확인하기 위해 콘솔에 출력
+  const responseText = data.choices[0]?.text || "데이터를 불러오지 못했습니다."; // 올바른 속성에 접근
 
-    // 결과를 말풍선 영역에 표시
-    const gptResponseContainer = document.getElementById("generate-container");
-    const gptResponseText = gptResponseContainer.querySelector(".generate-text");
-    gptResponseText.innerText = responseText;
-    gptResponseContainer.style.display = "block"; // 말풍선 영역을 표시
-  } catch (error) {
-    console.error("Error:", error);
-  }
+  // 결과를 말풍선 영역에 표시
+  const gptResponseContainer = document.getElementById("generate-container");
+  const gptResponseText = gptResponseContainer.querySelector(".generate-text");
+  gptResponseText.innerText = responseText;
+  gptResponseContainer.style.display = "block"; // 말풍선 영역을 표시
+} catch (error) {
+  console.error("Error:", error);
 }
+}
+
 
 
 function initMap() {
