@@ -55,10 +55,40 @@ function showPosition(position) {
 }
 
 
+async function getNearbyRestaurants(latitude, longitude) {
+  try {
+    const response = await fetch("/.netlify/functions/get-nearby-restaurants", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ latitude, longitude }),
+    });
+
+    const data = await response.json();
+
+    if (!data.documents || data.documents.length === 0) {
+      console.error("Error: No nearby restaurants found.");
+      return;
+    }
+
+    // 점수가 가장 높은 음식점 선택
+    const restaurants = data.documents;
+    const scores = restaurants.map(getScoreForRestaurant);
+    const maxScoreIndex = scores.reduce((maxIndex, score, index, scores) => {
+      return score > scores[maxIndex] ? index : maxIndex;
+    }, 0);
+    const recommendedRestaurant = restaurants[maxScoreIndex];
 
     // 음식점 정보 출력
     displayRestaurantInfo(recommendedRestaurant);
     getGptResponse(recommendedRestaurant);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+
 
 
 function getScoreForRestaurant(restaurant) {
