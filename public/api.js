@@ -189,11 +189,8 @@ async function getGptResponse(restaurant) {
   } catch (error) {
     console.error("Error:", error);
   }
-
-  const data = await response.json();
-  const responseText = data.result;
-  const xhr = new XMLHttpRequest();
 }
+
 
 
   xhr.onreadystatechange = function () {
