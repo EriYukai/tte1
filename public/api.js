@@ -189,7 +189,7 @@ async function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.place_name;
   const KAKAO_DETAIL_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
   const headers = {
-    Authorization: "KakaoAK <YOUR_APP_REST_API_KEY>"
+    Authorization: `KakaoAK ${process.env.KAKAO_API_KEY}`
   };
   const keyword = encodeURIComponent(restaurantName);
   const url = `${KAKAO_DETAIL_API_URL}?query=${keyword}`;
