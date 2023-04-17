@@ -27,6 +27,23 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
   );
 }
 
+function displayRestaurants(restaurants, latitude, longitude) {
+  const container = document.getElementById("map");
+  const options = {
+    center: new kakao.maps.LatLng(latitude, longitude),
+    level: 3,
+  };
+  const map = new kakao.maps.Map(container, options);
+
+  restaurants.forEach((restaurant) => {
+    const marker = new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(restaurant.y, restaurant.x),
+    });
+    marker.setMap(map);
+  });
+}
+
+
 async function showPosition(position) {
   try {
     const latitude = position.coords.latitude;
@@ -46,7 +63,7 @@ async function showPosition(position) {
 
     // 가까운 음식점을 찾아서 출력하는 코드.
     const restaurants = await getNearbyRestaurants(latitude, longitude);
-    displayRestaurants(restaurants);
+    displayRestaurants(restaurants, latitude, longitude);
 
     // 위치 정보를 로컬 스토리지에 저장
     localStorage.setItem("locationPermissionGranted", "true");
