@@ -194,7 +194,7 @@ function displayRestaurantInfo(restaurant) {
   // 음식점 카테고리가 "음식점"일 때는 대표 이미지 가져오기
   // 음식점 카테고리가 "카페"일 때는 기본 이미지 경로 할당
   const restaurantImageUrl = restaurant.category_code === category_code 
-    ? restaurant.thumbnail_url || "./images/ys.jpg"
+    ? restaurant.place_url || "./images/ys.jpg"
     : "./images/cafe.jpg";
 
   const imageElement = document.querySelector("#restaurant-image-tag");
