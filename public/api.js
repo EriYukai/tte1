@@ -54,7 +54,6 @@ function showPosition(position) {
   localStorage.setItem("longitude", position.coords.longitude);
 }
 
-
 async function getNearbyRestaurants(latitude, longitude) {
   try {
     const response = await fetch("/.netlify/functions/get-nearby-restaurants", {
@@ -82,11 +81,13 @@ async function getNearbyRestaurants(latitude, longitude) {
 
     // 음식점 정보 출력
     displayRestaurantInfo(recommendedRestaurant);
+
     getGptResponse(recommendedRestaurant);
   } catch (error) {
     console.error("Error:", error);
   }
 }
+
 
 
 
