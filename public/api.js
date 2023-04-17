@@ -4,7 +4,6 @@ const geolocationOptions = {
   maximumAge: 0,
 };
 
-
 // 페이지가 로드될 때, 이전에 위치 정보 제공에 동의한 적이 있다면 위치 정보 제공을 요구하지 않음
 if (localStorage.getItem("locationPermissionGranted") === "true") {
   // 위치 정보 제공에 동의한 경우의 처리
@@ -28,35 +27,33 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
   );
 }
 
-async function showPosition(position) {
-  try {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
+function showPosition(position) {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const date = today.getDate();
 
-    const container = document.getElementById("map");
-    const options = {
-      center: new kakao.maps.LatLng(latitude, longitude),
-      level: 3,
-    };
-    const map = new kakao.maps.Map(container, options);
-    const marker = new kakao.maps.Marker({
-      position: new kakao.maps.LatLng(latitude, longitude),
-    });
-    marker.setMap(map);
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
 
-    const restaurants = await getNearbyRestaurants(latitude, longitude);
-    if (restaurants && restaurants.length > 0) {
-      displayRestaurants(restaurants, latitude, longitude, map); // 지도 인스턴스를 인수로 전달
-      getGptResponse(restaurants); // 이 부분을 추가합니다.
-    }
+  const container = document.getElementById('map');
+  const options = {
+    center: new kakao.maps.LatLng(latitude, longitude),
+    level: 3
+  };
+  const map = new kakao.maps.Map(container, options);
+  const marker = new kakao.maps.Marker({
+    position: new kakao.maps.LatLng(latitude, longitude)
+  });
+  marker.setMap(map);
 
-    localStorage.setItem("locationPermissionGranted", "true");
-    localStorage.setItem("latitude", latitude);
-    localStorage.setItem("longitude", longitude);
-  } catch (error) {
-    console.error("Error:", error);
-  }
+  // 가까운 음식점을 찾아서 출력하는 코드.
+  getNearbyRestaurants(latitude, longitude);
+
+  localStorage.setItem("locationPermissionGranted", "true");
+  localStorage.setItem("latitude", position.coords.latitude);
+  localStorage.setItem("longitude", position.coords.longitude);
 }
+
 
 async function getNearbyRestaurants(latitude, longitude) {
   try {
@@ -70,26 +67,26 @@ async function getNearbyRestaurants(latitude, longitude) {
 
     const data = await response.json();
 
-    if (data && data.documents && Array.isArray(data.documents)) {
-      return data.documents;
-    } else {
-      return [];
+    if (!data.documents || data.documents.length === 0) {
+      console.error("Error: No nearby restaurants found.");
+      return;
     }
+
+    // 점수가 가장 높은 음식점 선택
+    const restaurants = data.documents;
+    const scores = restaurants.map(getScoreForRestaurant);
+    const maxScoreIndex = scores.reduce((maxIndex, score, index, scores) => {
+      return score > scores[maxIndex] ? index : maxIndex;
+    }, 0);
+    const recommendedRestaurant = restaurants[maxScoreIndex];
+
+    // 음식점 정보 출력
+    displayRestaurantInfo(recommendedRestaurant);
+
+    getGptResponse(recommendedRestaurant);
   } catch (error) {
     console.error("Error:", error);
-    return [];
   }
-}
-
-
-function displayRestaurants(restaurants, latitude, longitude, map) {
-  restaurants.forEach((restaurant) => {
-    const marker = new kakao.maps.Marker({
-      position: new kakao.maps.LatLng(restaurant.y, restaurant.x),
-    });
-    marker.setMap(map);
-  });
-  console.log(restaurants);
 }
 
 
@@ -153,51 +150,24 @@ async function getRestaurantImage(placeName) {
 
 // 위치 정보 제공에 동의하지 않은 경우 처리
 function handleLocationPermissionDenied() {
-  
-// 위치 정보 제공에 동의하지 않은 경우 처리
-if (localStorage.getItem("locationPermissionGranted") === "true") {
-  // ...
-} else {
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      // ...
-    },
-    (error) => {
-      console.log("Geolocation error:", error);
-      handleLocationPermissionDenied(); // 이 줄을 추가합니다.
-    },
-    geolocationOptions
-  );
-}
-
+// 위치 정보를 사용할 수 없는 경우 처리
+// ...
 
 // 위치 정보 제공에 동의하지 않은 것으로 표시
 localStorage.setItem("locationPermissionGranted", "false");
 }
 
-async function getGptResponse(restaurants) {
-  const prompt = `다음과 같은 음식점들 중에서 현재 날자 시간 그리고 해당 음식점들의 정보들을 토대로 하나의 음식점을 추천해주세요:`;
-  const restaurantList = restaurants
-    .map(
-      (restaurant, index) =>
-        `음식점 ${index + 1}: ${restaurant.place_name} (카테고리: ${
-          restaurant.category_name
-        }, 주소: ${restaurant.address_name}, 전화번호: ${
-          restaurant.phone
-        }, 인기 메뉴: ${restaurant.menu_info})`
-    )
-    .join("\n");
+async function getGptResponse(restaurant) {
+  const prompt = `제가 추천하는 ${restaurant.place_name}은(는) ${restaurant.category_name} 전문점입니다. 여기에서는 ${restaurant.menu_info} 등이 인기 메뉴입니다. 또한, ${restaurant.address_name}에 위치해 있으며, 전화번호는 ${restaurant.phone}입니다. 이 음식점을 추천해드리는 이유는 ${restaurant.place_name}의 맛이 좋기 때문입니다. 이 음식점을 방문하시면 꼭 드셔보세요!`;
 
-    const requestBody = {
-      prompt: `${prompt}\n${restaurantList}\n`,
-      temperature: 0.7,
-      max_tokens: 2000, // 2000 -> 60 으로 수정
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-    };
-    
-
+  const requestBody = {
+    prompt,
+    temperature: 0.7,
+    max_tokens: 60,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+  };
 
   try {
     const response = await fetch("/.netlify/functions/generate-text", {
@@ -210,33 +180,17 @@ async function getGptResponse(restaurants) {
 
     const data = await response.json();
     console.log(data); // 데이터 구조를 확인하기 위해 콘솔에 출력
+    const responseText = data.choices[0]?.text || "데이터를 불러오지 못했습니다."; // 올바른 속성에 접근
 
-    if (data && data.choices && data.choices.length > 0) {
-      const responseText =
-        data.choices[0].text || "데이터를 불러오지 못했습니다."; // 올바른 속성에 접근
-
-      // 결과를 말풍선 영역에 표시
-      const gptResponseContainer = document.getElementById(
-        "generate-container"
-      );
-      const gptResponseText = gptResponseContainer.querySelector(".generate-text");
-      gptResponseText.innerText = responseText;
-      gptResponseContainer.style.display = "block"; // 말풍선 영역을 표시
-    } else {
-      console.error("Error: Invalid data format");
-    }
+    // 결과를 말풍선 영역에 표시
+    const gptResponseContainer = document.getElementById("gpt-response-container");
+    const gptResponseText = gptResponseContainer.querySelector(".gpt-response-text");
+    gptResponseText.innerText = responseText;
+    gptResponseContainer.style.display = "block"; // 말풍선 영역을 표시
   } catch (error) {
-    console.error("Error in getGptResponse:", error); // 에러 메시지를 더 자세히 작성
-    const gptResponseContainer = document.getElementById("generate-container");
-    const gptResponseText = gptResponseContainer.querySelector(".generate-text");
-    gptResponseText.innerText = "오류가 발생했습니다."; // 오류 메시지를 표시
-    gptResponseContainer.style.display = "block";
+    console.error("Error:", error);
   }
 }
-
-  
-   
-
 
 
 function initMap() {
