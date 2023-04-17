@@ -4,9 +4,7 @@ const geolocationOptions = {
   maximumAge: 0,
 };
 
-// 페이지가 로드될 때, 이전에 위치 정보 제공에 동의한 적이 있다면 위치 정보 제공을 요구하지 않음
 if (localStorage.getItem("locationPermissionGranted") === "true") {
-  // 위치 정보 제공에 동의한 경우의 처리
   showPosition({
     coords: {
       latitude: parseFloat(localStorage.getItem("latitude")),
@@ -27,30 +25,11 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
   );
 }
 
-function displayRestaurants(restaurants, latitude, longitude) {
-  const container = document.getElementById("map");
-  const options = {
-    center: new kakao.maps.LatLng(latitude, longitude),
-    level: 3,
-  };
-  const map = new kakao.maps.Map(container, options);
-
-  restaurants.forEach((restaurant) => {
-    const marker = new kakao.maps.Marker({
-      position: new kakao.maps.LatLng(restaurant.y, restaurant.x),
-    });
-    marker.setMap(map);
-  });
-  console.log(restaurants);
-}
-
-
 async function showPosition(position) {
   try {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
 
-    // 카카오 맵 생성 및 마커 설정
     const container = document.getElementById("map");
     const options = {
       center: new kakao.maps.LatLng(latitude, longitude),
@@ -62,11 +41,11 @@ async function showPosition(position) {
     });
     marker.setMap(map);
 
-    // 가까운 음식점을 찾아서 출력하는 코드.
     const restaurants = await getNearbyRestaurants(latitude, longitude);
-    displayRestaurants(restaurants, latitude, longitude);
+    if (restaurants && restaurants.length > 0) {
+      displayRestaurants(restaurants, latitude, longitude, map); // 지도 인스턴스를 인수로 전달
+    }
 
-    // 위치 정보를 로컬 스토리지에 저장
     localStorage.setItem("locationPermissionGranted", "true");
     localStorage.setItem("latitude", latitude);
     localStorage.setItem("longitude", longitude);
@@ -74,7 +53,6 @@ async function showPosition(position) {
     console.error("Error:", error);
   }
 }
-
 
 async function getNearbyRestaurants(latitude, longitude) {
   try {
@@ -87,23 +65,27 @@ async function getNearbyRestaurants(latitude, longitude) {
     });
 
     const data = await response.json();
-    console.log(data); // 데이터 확인
 
-    // 'data.documents'가 실제로 존재하는지 확인하고, 배열인지 확인하세요.
     if (data && data.documents && Array.isArray(data.documents)) {
       return data.documents;
     } else {
-      // 문제가 발생하면 빈 배열 반환
-      return data.documents;
+      return [];
     }
   } catch (error) {
     console.error("Error:", error);
-    return data.documents;
+    return [];
   }
 }
 
-
-
+function displayRestaurants(restaurants, latitude, longitude, map) {
+  restaurants.forEach((restaurant) => {
+    const marker = new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(restaurant.y, restaurant.x),
+    });
+    marker.setMap(map);
+  });
+  console.log(restaurants);
+}
 
 
 
@@ -175,10 +157,17 @@ localStorage.setItem("locationPermissionGranted", "false");
 
 async function getGptResponse(restaurants) {
   const prompt = `다음과 같은 음식점들 중에서 현재 날자 시간 그리고 해당 음식점들의 정보들을 토대로 하나의 음식점을 추천해주세요:`;
-  const restaurantList = restaurants.map((restaurant, index) => {
-    return `음식점 ${index + 1}: ${restaurant.place_name} (카테고리: ${restaurant.category_name}, 주소: ${restaurant.address_name}, 전화번호: ${restaurant.phone}, 인기 메뉴: ${restaurant.menu_info})`;
-  }).join("\n");
-  
+  const restaurantList = restaurants
+    .map(
+      (restaurant, index) =>
+        `음식점 ${index + 1}: ${restaurant.place_name} (카테고리: ${
+          restaurant.category_name
+        }, 주소: ${restaurant.address_name}, 전화번호: ${
+          restaurant.phone
+        }, 인기 메뉴: ${restaurant.menu_info})`
+    )
+    .join("\n");
+
   const requestBody = {
     prompt: `${prompt}\n${restaurantList}\n`,
     temperature: 0.7,
@@ -188,28 +177,39 @@ async function getGptResponse(restaurants) {
     presence_penalty: 0,
   };
 
-try {
-  const response = await fetch("/.netlify/functions/generate-text", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(requestBody),
-  });
+  try {
+    const response = await fetch("/.netlify/functions/generate-text", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
 
-  const data = await response.json();
-  console.log(data); // 데이터 구조를 확인하기 위해 콘솔에 출력
-  const responseText = data.choices[0]?.text || "데이터를 불러오지 못했습니다."; // 올바른 속성에 접근
+    const data = await response.json();
+    console.log(data); // 데이터 구조를 확인하기 위해 콘솔에 출력
 
-  // 결과를 말풍선 영역에 표시
-  const gptResponseContainer = document.getElementById("generate-container");
-  const gptResponseText = gptResponseContainer.querySelector(".generate-text");
-  gptResponseText.innerText = responseText;
-  gptResponseContainer.style.display = "block"; // 말풍선 영역을 표시
-} catch (error) {
-  console.error("Error:", error);
+    if (data && data.choices && data.choices.length > 0) {
+      const responseText =
+        data.choices[0].text || "데이터를 불러오지 못했습니다."; // 올바른 속성에 접근
+
+      // 결과를 말풍선 영역에 표시
+      const gptResponseContainer = document.getElementById(
+        "generate-container"
+      );
+      const gptResponseText = gptResponseContainer.querySelector(".generate-text");
+      gptResponseText.innerText = responseText;
+      gptResponseContainer.style.display = "block"; // 말풍선 영역을 표시
+    } else {
+      console.error("Error: Invalid data format");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
-}
+
+  
+   
 
 
 
