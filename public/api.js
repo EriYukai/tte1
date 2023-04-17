@@ -41,6 +41,7 @@ function displayRestaurants(restaurants, latitude, longitude) {
     });
     marker.setMap(map);
   });
+  console.log(restaurants);
 }
 
 
@@ -93,11 +94,11 @@ async function getNearbyRestaurants(latitude, longitude) {
       return data.documents;
     } else {
       // 문제가 발생하면 빈 배열 반환
-      return [];
+      return data.documents;
     }
   } catch (error) {
     console.error("Error:", error);
-    return [];
+    return data.documents;
   }
 }
 
