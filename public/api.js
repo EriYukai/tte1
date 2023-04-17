@@ -226,7 +226,11 @@ async function getGptResponse(restaurants) {
       console.error("Error: Invalid data format");
     }
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error in getGptResponse:", error); // 에러 메시지를 더 자세히 작성
+    const gptResponseContainer = document.getElementById("generate-container");
+    const gptResponseText = gptResponseContainer.querySelector(".generate-text");
+    gptResponseText.innerText = "오류가 발생했습니다."; // 오류 메시지를 표시
+    gptResponseContainer.style.display = "block";
   }
 }
 
