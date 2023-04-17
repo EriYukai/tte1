@@ -1,5 +1,5 @@
 // root/functions/generate-text.js
-const fetch = require('node-fetch');
+const fetch = (...args) => import('node-fetch').then(({default: f}) => f(...args));
 
 exports.handler = async function (event, context) {
   const KAKAO_API_KEY = process.env.KAKAO_API_KEY;
