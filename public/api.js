@@ -4,7 +4,10 @@ const geolocationOptions = {
   maximumAge: 0,
 };
 
+
+// 페이지가 로드될 때, 이전에 위치 정보 제공에 동의한 적이 있다면 위치 정보 제공을 요구하지 않음
 if (localStorage.getItem("locationPermissionGranted") === "true") {
+  // 위치 정보 제공에 동의한 경우의 처리
   showPosition({
     coords: {
       latitude: parseFloat(localStorage.getItem("latitude")),
@@ -44,6 +47,7 @@ async function showPosition(position) {
     const restaurants = await getNearbyRestaurants(latitude, longitude);
     if (restaurants && restaurants.length > 0) {
       displayRestaurants(restaurants, latitude, longitude, map); // 지도 인스턴스를 인수로 전달
+      getGptResponse(restaurants); // 이 부분을 추가합니다.
     }
 
     localStorage.setItem("locationPermissionGranted", "true");
@@ -76,6 +80,7 @@ async function getNearbyRestaurants(latitude, longitude) {
     return [];
   }
 }
+
 
 function displayRestaurants(restaurants, latitude, longitude, map) {
   restaurants.forEach((restaurant) => {
@@ -171,7 +176,7 @@ async function getGptResponse(restaurants) {
     const requestBody = {
       prompt: `${prompt}\n${restaurantList}\n`,
       temperature: 0.7,
-      max_tokens: 60, // 2000 -> 60 으로 수정
+      max_tokens: 2000, // 2000 -> 60 으로 수정
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,
