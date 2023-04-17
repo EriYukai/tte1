@@ -157,40 +157,6 @@ function handleLocationPermissionDenied() {
 localStorage.setItem("locationPermissionGranted", "false");
 }
 
-async function getGptResponse(restaurant) {
-  const prompt = `제가 추천하는 ${restaurant.place_name}은(는) ${restaurant.category_name} 전문점입니다. 여기에서는 ${restaurant.menu_info} 등이 인기 메뉴입니다. 또한, ${restaurant.address_name}에 위치해 있으며, 전화번호는 ${restaurant.phone}입니다. 이 음식점을 추천해드리는 이유는 ${restaurant.place_name}의 맛이 좋기 때문입니다. 이 음식점을 방문하시면 꼭 드셔보세요!`;
-
-  const requestBody = {
-    prompt,
-    temperature: 0.7,
-    max_tokens: 60,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0,
-  };
-
-  try {
-    const response = await fetch("/.netlify/functions/generate-text", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    const data = await response.json();
-    console.log(data); // 데이터 구조를 확인하기 위해 콘솔에 출력
-    const responseText = data.choices[0]?.text || "데이터를 불러오지 못했습니다."; // 올바른 속성에 접근
-
-    // 결과를 말풍선 영역에 표시
-    const gptResponseContainer = document.getElementById("gpt-response-container");
-    const gptResponseText = gptResponseContainer.querySelector(".gpt-response-text");
-    gptResponseText.innerText = responseText;
-    gptResponseContainer.style.display = "block"; // 말풍선 영역을 표시
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
 
 
 function initMap() {
