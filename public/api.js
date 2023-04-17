@@ -153,8 +153,23 @@ async function getRestaurantImage(placeName) {
 
 // 위치 정보 제공에 동의하지 않은 경우 처리
 function handleLocationPermissionDenied() {
-// 위치 정보를 사용할 수 없는 경우 처리
-// ...
+  
+// 위치 정보 제공에 동의하지 않은 경우 처리
+if (localStorage.getItem("locationPermissionGranted") === "true") {
+  // ...
+} else {
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      // ...
+    },
+    (error) => {
+      console.log("Geolocation error:", error);
+      handleLocationPermissionDenied(); // 이 줄을 추가합니다.
+    },
+    geolocationOptions
+  );
+}
+
 
 // 위치 정보 제공에 동의하지 않은 것으로 표시
 localStorage.setItem("locationPermissionGranted", "false");
