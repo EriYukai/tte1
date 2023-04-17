@@ -183,8 +183,8 @@ async function getGptResponse(restaurant) {
     const responseText = data.choices[0]?.text || "데이터를 불러오지 못했습니다."; // 올바른 속성에 접근
 
     // 결과를 말풍선 영역에 표시
-    const gptResponseContainer = document.getElementById("gpt-response-container");
-    const gptResponseText = gptResponseContainer.querySelector(".gpt-response-text");
+    const gptResponseContainer = document.getElementById("generate-container");
+    const gptResponseText = gptResponseContainer.querySelector(".generate-text");
     gptResponseText.innerText = responseText;
     gptResponseContainer.style.display = "block"; // 말풍선 영역을 표시
   } catch (error) {
