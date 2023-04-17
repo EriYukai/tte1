@@ -188,12 +188,12 @@ function showError(error) {
 function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.place_name;
   const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
-  const category_group_code = "FD6"; // 음식점 카테고리 코드
+  const category_code = "FD6"; // 음식점 카테고리 코드
   const radius = 5000; // 반경 2km 내 검색
   
   // 음식점 카테고리가 "음식점"일 때는 대표 이미지 가져오기
   // 음식점 카테고리가 "카페"일 때는 기본 이미지 경로 할당
-  const restaurantImageUrl = restaurant.category_group_code === "FD6" 
+  const restaurantImageUrl = restaurant.category_code === category_code 
     ? restaurant.thumbnail_url || "./images/ys.jpg"
     : "./images/cafe.jpg";
 
@@ -236,6 +236,12 @@ function displayRestaurantInfo(restaurant) {
     reason += " 추천할 만한 음식점입니다.";
   } else {
     reason += " 추천하기에는 좀 부족한 음식점입니다.";
+  }
+
+  // 이전 balloon 요소 삭제
+  const previousBalloons = document.querySelectorAll('.balloon');
+  for (let i = 0; i < previousBalloons.length; i++) {
+    previousBalloons[i].remove();
   }
 
   const contentArea = document.querySelector('.content-area');
