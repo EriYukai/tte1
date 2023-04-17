@@ -168,14 +168,16 @@ async function getGptResponse(restaurants) {
     )
     .join("\n");
 
-  const requestBody = {
-    prompt: `${prompt}\n${restaurantList}\n`,
-    temperature: 0.7,
-    max_tokens: 2000,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0,
-  };
+    const requestBody = {
+      prompt: `${prompt}\n${restaurantList}\n`,
+      temperature: 0.7,
+      max_tokens: 60, // 2000 -> 60 으로 수정
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+    };
+    
+
 
   try {
     const response = await fetch("/.netlify/functions/generate-text", {
