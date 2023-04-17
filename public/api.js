@@ -193,26 +193,6 @@ async function getGptResponse(restaurant) {
   }
 }
 
-
-
-
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      const responseText = JSON.parse(xhr.responseText).choices[0].text;
-      // 결과를 말풍선 영역에 표시
-      const gptResponseContainer = document.getElementById('gpt-response-container');
-      const gptResponseText = gptResponseContainer.querySelector('.gpt-response-text');
-      gptResponseText.innerText = responseText;
-      gptResponseContainer.style.display = 'block'; // 말풍선 영역을 표시
-    }
-  };
-  
-  xhr.open('POST', '/.netlify/functions/generate-text', true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-
-// ... 기존 코드 ...
-
-
   const requestBody = {
     prompt,
     temperature: 0.7,
