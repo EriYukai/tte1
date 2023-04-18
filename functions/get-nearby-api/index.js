@@ -5,9 +5,12 @@ const KAKAO_CATEGORY_API_URL = "https://dapi.kakao.com/v2/local/search/category.
 exports.handler = async function (event, context) {
   const KAKAO_API_KEY = process.env.KAKAO_API_KEY;
 
+  console.log(event.body); // 이 줄을 추가
   const { latitude, longitude } = JSON.parse(event.body);
   const category_group_code = "FD6"; // 음식점 카테고리 코드
   const radius = 2000; // 반경 2km 내 검색
+
+  
 
   const headers = {
     "Authorization": `KakaoAK ${KAKAO_API_KEY}`,
