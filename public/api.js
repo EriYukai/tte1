@@ -27,7 +27,40 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
   );
 }
 
-function showPosition(position) {
+async function getNearbyRestaurants(latitude, longitude) {
+  try {
+    const response = await fetch(
+      `${window.location.origin}/.netlify/functions/get-nearby-api`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ latitude, longitude }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!data.documents || data.documents.length === 0) {
+      console.error("Error: No nearby restaurants found.");
+      return;
+    }
+
+    return data; // 음식점 정보를 반환하도록 변경
+
+    // (나머지 코드 생략)
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+
+async function showPosition(position) {
   const today = new Date();
   const month = today.getMonth() + 1;
   const date = today.getDate();
@@ -50,6 +83,17 @@ function showPosition(position) {
   localStorage.setItem("locationPermissionGranted", "true");
   localStorage.setItem("latitude", position.coords.latitude);
   localStorage.setItem("longitude", position.coords.longitude);
+  
+  const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
+
+  if (nearbyRestaurants && nearbyRestaurants.documents && nearbyRestaurants.documents.length > 0) {
+    // 음식점 정보를 가져와 각 음식점에 대한 점수를 계산합니다.
+    nearbyRestaurants.documents.forEach(restaurant => {
+      getScoreForRestaurant(restaurant);
+    });
+  } else {
+    console.log("근처 음식점을 찾을 수 없습니다.");
+  }
 }
 
 
