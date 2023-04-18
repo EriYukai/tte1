@@ -1,15 +1,18 @@
+// root/functions/generate-text.js
 const fetch = (...args) => import('node-fetch').then(({default: f}) => f(...args));
 
 exports.handler = async function (event, context) {
   const KAKAO_API_KEY = process.env.KAKAO_API_KEY;
-  const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
-  const KAKAO_CATEGORY_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
+  const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
   const category_group_code = "FD6"; // 음식점 카테고리 코드
   const radius = 5000; // 반경 5km 내 검색
 
   const data = JSON.parse(event.body);
   const { latitude, longitude } = data;
   const url = `${KAKAO_SEARCH_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
+  const categoryUrl = `${KAKAO_CATEGORY_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
+  const categoryResponse = await fetch(categoryUrl, { headers });
+  const categoryData = await categoryResponse.json();
 
   const headers = {
     Authorization: `KakaoAK ${KAKAO_API_KEY}`,
