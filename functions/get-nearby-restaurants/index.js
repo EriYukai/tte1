@@ -27,7 +27,25 @@ exports.handler = async function (event, context) {
         body: JSON.stringify({ message: "검색 결과가 없습니다." }),
       };
     }
-
+    if (!event.body) {
+      console.error("Empty request body");
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "Empty request body" }),
+      };
+    }
+    
+    try {
+      const data = JSON.parse(event.body);
+      const { restaurantName } = data;
+    } catch (error) {
+      console.error("Error parsing JSON body:", event.body);
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "Invalid JSON body" }),
+      };
+    }
+    
     const placeId = searchData.documents[0].id;
     const detailUrl = `${KAKAO_DETAIL_API_URL}?place_id=${placeId}`;
     const detailResponse = await fetch(detailUrl, { headers });
