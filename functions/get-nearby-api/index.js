@@ -3,6 +3,8 @@ const KAKAO_CATEGORY_API_URL = "https://dapi.kakao.com/v2/local/search/category.
 
 const fetchCategoryData = async (category_group_code, longitude, latitude, radius) => {
   const KAKAO_API_KEY = process.env.KAKAO_API_KEY;
+  const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
+  const KAKAO_DETAIL_API_URL = "https://dapi.kakao.com/v2/local/search/place.json";
 
   const headers = {
     "Authorization": `KakaoAK ${KAKAO_API_KEY}`,
