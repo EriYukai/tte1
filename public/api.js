@@ -30,7 +30,7 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
 async function getNearbyRestaurants(latitude, longitude) {
   try {
     const response = await fetch(
-      `${window.location.origin}/.netlify/functions/get-nearby-api`,
+      `${window.location.origin}/api/get-nearby-api`,
       {
         method: "POST",
         headers: {
