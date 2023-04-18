@@ -312,7 +312,7 @@ button.addEventListener("click", async function() {
   if (localStorage.getItem("locationPermissionGranted") === "true") {
     const latitude = localStorage.getItem("latitude");
     const longitude = localStorage.getItem("longitude");
-    const restaurants = await getNearbyRestaurants(latitude, longitude);
+    const restaurants = await getScoreForRestaurant(latitude, longitude);
     displayRestaurants(restaurants, latitude, longitude);
     getGptResponse(restaurants); // 결과를 말풍선에 표시하도록 함수 호출
   } else {
