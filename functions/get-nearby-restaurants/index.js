@@ -5,8 +5,25 @@ exports.handler = async function (event, context) {
   const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
   const KAKAO_DETAIL_API_URL = "https://dapi.kakao.com/v2/local/search/place.json";
 
-  const data = JSON.parse(event.body);
-  const { restaurantName } = data;
+  if (!event.body) {
+    console.error("Empty request body");
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "Empty request body" }),
+    };
+  }
+
+  let data, restaurantName;
+  try {
+    data = JSON.parse(event.body);
+    restaurantName = data.restaurantName;
+  } catch (error) {
+    console.error("Error parsing JSON body:", event.body);
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "Invalid JSON body" }),
+    };
+  }
 
   const headers = {
     "Authorization": `KakaoAK ${KAKAO_API_KEY}`,
@@ -27,25 +44,7 @@ exports.handler = async function (event, context) {
         body: JSON.stringify({ message: "검색 결과가 없습니다." }),
       };
     }
-    if (!event.body) {
-      console.error("Empty request body");
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: "Empty request body" }),
-      };
-    }
-    
-    try {
-      const data = JSON.parse(event.body);
-      const { restaurantName } = data;
-    } catch (error) {
-      console.error("Error parsing JSON body:", event.body);
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: "Invalid JSON body" }),
-      };
-    }
-    
+
     const placeId = searchData.documents[0].id;
     const detailUrl = `${KAKAO_DETAIL_API_URL}?place_id=${placeId}`;
     const detailResponse = await fetch(detailUrl, { headers });
