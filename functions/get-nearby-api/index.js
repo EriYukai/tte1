@@ -1,5 +1,4 @@
-const fetch = (...args) => import('node-fetch').then(({default: f}) => f(...args));
-
+const fetch = require("node-fetch");
 const KAKAO_CATEGORY_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
 
 exports.handler = async function (event, context) {
