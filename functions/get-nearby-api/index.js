@@ -1,45 +1,45 @@
-// const fetch = require("node-fetch"); // 이 줄을 주석 처리
-const fetch = (...args) => import("node-fetch").then(({ default: f }) => f(...args)); // 이 줄을 추가
+const fetch = (...args) => import("node-fetch").then(({ default: f }) => f(...args));
 const KAKAO_CATEGORY_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
 
-exports.handler = async function (event, context) {
+const fetchCategoryData = async (category_group_code, longitude, latitude, radius) => {
   const KAKAO_API_KEY = process.env.KAKAO_API_KEY;
-
-  console.log(event.body); // 이 줄을 추가
-  const { latitude, longitude } = JSON.parse(event.body);
-  const category_group_code = "FD6"; // 음식점 카테고리 코드
-  const radius = 2000; // 반경 2km 내 검색
 
   const headers = {
     "Authorization": `KakaoAK ${KAKAO_API_KEY}`,
     "Content-Type": "application/json"
   };
 
+  const categoryUrl = `${KAKAO_CATEGORY_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
+  const categoryResponse = await fetch(categoryUrl, { headers });
+  const categoryData = await categoryResponse.json();
+
+  return categoryData;
+};
+
+const createResponse = (statusCode, body) => ({
+  statusCode,
+  body: JSON.stringify(body),
+});
+
+exports.handler = async function (event, context) {
+  console.log(event.body);
+  const { latitude, longitude } = JSON.parse(event.body);
+  const category_group_code = "FD6"; // 음식점 카테고리 코드
+  const radius = 2000; // 반경 2km 내 검색
+
   try {
-    const categoryUrl = `${KAKAO_CATEGORY_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
-    const categoryResponse = await fetch(categoryUrl, { headers });
-    const categoryData = await categoryResponse.json();
+    const categoryData = await fetchCategoryData(category_group_code, longitude, latitude, radius);
 
     if (!categoryData.documents || categoryData.documents.length === 0) {
-      return {
-        statusCode: 404,
-        body: JSON.stringify({ message: "No nearby restaurants found." }),
-      };
+      return createResponse(404, { message: "No nearby restaurants found." });
     }
 
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify(categoryData),
-    };
-
-    console.log('response:', response); // 이 줄을 추가하세요.
+    const response = createResponse(200, categoryData);
+    console.log("response:", response);
 
     return response;
   } catch (error) {
     console.error(error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
-    };
+    return createResponse(500, { error: error.message });
   }
 };
