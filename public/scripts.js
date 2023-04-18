@@ -332,6 +332,9 @@ button.addEventListener("click", async function() {
     });
   }
 
+  const recommendedRestaurant = await getRecommendedRestaurant(nearbyRestaurants.documents);
+  displayRestaurantInfo(recommendedRestaurant);
+
     const audio = new Audio("ok.mp3");
     audio.volume = 0.2; // 볼륨을 10%로 설정
     audio.play();

@@ -49,13 +49,28 @@ async function getNearbyRestaurants(latitude, longitude) {
       console.error("Error: No nearby restaurants found.");
       return;
     }
+  
+    const maxRestaurants = 15;
+    const selectedRestaurants = data.documents
+      .sort(() => Math.random() - 0.5)
+      .slice(0, maxRestaurants);
+  
+    return { documents: selectedRestaurants }; // 수정된 부분
+  }
 
-    return data;
-
-  } catch (error) {
+  catch (error) {
     console.error("Error:", error);
   }
 }
+
+async function getRandomRestaurantImages(restaurants) {
+  const images = await Promise.all(
+    restaurants.map((restaurant) => getRestaurantImage(restaurant.place_name))
+  );
+  return images;
+}
+
+  
 
 async function showPosition(position) {
   const latitude = position.coords.latitude;
@@ -79,9 +94,8 @@ async function showPosition(position) {
   const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
 
   if (nearbyRestaurants && nearbyRestaurants.documents && nearbyRestaurants.documents.length > 0) {
-    nearbyRestaurants.documents.forEach(restaurant => {
-      getScoreForRestaurant(restaurant);
-    });
+    const restaurantImages = await getRandomRestaurantImages(nearbyRestaurants.documents);
+    // 여기서 restaurantImages를 사용하여 백그라운드 이미지를 설정할 수 있습니다.
   } else {
     console.log("근처 음식점을 찾을 수 없습니다.");
   }
