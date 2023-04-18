@@ -39,7 +39,7 @@ async function getNearbyRestaurants(latitude, longitude) {
         body: JSON.stringify({ latitude, longitude }),
       }
     );
-    
+2    
 
     if (!response.ok) {
       throw new Error(`API request failed with status ${response.status}`);
