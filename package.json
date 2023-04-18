@@ -13,10 +13,10 @@
     },
     "scripts": {
         "start": "react-app-rewired start",
-        "build": "netlify-lambda build functions",
+        "build": "react-app-rewired build && netlify-lambda build functions",
         "test": "react-app-rewired test",
         "eject": "react-scripts eject"
-    },
+      },
     "devDependencies": {
         "react-app-rewired": "^2.2.1"
     }
