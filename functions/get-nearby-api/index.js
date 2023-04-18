@@ -10,8 +10,6 @@ exports.handler = async function (event, context) {
   const category_group_code = "FD6"; // 음식점 카테고리 코드
   const radius = 2000; // 반경 2km 내 검색
 
-  
-
   const headers = {
     "Authorization": `KakaoAK ${KAKAO_API_KEY}`,
     "Content-Type": "application/json"
@@ -29,10 +27,14 @@ exports.handler = async function (event, context) {
       };
     }
 
-    return {
+    const response = {
       statusCode: 200,
       body: JSON.stringify(categoryData),
     };
+
+    console.log('response:', response); // 이 줄을 추가하세요.
+
+    return response;
   } catch (error) {
     console.error(error);
     return {
