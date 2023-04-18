@@ -46,44 +46,12 @@ function showPosition(position) {
   });
   marker.setMap(map);
 
-  // 가까운 음식점을 찾아서 출력하는 코드.
-  getNearbyRestaurants(latitude, longitude);
 
   localStorage.setItem("locationPermissionGranted", "true");
   localStorage.setItem("latitude", position.coords.latitude);
   localStorage.setItem("longitude", position.coords.longitude);
 }
 
-
-async function getNearbyRestaurants(latitude, longitude) {
-  try {
-    const response = await fetch(
-      `${window.location.origin}/.netlify/functions/get-nearby-api`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ latitude, longitude }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    if (!data.documents || data.documents.length === 0) {
-      console.error("Error: No nearby restaurants found.");
-      return;
-    }
-
-    // (나머지 코드 생략)
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
 
 
 
