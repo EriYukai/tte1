@@ -40,12 +40,13 @@ async function getNearbyRestaurants(latitude, longitude) {
       }
     );
 
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
+    if (response.status === 204) {
+      console.error("Error: No nearby restaurants found.");
+      return;
     }
-
+    
     const data = await response.json();
-
+    
     if (!data.documents || data.documents.length === 0) {
       console.error("Error: No nearby restaurants found.");
       return;

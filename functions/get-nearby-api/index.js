@@ -48,8 +48,9 @@ exports.handler = async function (event, context) {
     const categoryData = await fetchCategoryData(category_group_code, longitude, latitude, radius);
 
     if (!categoryData.documents || categoryData.documents.length === 0) {
-      return createResponse(204, { message: "No nearby restaurants found." }); // 수정된 부분
+      return createResponse(204, null); // 수정된 부분
     }
+    
 
     const response = createResponse(200, categoryData);
     console.log("response:", response);
