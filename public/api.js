@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const geolocationOptions = {
   enableHighAccuracy: true,
   timeout: 5000,
@@ -90,6 +88,7 @@ async function getNearbyRestaurants(latitude, longitude) {
     console.error("Error:", error);
   }
 }
+
 
 
 
@@ -189,39 +188,28 @@ function showError(error) {
 
 async function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.place_name;
-  const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
-  const KAKAO_DETAIL_API_URL = "https://dapi.kakao.com/v2/local/search/place.json";
-  const KAKAO_API_KEY = process.env.KAKAO_API_KEY;
 
-  const headers = {
-    "Authorization": `KakaoAK ${KAKAO_API_KEY}`,
-    "Content-Type": "application/json"
-  };
-  
   try {
-    const query = encodeURIComponent(restaurantName);
-    const category_group_code = "FD6"; // 음식점 카테고리 코드
-    const radius = 5000; // 반경 5km 내 검색
-    const searchUrl = `${KAKAO_SEARCH_API_URL}?query=${query}&category_group_code=${category_group_code}&radius=${radius}`;
-    const searchResponse = await fetch(searchUrl, { headers });
-    const searchData = await searchResponse.json();
-    
-    // 검색 결과가 없는 경우
-    if (!searchData.documents || searchData.documents.length === 0) {
+    // Get restaurant details from the serverless function
+    const response = await fetch("/.netlify/functions/get-restaurant-details", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ restaurantName }),
+    });
+
+    const detailData = await response.json();
+
+    // Check if the response has the required data
+    if (!detailData.documents || detailData.documents.length === 0) {
       console.log("검색 결과가 없습니다.");
       return;
     }
-    
-    // 검색 결과 중 첫번째 음식점 선택
-    const placeId = searchData.documents[0].id;
 
-    // 음식점 상세 정보 검색
-    const detailUrl = `${KAKAO_DETAIL_API_URL}?place_id=${placeId}`;
-    const detailResponse = await fetch(detailUrl, { headers });
-    const detailData = await detailResponse.json();
-
-    // 음식점 이미지 URL 가져오기
-    const imageUrl = detailData.documents[0].place_url;
+    // Get restaurant details
+    const details = detailData.documents[0];
+    const imageUrl = details.place_url;
 
     // 이미지 표시
     const imageElement = document.querySelector("#restaurant-image-tag");
@@ -234,51 +222,9 @@ async function displayRestaurantInfo(restaurant) {
     console.log("음식점 위도:", restaurant.y);
     console.log("음식점 경도:", restaurant.x);
 
-    const today = new Date();
-    const hour = today.getHours();
-    const month = today.getMonth() + 1;
-    const date = today.getDate();
+    // 추천 이유 계산 및 출력
+    calculateAndDisplayRecommendationReason(restaurant);
 
-    const isAnniversary = restaurant.place_name.includes(`${month}월 ${date}일`);
-    const isLunchTime = hour >= 11 && hour <= 14;
-    const isDinnerTime = hour >= 17 && hour <= 21;
-
-    let reason = "";
-    let score = 0;
-
-    if (isAnniversary) {
-      score++;
-      reason = "오늘은 기념일이어서 ";
-    }
-    if (isLunchTime || isDinnerTime) {
-      score++;
-      reason += "지금은 점심이나 저녁시간이어서 ";
-    }
-    const TrendScore = Math.random() * 0.5;
-    score += TrendScore;
-
-    reason += `${restaurantName}은(는)`;
-
-    if (score >= 2.5) {
-      reason += " 추천할 만한 음식점입니다.";
-    } else {
-      reason += " 추천하기에는 좀 부족한 음식점입니다.";
-    }
-
-    // 이전 balloon 요소 삭제
-    const previousBalloons = document.querySelectorAll('.balloon');
-    for (let i = 0; i < previousBalloons.length; i++) {
-      previousBalloons[i].remove();
-    }
-
-    const contentArea = document.querySelector('.content-area');
-    const balloon = document.createElement('div');
-    balloon.className = 'balloon';
-    balloon.innerText = reason;
-    contentArea.insertBefore(balloon, contentArea.firstChild);
-
-    console.log("최종 점수:", score);
-    console.log("추천 이유:", reason);
   } catch (error) {
     console.error(error);
   }
