@@ -4,9 +4,7 @@ const geolocationOptions = {
   maximumAge: 0,
 };
 
-// 페이지가 로드될 때, 이전에 위치 정보 제공에 동의한 적이 있다면 위치 정보 제공을 요구하지 않음
 if (localStorage.getItem("locationPermissionGranted") === "true") {
-  // 위치 정보 제공에 동의한 경우의 처리
   showPosition({
     coords: {
       latitude: parseFloat(localStorage.getItem("latitude")),
@@ -59,12 +57,7 @@ async function getNearbyRestaurants(latitude, longitude) {
   }
 }
 
-
 async function showPosition(position) {
-  const today = new Date();
-  const month = today.getMonth() + 1;
-  const date = today.getDate();
-
   const latitude = position.coords.latitude;
   const longitude = position.coords.longitude;
 
@@ -79,7 +72,6 @@ async function showPosition(position) {
   });
   marker.setMap(map);
 
-
   localStorage.setItem("locationPermissionGranted", "true");
   localStorage.setItem("latitude", position.coords.latitude);
   localStorage.setItem("longitude", position.coords.longitude);
@@ -87,16 +79,16 @@ async function showPosition(position) {
   const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
 
   if (nearbyRestaurants && nearbyRestaurants.documents && nearbyRestaurants.documents.length > 0) {
-    // 음식점 정보를 가져와 각 음식점에 대한 점수를 계산합니다.
     nearbyRestaurants.documents.forEach(restaurant => {
       getScoreForRestaurant(restaurant);
     });
   } else {
-    // 음식점이 없을 때 적절한 메시지를 출력합니다.
     console.log("근처 음식점을 찾을 수 없습니다.");
-    // 여기에 추가적인 처리를 할 수 있습니다.
   }
 }
+
+// 기존의 코드를 유지하면서 에러 출력 부분을 제거하였습니다.
+// 이렇게 하면 근처 음식점을 찾을 수 없는 경우에 대한 메시지만 출력됩니다.
 
 
 
