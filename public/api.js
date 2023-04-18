@@ -92,7 +92,9 @@ async function showPosition(position) {
       getScoreForRestaurant(restaurant);
     });
   } else {
+    // 음식점이 없을 때 적절한 메시지를 출력합니다.
     console.log("근처 음식점을 찾을 수 없습니다.");
+    // 여기에 추가적인 처리를 할 수 있습니다.
   }
 }
 
