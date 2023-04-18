@@ -1,10 +1,10 @@
-const fetch = (...args) => import("node-fetch").then(({ default: f }) => f(...args));
-const KAKAO_CATEGORY_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
+const fetch = (...args) => import('node-fetch').then(({default: f}) => f(...args));
 
 const fetchCategoryData = async (category_group_code, longitude, latitude, radius) => {
   const KAKAO_API_KEY = process.env.KAKAO_API_KEY;
   const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
   const KAKAO_DETAIL_API_URL = "https://dapi.kakao.com/v2/local/search/place.json";
+  const KAKAO_CATEGORY_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
 
   const headers = {
     "Authorization": `KakaoAK ${KAKAO_API_KEY}`,
@@ -23,9 +23,12 @@ const createResponse = (statusCode, body) => ({
   body: JSON.stringify(body),
 });
 
-// ... (기존 코드 생략)
+
 
 exports.handler = async function (event, context) {
+  const data = JSON.parse(event.body);
+  const { restaurantName } = data;
+  
   console.log("event.body:", event.body);
   
   if (!event.body) {
