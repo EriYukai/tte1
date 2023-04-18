@@ -4,7 +4,7 @@ function getRandomColor() {
 
 function init() {
   if (localStorage.getItem("locationPermissionGranted") === "true") {
-    getNearbyRestaurants(localStorage.getItem("latitude"), localStorage.getItem("longitude"));
+    getScoreForRestaurant(localStorage.getItem("latitude"), localStorage.getItem("longitude"));
   }
   // ... 나머지 코드 ...
 }
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener('DOMContentLoaded', function () {
 
   if (localStorage.getItem("locationPermissionGranted") === "true") {
-      getNearbyRestaurants(localStorage.getItem("latitude"), localStorage.getItem("longitude"));
+    getScoreForRestaurant(localStorage.getItem("latitude"), localStorage.getItem("longitude"));
     }
 
   const menuButton = document.getElementById('menu-button');
@@ -320,7 +320,7 @@ button.addEventListener("click", async function() {
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
       showPosition(position);
-      const restaurants = await getNearbyRestaurants(latitude, longitude);
+      const restaurants = await getScoreForRestaurant(latitude, longitude);
       displayRestaurants(restaurants, latitude, longitude);
       getGptResponse(restaurants); // 결과를 말풍선에 표시하도록 함수 호출
     });
