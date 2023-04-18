@@ -58,7 +58,7 @@ function showPosition(position) {
 
 
 function getScoreForRestaurant(restaurant) {
-  if (!restaurant) {
+  if (!restaurant || !restaurant.place_name) {
     console.log("음식점 정보가 없습니다.");
     return 0;
   }

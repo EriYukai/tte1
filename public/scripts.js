@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (localStorage.getItem("locationPermissionGranted") === "true") {
       const latitude = localStorage.getItem("latitude");
       const longitude = localStorage.getItem("longitude");
-      const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
+      const nearbyRestaurants = await getScoreForRestaurant(latitude, longitude);
       if (nearbyRestaurants && nearbyRestaurants.length > 0) {
         // 여기에서 적절한 음식점을 선택할 수 있습니다. 예를 들어 첫 번째 음식점을 사용하려면 다음과 같이 합니다.
         const selectedRestaurant = nearbyRestaurants[0];
