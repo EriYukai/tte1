@@ -36,7 +36,7 @@ async function getNearbyRestaurants(latitude, longitude) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ latitude, longitude }),
+        body: JSON.stringify({ latitude: latitude, longitude: longitude }),
       }
     );
 
