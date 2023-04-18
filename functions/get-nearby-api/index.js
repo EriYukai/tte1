@@ -22,8 +22,23 @@ const createResponse = (statusCode, body) => ({
 });
 
 exports.handler = async function (event, context) {
-  console.log(event.body);
-  const { latitude, longitude } = JSON.parse(event.body);
+  console.log("event.body:", event.body);
+  
+  if (!event.body) {
+    return createResponse(400, { error: "Missing event body" });
+  }
+  
+  let latitude, longitude;
+  
+  try {
+    const parsedBody = JSON.parse(event.body);
+    latitude = parsedBody.latitude;
+    longitude = parsedBody.longitude;
+  } catch (error) {
+    console.error("Error parsing event body:", error);
+    return createResponse(400, { error: "Invalid JSON in event body" });
+  }
+  
   const category_group_code = "FD6"; // 음식점 카테고리 코드
   const radius = 2000; // 반경 2km 내 검색
 
