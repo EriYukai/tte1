@@ -39,7 +39,6 @@ async function getNearbyRestaurants(latitude, longitude) {
         body: JSON.stringify({ latitude, longitude }),
       }
     );
-2    
 
     if (!response.ok) {
       throw new Error(`API request failed with status ${response.status}`);
@@ -52,9 +51,9 @@ async function getNearbyRestaurants(latitude, longitude) {
       return;
     }
 
-    return data; // 음식점 정보를 반환하도록 변경
+    return data;
 
-    // (나머지 코드 생략)
+
   } catch (error) {
     console.error("Error:", error);
   }
