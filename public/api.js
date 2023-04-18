@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const geolocationOptions = {
   enableHighAccuracy: true,
   timeout: 5000,
