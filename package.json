@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build && netlify-lambda build functions-build",
+    "build": "react-app-rewired build && netlify-lambda build netlify-functions",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
