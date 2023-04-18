@@ -144,24 +144,23 @@ function getScoreForRestaurant(restaurant) {
 }
 
 async function getRestaurantImage(placeName) {
-  const KAKAO_PLACE_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
-  const query = encodeURIComponent(placeName);
+  const SERVERLESS_FUNCTION_URL = `${window.location.origin}/.netlify/functions/get-nearby-restaurants`; // 서버리스 함수 URL
 
-  const headers = {
-    Authorization: `KakaoAK ${KAKAO_API_KEY}`,
-    "Content-Type": "application/json;charset=UTF-8",
-    Accept: "application/json",
-    KA: "sdk/1.38.0 os/javascript lang/en-US device/Win32 origin/https%3A%2F%2Feriyukai.github.io",
-  };
+  const response = await fetch(SERVERLESS_FUNCTION_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ restaurantName: placeName }),
+  });
 
-  const url = `${KAKAO_PLACE_API_URL}?query=${query}&page=1&size=1&sort=accuracy`;
-
-  const response = await fetch(url, { headers });
   const data = await response.json();
 
   const imageUrl = data.documents[0]?.place_photo?.[0]?.thumbnail_url || "./images/ys.jpg";
   return imageUrl;
 }
+
+
 
 
 
