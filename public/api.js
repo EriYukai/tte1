@@ -156,7 +156,7 @@ async function displayRestaurantInfo(restaurant) {
 
   try {
     // Get restaurant details from the serverless function
-    const response = await fetch("/.netlify/functions/get-restaurant-details", {
+    const response = await fetch("/.netlify/functions/get-nearby-restaurants", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
