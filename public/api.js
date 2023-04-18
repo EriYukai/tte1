@@ -53,7 +53,6 @@ async function getNearbyRestaurants(latitude, longitude) {
 
     return data;
 
-
   } catch (error) {
     console.error("Error:", error);
   }

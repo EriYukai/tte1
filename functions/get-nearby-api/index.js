@@ -21,6 +21,8 @@ const createResponse = (statusCode, body) => ({
   body: JSON.stringify(body),
 });
 
+// ... (기존 코드 생략)
+
 exports.handler = async function (event, context) {
   console.log("event.body:", event.body);
   
@@ -46,7 +48,7 @@ exports.handler = async function (event, context) {
     const categoryData = await fetchCategoryData(category_group_code, longitude, latitude, radius);
 
     if (!categoryData.documents || categoryData.documents.length === 0) {
-      return createResponse(404, { message: "No nearby restaurants found." });
+      return createResponse(204, { message: "No nearby restaurants found." }); // 수정된 부분
     }
 
     const response = createResponse(200, categoryData);
