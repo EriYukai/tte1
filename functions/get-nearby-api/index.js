@@ -1,4 +1,5 @@
-const fetch = require("node-fetch");
+// const fetch = require("node-fetch"); // 이 줄을 주석 처리
+const fetch = (...args) => import("node-fetch").then(({ default: f }) => f(...args)); // 이 줄을 추가
 const KAKAO_CATEGORY_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
 
 exports.handler = async function (event, context) {
