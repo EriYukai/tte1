@@ -23,12 +23,7 @@ const createResponse = (statusCode, body) => ({
   body: JSON.stringify(body),
 });
 
-
-
 exports.handler = async function (event, context) {
-  const data = JSON.parse(event.body);
-  const { restaurantName } = data;
-  
   console.log("event.body:", event.body);
   
   if (!event.body) {
