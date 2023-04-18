@@ -1,6 +1,6 @@
 const KAKAO_CATEGORY_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
 
-exports.getNearbyRestaurants = async function (event, context) {
+exports.handler = async function (event, context) {
   const KAKAO_API_KEY = process.env.KAKAO_API_KEY;
 
   const { latitude, longitude } = JSON.parse(event.body);
