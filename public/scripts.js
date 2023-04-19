@@ -310,7 +310,7 @@ function addFadingDot(x, y) {
   }, 35);
 }
 
-function displayRestaurantInfo(restaurant) {
+function displayRestaurants(restaurant) {
   const restaurantName = restaurant.title;
   const restaurantAddress = restaurant.address;
   const restaurantPhone = restaurant.telephone;
