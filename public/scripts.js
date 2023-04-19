@@ -309,11 +309,13 @@ function addFadingDot(x, y) {
       fadingDot.remove();
   }, 35);
 }
+
 function displayRestaurants(restaurant) {
   const restaurantName = restaurant.title;
   const restaurantAddress = restaurant.address;
   const restaurantPhone = restaurant.telephone;
-  const restaurantCategory = restaurant.category_name; // 카테고리 정보를 추가합니다.
+  const restaurantCategory = restaurant.category_name;
+  const restaurantImageUrl = restaurant.image_url; // 이미지 URL을 가져옵니다.
 
   // 이미지를 삽입할 div를 선택합니다.
   const contentArea = document.querySelector(".content-area");
@@ -341,9 +343,8 @@ function displayRestaurants(restaurant) {
 
   // 음식점 카테고리 출력
   const categoryElement = document.querySelector("#restaurant-category");
-  categoryElement.textContent = restaurantCategory; // 카테고리 정보를 출력합니다.
+  categoryElement.textContent = restaurantCategory;
 }
-
 
 
 // 버튼클릭 이벤트
