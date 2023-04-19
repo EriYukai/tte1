@@ -342,6 +342,10 @@ function displayRestaurants(restaurant) {
   // 음식점 전화번호 출력
   const phoneElement = document.querySelector("#restaurant-phone");
   phoneElement.textContent = restaurantPhone;
+
+  // 음식점 이미지 출력
+  const imageElement = document.querySelector("#restaurant-image-tag");
+  imageElement.src = restaurantImageUrl;
 }
 
 
@@ -484,26 +488,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.title;
+  const restaurantImageUrl = restaurant.image_url;
 
   // 이미지를 삽입할 div를 선택합니다.
   const contentArea = document.querySelector(".content-area");
   contentArea.innerHTML = ""; // 이전 이미지를 제거합니다.
 
-  // 선택된 음식점의 대표 이미지를 불러와서 컨텐츠 페이지에 표시하는 코드
+  // 음식점 이미지 출력
+  const imageElement = document.createElement("img");
+  imageElement.id = "restaurant-image-tag";
   imageElement.src = restaurantImageUrl;
   imageElement.alt = restaurantName;
+  
 
   // 이미지를 content-area div에 추가합니다.
   contentArea.appendChild(imageElement);
 
-
   const restaurantAddress = restaurant.address;
   const restaurantPhone = restaurant.telephone;
-
-
-  // 음식점 이미지 출력
-  const imageElement = document.querySelector("#restaurant-image-tag");
-  imageElement.src = restaurantImageUrl;
 
   // 음식점 이름 출력
   const nameElement = document.querySelector("#restaurant-name");
@@ -516,6 +518,10 @@ function displayRestaurantInfo(restaurant) {
   // 음식점 전화번호 출력
   const phoneElement = document.querySelector("#restaurant-phone");
   phoneElement.textContent = restaurantPhone;
+
+  // 음식점 이미지 출력
+  const imageElement = document.querySelector("#restaurant-image-tag");
+  imageElement.src = restaurantImageUrl;
 
 }
 
