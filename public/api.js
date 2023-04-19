@@ -4,32 +4,6 @@ const geolocationOptions = {
   maximumAge: 0,
 };
 
-async function showPosition(position) {
-  const { latitude, longitude } = position.coords;
-
-  const container = document.getElementById('map');
-  const options = {
-    center: new kakao.maps.LatLng(latitude, longitude),
-    level: 3
-  };
-  const map = new kakao.maps.Map(container, options);
-  const marker = new kakao.maps.Marker({
-    position: new kakao.maps.LatLng(latitude, longitude)
-  });
-  marker.setMap(map);
-
-  localStorage.setItem("locationPermissionGranted", "true");
-  localStorage.setItem("latitude", latitude);
-  localStorage.setItem("longitude", longitude);
-
-  const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
-
-  if (nearbyRestaurants?.documents?.length > 0) {
-    const restaurantImages = await getRandomRestaurantImages(nearbyRestaurants.documents);
-  } else {
-    console.log("근처 음식점을 찾을 수 없습니다.");
-  }
-}
 
 const showPositionWithRestaurants = (position) => {
   const { latitude, longitude } = position.coords;
@@ -246,3 +220,31 @@ document.querySelector("#restaurant-name").innerText = restaurantName;
 document.querySelector("#restaurant-address").innerText = restaurant.address_name;
 document.querySelector("#restaurant-phone").innerText = restaurant.phone;
 document.querySelector("#restaurant-category").innerText = restaurant.category_name;
+
+
+async function showPosition(position) {
+  const { latitude, longitude } = position.coords;
+
+  const container = document.getElementById('map');
+  const options = {
+    center: new kakao.maps.LatLng(latitude, longitude),
+    level: 3
+  };
+  const map = new kakao.maps.Map(container, options);
+  const marker = new kakao.maps.Marker({
+    position: new kakao.maps.LatLng(latitude, longitude)
+  });
+  marker.setMap(map);
+
+  localStorage.setItem("locationPermissionGranted", "true");
+  localStorage.setItem("latitude", latitude);
+  localStorage.setItem("longitude", longitude);
+
+  const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
+
+  if (nearbyRestaurants?.documents?.length > 0) {
+    const restaurantImages = await getRandomRestaurantImages(nearbyRestaurants.documents);
+  } else {
+    console.log("근처 음식점을 찾을 수 없습니다.");
+  }
+}
