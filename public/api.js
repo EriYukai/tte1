@@ -3,12 +3,37 @@ const geolocationOptions = {
   timeout: 5000,
   maximumAge: 0,
 };
+async function showPosition(position) {
+  const { latitude, longitude } = position.coords;
+
+  const container = document.getElementById('map');
+  const options = {
+    center: new kakao.maps.LatLng(latitude, longitude),
+    level: 3
+  };
+  const map = new kakao.maps.Map(container, options);
+  const marker = new kakao.maps.Marker({
+    position: new kakao.maps.LatLng(latitude, longitude)
+  });
+  marker.setMap(map);
+
+  localStorage.setItem("locationPermissionGranted", "true");
+  localStorage.setItem("latitude", latitude);
+  localStorage.setItem("longitude", longitude);
+
+  const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
+
+  if (nearbyRestaurants?.documents?.length > 0) {
+    const restaurantImages = await getRandomRestaurantImages(nearbyRestaurants.documents);
+  } else {
+    console.log("근처 음식점을 찾을 수 없습니다.");
+  }
+}
 
 const showPosition = (position) => {
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
+  const { latitude, longitude } = position.coords;
   getNearbyRestaurants(latitude, longitude)
-    .then((restaurants) => getRandomRestaurantImages(restaurants))
+    .then((restaurants) => getRandomRestaurantImages(restaurants.documents))
     .then((images) => displayRestaurants(restaurants, images))
     .catch((error) => console.error(error));
 };
@@ -70,33 +95,33 @@ async function getRandomRestaurantImages(restaurants) {
   );
   return images;
 }
-async function showPosition(position) {
-  const { latitude, longitude } = position.coords;
 
-  const container = document.getElementById('map');
-  const options = {
-    center: new kakao.maps.LatLng(latitude, longitude),
-    level: 3
-  };
-  const map = new kakao.maps.Map(container, options);
-  const marker = new kakao.maps.Marker({
-    position: new kakao.maps.LatLng(latitude, longitude)
-  });
-  marker.setMap(map);
+async function getRestaurantImage(restaurantName) {
+  try {
+    const response = await fetch(
+      `${window.location.origin}/.netlify/functions/get-image-api`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ restaurantName }),
+      }
+    );
 
-  localStorage.setItem("locationPermissionGranted", "true");
-  localStorage.setItem("latitude", latitude);
-  localStorage.setItem("longitude", longitude);
+    const data = await response.json();
 
-  const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
+    if (!data.imageUrl) {
+      console.error("Error: No image found.");
+      return;
+    }
 
-  if (nearbyRestaurants?.documents?.length > 0) {
-    const restaurantImages = await getRandomRestaurantImages(nearbyRestaurants.documents);
-    // 여기서 restaurantImages를 사용하여 백그라운드 이미지를 설정할 수 있습니다.
-  } else {
-    console.log("근처 음식점을 찾을 수 없습니다.");
+    return data.imageUrl;
+  } catch (error) {
+    console.error("Error:", error);
   }
 }
+
 
 function getScoreForRestaurant(restaurant) {
   if (!restaurant?.place_name) {
