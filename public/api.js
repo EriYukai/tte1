@@ -3,6 +3,7 @@ const geolocationOptions = {
   timeout: 5000,
   maximumAge: 0,
 };
+
 async function showPosition(position) {
   const { latitude, longitude } = position.coords;
 
@@ -29,7 +30,8 @@ async function showPosition(position) {
     console.log("근처 음식점을 찾을 수 없습니다.");
   }
 }
-const showPosition = (position) => {
+
+const showPositionWithRestaurants = (position) => {
   const { latitude, longitude } = position.coords;
   getNearbyRestaurants(latitude, longitude)
     .then((restaurants) => getRandomRestaurantImages(restaurants.documents))
@@ -46,7 +48,7 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
   });
 } else {
   navigator.geolocation.getCurrentPosition(
-    (position) => showPosition(position),
+    (position) => showPositionWithRestaurants(position),
     (error) => console.log("Geolocation error:", error),
     geolocationOptions
   );
