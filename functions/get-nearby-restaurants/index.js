@@ -1,4 +1,4 @@
-const fetch = (...args) => import('node-fetch').then(({ default: f }) => f(...args));
+const fetch = require('node-fetch');
 
 exports.getRestaurantDetails = async function (event, context) {
   const KAKAO_API_KEY = process.env.KAKAO_API_KEY;

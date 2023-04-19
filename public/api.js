@@ -122,8 +122,6 @@ async function getRestaurantImage(restaurantName) {
     console.error("Error:", error);
   }
 }
-
-
 function getScoreForRestaurant(restaurant) {
   if (!restaurant?.place_name) {
     console.log("음식점 정보가 없습니다.");
@@ -159,14 +157,18 @@ function getScoreForRestaurant(restaurant) {
 }
 async function getRestaurantImage(placeName) {
   const SERVERLESS_FUNCTION_URL = `${window.location.origin}/.netlify/functions/get-nearby-restaurants`;
-  const response = await fetch(SERVERLESS_FUNCTION_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ restaurantName: placeName }),
-  });
-  const data = await response.json();
-  const imageUrl = data.documents[0]?.place_photo?.[0]?.thumbnail_url || "./images/ys.jpg";
-  return imageUrl;
+  try {
+    const response = await fetch(SERVERLESS_FUNCTION_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ restaurantName: placeName }),
+    });
+    const data = await response.json();
+    const imageUrl = data.documents[0]?.place_photo?.[0]?.thumbnail_url || "./images/ys.jpg";
+    return imageUrl;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function handleLocationPermissionDenied() {
