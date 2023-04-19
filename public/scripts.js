@@ -262,7 +262,6 @@ document.addEventListener("DOMContentLoaded", function () {
       updateShimmerDot(shimmerDot, progress, buttonRect);
   });
 });
-
 function setShimmerDotSize(shimmerDot) {
   const recommendationButton = document.getElementById("recommendation-button");
   const buttonRect = recommendationButton.getBoundingClientRect();
@@ -270,32 +269,30 @@ function setShimmerDotSize(shimmerDot) {
   const windowWidth = window.innerWidth;
   const windowHeight = window.innerHeight;
 
-  const minSize = 6; // 최소 크기
-  const maxSize = 25; // 최대 크기
+  const minSize = 6;
+  const maxSize = 25;
 
-  // 창의 크기를 기준으로 적절한 크기를 계산합니다.
   const size = Math.max(minSize, Math.min(maxSize, Math.min(windowWidth, windowHeight) / 36));
 
-  // 크기와 관련된 스타일 속성을 설정합니다.
-  shimmerDot.style.width = size + "px";
-  shimmerDot.style.height = size + "px";
-  shimmerDot.style.borderRadius = "0%";
-  shimmerDot.style.boxShadow = `
-    0 0 ${size / 2}px rgba(255, 255, 255, 0.8),
-    0 0 ${size}px rgba(255, 255, 255, 0.6),
-    0 0 ${size * 1.5}px rgba(255, 255, 255, 0.4),
-    0 0 ${size * 2}px rgba(255, 255, 255, 0.2)
+  shimmerDot.style.cssText = `
+    width: ${size}px;
+    height: ${size}px;
+    border-radius: 0%;
+    box-shadow: 0 0 ${size / 2}px rgba(255, 255, 255, 0.8),
+                0 0 ${size}px rgba(255, 255, 255, 0.6),
+                0 0 ${size * 1.5}px rgba(255, 255, 255, 0.4),
+                0 0 ${size * 2}px rgba(255, 255, 255, 0.2);
   `;
 }
 
 function createFadingDot(x, y) {
   const fadingDot = document.createElement("div");
   fadingDot.classList.add("shimmer-dot", "fading-dot");
-  
+
   fadingDot.style.left = x + "px";
   fadingDot.style.top = y + "px";
 
-  setShimmerDotSize(fadingDot); // 새로운 점의 크기와 스타일 설정
+  setShimmerDotSize(fadingDot);
 
   return fadingDot;
 }
@@ -306,7 +303,7 @@ function addFadingDot(x, y) {
   body.appendChild(fadingDot);
 
   setTimeout(() => {
-      fadingDot.remove();
+    fadingDot.remove();
   }, 35);
 }
 
