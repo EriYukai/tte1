@@ -1,7 +1,3 @@
-z
-
-  
-
 async function showPosition(position) {
   const latitude = position.coords.latitude;
   const longitude = position.coords.longitude;
