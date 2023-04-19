@@ -230,3 +230,19 @@ async function displayRestaurantInfo(restaurant) {
     console.error(error);
   }
 }
+
+// 웹 페이지에 표시할 음식점을 선택합니다.
+const chosenRestaurant = nearbyRestaurants.documents.reduce((best, current) => {
+  const bestScore = getScoreForRestaurant(best);
+  const currentScore = getScoreForRestaurant(current);
+  return currentScore > bestScore ? current : best;
+}, nearbyRestaurants.documents[0]);
+
+// 선택된 음식점의 정보를 웹 페이지에 표시합니다.
+displayRestaurantInfo(chosenRestaurant);
+
+// 음식점 정보를 웹 페이지에 표시합니다.
+document.querySelector("#restaurant-name").innerText = restaurantName;
+document.querySelector("#restaurant-address").innerText = restaurant.address_name;
+document.querySelector("#restaurant-phone").innerText = restaurant.phone;
+document.querySelector("#restaurant-category").innerText = restaurant.category_name;
