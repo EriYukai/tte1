@@ -4,6 +4,15 @@ const geolocationOptions = {
   maximumAge: 0,
 };
 
+const showPosition = (position) => {
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+  getNearbyRestaurants(latitude, longitude)
+    .then((restaurants) => getRandomRestaurantImages(restaurants))
+    .then((images) => displayRestaurants(restaurants, images))
+    .catch((error) => console.error(error));
+};
+
 if (localStorage.getItem("locationPermissionGranted") === "true") {
   showPosition({
     coords: {
@@ -13,14 +22,8 @@ if (localStorage.getItem("locationPermissionGranted") === "true") {
   });
 } else {
   navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      showPosition(position);
-    },
-    (error) => {
-      console.log("Geolocation error:", error);
-    },
+    (position) => showPosition(position),
+    (error) => console.log("Geolocation error:", error),
     geolocationOptions
   );
 }
@@ -34,7 +37,7 @@ async function getNearbyRestaurants(latitude, longitude) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ latitude: latitude, longitude: longitude }),
+        body: JSON.stringify({ latitude, longitude }),
       }
     );
 
@@ -42,23 +45,21 @@ async function getNearbyRestaurants(latitude, longitude) {
       console.error("Error: No nearby restaurants found.");
       return;
     }
-    
+
     const data = await response.json();
-    
+
     if (!data.documents || data.documents.length === 0) {
       console.error("Error: No nearby restaurants found.");
       return;
     }
-  
+
     const maxRestaurants = 15;
     const selectedRestaurants = data.documents
       .sort(() => Math.random() - 0.5)
       .slice(0, maxRestaurants);
-  
-    return { documents: selectedRestaurants }; // 수정된 부분
-  }
 
-  catch (error) {
+    return { documents: selectedRestaurants };
+  } catch (error) {
     console.error("Error:", error);
   }
 }
@@ -69,12 +70,8 @@ async function getRandomRestaurantImages(restaurants) {
   );
   return images;
 }
-
-  
-
 async function showPosition(position) {
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
+  const { latitude, longitude } = position.coords;
 
   const container = document.getElementById('map');
   const options = {
@@ -88,12 +85,12 @@ async function showPosition(position) {
   marker.setMap(map);
 
   localStorage.setItem("locationPermissionGranted", "true");
-  localStorage.setItem("latitude", position.coords.latitude);
-  localStorage.setItem("longitude", position.coords.longitude);
-  
+  localStorage.setItem("latitude", latitude);
+  localStorage.setItem("longitude", longitude);
+
   const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
 
-  if (nearbyRestaurants && nearbyRestaurants.documents && nearbyRestaurants.documents.length > 0) {
+  if (nearbyRestaurants?.documents?.length > 0) {
     const restaurantImages = await getRandomRestaurantImages(nearbyRestaurants.documents);
     // 여기서 restaurantImages를 사용하여 백그라운드 이미지를 설정할 수 있습니다.
   } else {
@@ -101,16 +98,8 @@ async function showPosition(position) {
   }
 }
 
-// 기존의 코드를 유지하면서 에러 출력 부분을 제거하였습니다.
-// 이렇게 하면 근처 음식점을 찾을 수 없는 경우에 대한 메시지만 출력됩니다.
-
-
-
-
-
-
 function getScoreForRestaurant(restaurant) {
-  if (!restaurant || !restaurant.place_name) {
+  if (!restaurant?.place_name) {
     console.log("음식점 정보가 없습니다.");
     return 0;
   }
@@ -139,45 +128,26 @@ function getScoreForRestaurant(restaurant) {
   console.log("시간 점수:", timeScore);
   console.log("인기 트렌드 점수:", TrendScore);
   console.log("최종 점수:", score);
-  
+
   return score;
 }
-
 async function getRestaurantImage(placeName) {
-  const SERVERLESS_FUNCTION_URL = `${window.location.origin}/.netlify/functions/get-nearby-restaurants`; // 서버리스 함수 URL
-
+  const SERVERLESS_FUNCTION_URL = `${window.location.origin}/.netlify/functions/get-nearby-restaurants`;
   const response = await fetch(SERVERLESS_FUNCTION_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ restaurantName: placeName }),
   });
-
   const data = await response.json();
-
   const imageUrl = data.documents[0]?.place_photo?.[0]?.thumbnail_url || "./images/ys.jpg";
   return imageUrl;
 }
 
-
-
-
-
-
-// 위치 정보 제공에 동의하지 않은 경우 처리
 function handleLocationPermissionDenied() {
-// 위치 정보를 사용할 수 없는 경우 처리
-// ...
-
-// 위치 정보 제공에 동의하지 않은 것으로 표시
-localStorage.setItem("locationPermissionGranted", "false");
+  localStorage.setItem("locationPermissionGranted", "false");
 }
 
-
-
 function initMap() {
-  // 사용자의 위치를 얻기 위한 geolocation API 사용
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition, showError);
   } else {
@@ -186,20 +156,7 @@ function initMap() {
 }
 
 function showError(error) {
-  switch (error.code) {
-    case error.PERMISSION_DENIED:
-      console.log("User denied the request for Geolocation.");
-      break;
-    case error.POSITION_UNAVAILABLE:
-      console.log("Location information is unavailable.");
-      break;
-    case error.TIMEOUT:
-      console.log("The request to get user location timed out.");
-      break;
-    case error.UNKNOWN_ERROR:
-      console.log("An unknown error occurred.");
-      break;
-  }
+  console.log(`Error occurred: ${error.message}`);
 }
 
 async function displayRestaurantInfo(restaurant) {
