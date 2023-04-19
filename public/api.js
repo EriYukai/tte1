@@ -29,7 +29,6 @@ async function showPosition(position) {
     console.log("근처 음식점을 찾을 수 없습니다.");
   }
 }
-
 const showPosition = (position) => {
   const { latitude, longitude } = position.coords;
   getNearbyRestaurants(latitude, longitude)
