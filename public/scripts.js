@@ -293,7 +293,7 @@ function createFadingDot(x, y) {
   fadingDot.style.top = y + "px";
 
   setShimmerDotSize(fadingDot);
-
+  
   return fadingDot;
 }
 
