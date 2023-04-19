@@ -310,6 +310,45 @@ function addFadingDot(x, y) {
   }, 35);
 }
 
+function displayRestaurantInfo(restaurant) {
+  const restaurantName = restaurant.title;
+  const restaurantAddress = restaurant.address;
+  const restaurantPhone = restaurant.telephone;
+  const restaurantCategory = restaurant.category_name; // 카테고리 정보를 추가합니다.
+
+  // 이미지를 삽입할 div를 선택합니다.
+  const contentArea = document.querySelector(".content-area");
+  contentArea.innerHTML = ""; // 이전 이미지를 제거합니다.
+
+  // 선택된 음식점의 대표 이미지를 불러와서 컨텐츠 페이지에 표시하는 코드
+  imageElement.src = restaurantImageUrl;
+  imageElement.alt = restaurantName;
+
+  // 이미지를 content-area div에 추가합니다.
+  contentArea.appendChild(imageElement);
+
+  // 음식점 이미지 출력
+  const imageElement = document.querySelector("#restaurant-image-tag");
+  imageElement.src = restaurantImageUrl;
+
+  // 음식점 이름 출력
+  const nameElement = document.querySelector("#restaurant-name");
+  nameElement.textContent = restaurantName;
+
+  // 음식점 주소 출력
+  const addressElement = document.querySelector("#restaurant-address");
+  addressElement.textContent = restaurantAddress;
+
+  // 음식점 전화번호 출력
+  const phoneElement = document.querySelector("#restaurant-phone");
+  phoneElement.textContent = restaurantPhone;
+
+  // 음식점 카테고리 출력
+  const categoryElement = document.querySelector("#restaurant-category");
+  categoryElement.textContent = restaurantCategory; // 카테고리 정보를 출력합니다.
+}
+
+
 // 버튼클릭 이벤트
 const button = document.getElementById("recommendation-button");
 
