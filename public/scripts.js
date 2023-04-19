@@ -465,8 +465,21 @@ function showPosition(position, map) {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  getLocation();
+  button.addEventListener("click", async function () {
+    if (localStorage.getItem("locationPermissionGranted") === "true") {
+      // 기존 코드
+    } else {
+      navigator.geolocation.getCurrentPosition(async function (position) {
+        // 기존 코드
+      });
+    }
+
+    const recommendedRestaurant = await getRecommendedRestaurant(nearbyRestaurants.documents);
+    displayRestaurantInfo(recommendedRestaurant);
+    // 기존 코드
+  });
 });
+
 
 
 function displayRestaurantInfo(restaurant) {
