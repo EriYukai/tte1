@@ -319,7 +319,8 @@ function displayRestaurants(restaurant) {
   contentArea.innerHTML = ""; // 이전 이미지를 제거합니다.
 
   // 음식점 이미지 출력
-  const imageElement = document.querySelector("#restaurant-image-tag");
+  const imageElement = document.createElement("img");
+  imageElement.id = "restaurant-image-tag";
   imageElement.src = restaurantImageUrl;
   imageElement.alt = restaurantName;
 
@@ -341,6 +342,7 @@ function displayRestaurants(restaurant) {
   const phoneElement = document.querySelector("#restaurant-phone");
   phoneElement.textContent = restaurantPhone;
 }
+
 
 
 
