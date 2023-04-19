@@ -356,7 +356,7 @@ button.addEventListener("click", async function() {
     const longitude = localStorage.getItem("longitude");
     const restaurants = await getScoreForRestaurant(latitude, longitude);
     displayRestaurants(restaurants, latitude, longitude);
-    getGptResponse(restaurants);
+    displayRestaurantInfo(restaurants);
   } else {
     navigator.geolocation.getCurrentPosition(async function (position) {
       const latitude = position.coords.latitude;
@@ -364,7 +364,7 @@ button.addEventListener("click", async function() {
       showPosition(position);
       const restaurants = await getScoreForRestaurant(latitude, longitude);
       displayRestaurants(restaurants, latitude, longitude);
-      getGptResponse(restaurants);
+      displayRestaurantInfo(restaurants);
     });
   }
 
