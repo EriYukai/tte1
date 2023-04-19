@@ -359,55 +359,101 @@ function displayRestaurants(restaurant) {
 // |- 함수와 변수의 이름이 명확하지 않다. 함수와 변수의 이름을 명확하게 지어 가독성을 높일 필요가 있다.
 // |- 코드 중간에 있는 오버레이 페이드 인 효과와 관련된 코드가 이해하기 어렵다. 이 코드를 주석으로 설명하거나 함수로 분리하여 가독성을 높일 필요가 있다.
 // |
+
 // 버튼클릭 이벤트
 const button = document.getElementById("recommendation-button");
 
-button.addEventListener("click", async function () {
-  const locationPermissionGranted = localStorage.getItem("locationPermissionGranted") === "true";
-  const position = locationPermissionGranted ? { coords: { latitude: localStorage.getItem("latitude"), longitude: localStorage.getItem("longitude") } } : await new Promise(resolve => navigator.geolocation.getCurrentPosition(resolve));
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
-  showPosition(position);
-  const restaurants = await getScoreForRestaurant(latitude, longitude);
-  displayRestaurants(restaurants, latitude, longitude);
-  displayRestaurantInfo(restaurants);
-  const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
+
+button.addEventListener("click", async function() {
+  if (localStorage.getItem("locationPermissionGranted") === "true") {
+    const latitude = localStorage.getItem("latitude");
+    const longitude = localStorage.getItem("longitude");
+    const restaurants = await getScoreForRestaurant(latitude, longitude);
+    displayRestaurants(restaurants, latitude, longitude);
+    displayRestaurantInfo(restaurants);
+  } else {
+    navigator.geolocation.getCurrentPosition(async function (position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      showPosition(position);
+      const restaurants = await getScoreForRestaurant(latitude, longitude);
+      displayRestaurants(restaurants, latitude, longitude);
+      displayRestaurantInfo(restaurants);
+    });
+  }
+
   const recommendedRestaurant = await getRecommendedRestaurant(nearbyRestaurants.documents);
   displayRestaurantInfo(recommendedRestaurant);
-  const audio = new Audio("ok.mp3");
-  audio.volume = 0.2;
-  audio.play();
-  const overlay = document.getElementById("overlay");
-  overlay.classList.add("fade-out");
-  setTimeout(() => {
-    overlay.classList.add("fade-in");
-    overlay.classList.remove("fade-out");
-    setTimeout(() => {
-      overlay.classList.remove("fade-in");
-    }, 1000);
-  }, 1000);
-  const currentButton = document.getElementById("recommendation-button");
-  currentButton.style.display = "none";
-  const newButton = document.createElement("button");
-  newButton.setAttribute("id", "recommendation-button3");
-  newButton.classList.add("recommendation-button", "new-button", "createRaindrop");
-  newButton.innerHTML = "정보확인";
-  const newButton2 = document.createElement("button");
-  newButton2.setAttribute("id", "recommendation-button2");
-  newButton2.classList.add("recommendation-button", "new-button2");
-  newButton2.innerHTML = "&#x21bb;";
-  newButton2.addEventListener("click", () => location.reload());
-  const buttonContainer = document.createElement("div");
-  buttonContainer.classList.add("button-container");
-  buttonContainer.appendChild(newButton);
-  buttonContainer.appendChild(newButton2);
-  const body = document.querySelector("body");
-  body.appendChild(buttonContainer);
-  ["raindrop", "shimmer-border", "shimmer-dot", "fading-dot"].forEach(hideClass);
-  ["createRaindrop", "createShimmerDot", "updateShimmerDot", "setShimmerDotSize", "createFadingDot", "addFadingDot"].forEach(hideFunction);
-  getLocation(map);
+
+    const audio = new Audio("ok.mp3");
+    audio.volume = 0.2; // 볼륨을 10%로 설정
+    audio.play();
+
+// 오버레이 페이드 인 효과 시작
+let overlay = document.getElementById("overlay");
+overlay.classList.add("fade-out");
+
+setTimeout(function() {
+  overlay.classList.add("fade-in");
+  overlay.classList.remove("fade-out");
+
+  setTimeout(function() {
+    overlay.classList.remove("fade-in");
+  }, 1000); // 2000ms (2초) 후에 페이드 인 효과가 끝납니다.
+}, 1000); // 2000ms (2초) 후에 페이드 인 효과를 시작합니다.
+
+// 현재 버튼 요소 가져오기
+const currentButton = document.getElementById("recommendation-button");
+
+// 버튼 숨기기
+currentButton.style.display = "none";
+
+// 새 버튼 생성
+const newButton = document.createElement("button");
+newButton.setAttribute("id", "recommendation-button3");
+newButton.classList.add("recommendation-button", "new-button", "createRaindrop"); // new-button 클래스 추가
+newButton.innerHTML = "정보확인";
+
+// 새 버튼2 생성
+const newButton2 = document.createElement("button");
+newButton2.setAttribute("id", "recommendation-button2");
+newButton2.classList.add("recommendation-button", "new-button2"); // new-button2 클래스 추가
+newButton2.innerHTML = "&#x21bb;";
+
+
+// 버튼2 클릭 이벤트
+newButton2.addEventListener("click", function() {
+  location.reload();
 });
 
+
+// 버튼 컨테이너 생성
+const buttonContainer = document.createElement("div");
+buttonContainer.classList.add("button-container");
+
+// 생성한 버튼 추가
+buttonContainer.appendChild(newButton);
+buttonContainer.appendChild(newButton2);
+
+const body = document.querySelector("body");
+body.appendChild(buttonContainer);
+
+
+// 숨겨진 클래스와 함수 호출
+hideClass("raindrop");
+hideClass("shimmer-border");
+hideClass("shimmer-dot");
+hideClass("fading-dot");
+hideFunction("createRaindrop");
+hideFunction("createShimmerDot");
+hideFunction("updateShimmerDot");
+hideFunction("setShimmerDotSize");
+hideFunction("createFadingDot");
+hideFunction("addFadingDot");
+
+
+
+// 위치 정보 확인 및 주변 음식점 이미지 표시 로직
 function getLocation(map) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -419,11 +465,14 @@ function getLocation(map) {
   }
 }
 
+
 function showPosition(position, map) {
   const lat = position.coords.latitude;
   const lng = position.coords.longitude;
+
   const latlng = new kakao.maps.LatLng(lat, lng);
   const marker = new kakao.maps.Marker({ position: latlng });
+
   marker.setMap(map);
 }
 
@@ -477,7 +526,7 @@ function displayRestaurantInfo(restaurant) {
   phoneElement.textContent = restaurantPhone;
 }
 
-
+});
 
 function hideClass(className) {
 const elements = document.getElementsByClassName(className);
