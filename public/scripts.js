@@ -310,6 +310,10 @@ function addFadingDot(x, y) {
   }, 35);
 }
 
+const imageElement = document.querySelector("#restaurant-image-tag");
+imageElement.src = restaurantImageUrl;
+imageElement.alt = restaurantName;
+
 function displayRestaurants(restaurant) {
   const restaurantName = restaurant.title;
   const restaurantAddress = restaurant.address;
