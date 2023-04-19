@@ -359,7 +359,6 @@ function displayRestaurants(restaurant) {
 // |- 함수와 변수의 이름이 명확하지 않다. 함수와 변수의 이름을 명확하게 지어 가독성을 높일 필요가 있다.
 // |- 코드 중간에 있는 오버레이 페이드 인 효과와 관련된 코드가 이해하기 어렵다. 이 코드를 주석으로 설명하거나 함수로 분리하여 가독성을 높일 필요가 있다.
 // |
-
 // 버튼클릭 이벤트
 const button = document.getElementById("recommendation-button");
 
@@ -372,6 +371,7 @@ button.addEventListener("click", async function () {
   const restaurants = await getScoreForRestaurant(latitude, longitude);
   displayRestaurants(restaurants, latitude, longitude);
   displayRestaurantInfo(restaurants);
+  const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
   const recommendedRestaurant = await getRecommendedRestaurant(nearbyRestaurants.documents);
   displayRestaurantInfo(recommendedRestaurant);
   const audio = new Audio("ok.mp3");
