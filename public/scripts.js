@@ -323,6 +323,7 @@ function displayRestaurants(restaurant) {
   imageElement.id = "restaurant-image-tag";
   imageElement.src = restaurantImageUrl;
   imageElement.alt = restaurantName;
+  
 
   // 이미지를 content-area div에 추가합니다.
   contentArea.appendChild(imageElement);
