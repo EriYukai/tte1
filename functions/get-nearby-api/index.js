@@ -1,12 +1,14 @@
-const fetch = (...args) => import('node-fetch').then(({ default: f }) => f(...args));
+// root/functions/generate-text.js
+const fetch = (...args) => import('node-fetch').then(({default: f}) => f(...args));
 
 exports.handler = async function (event, context) {
   const KAKAO_API_KEY = process.env.KAKAO_API_KEY;
   const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
-  const category_group_code = "FD6";
-  const radius = 5000;
+  const category_group_code = "FD6"; // 음식점 카테고리 코드
+  const radius = 5000; // 반경 2km 내 검색
 
-  const { latitude, longitude } = JSON.parse(event.body);
+  const data = JSON.parse(event.body);
+  const { latitude, longitude } = data;
   const url = `${KAKAO_SEARCH_API_URL}?category_group_code=${category_group_code}&x=${longitude}&y=${latitude}&radius=${radius}`;
 
   const headers = {
@@ -25,7 +27,7 @@ exports.handler = async function (event, context) {
       body: JSON.stringify(data),
     };
   } catch (error) {
-    console.error(error);
+    console.error(error); // 에러를 콘솔에 출력하도록 추가
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message }),

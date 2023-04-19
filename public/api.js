@@ -1,103 +1,46 @@
-const geolocationOptions = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0,
-};
+z
 
+  
 
-const showPositionWithRestaurants = (position) => {
-  const { latitude, longitude } = position.coords;
-  getNearbyRestaurants(latitude, longitude)
-    .then((restaurants) => getRandomRestaurantImages(restaurants.documents))
-    .then((images) => displayRestaurants(restaurants, images))
-    .catch((error) => console.error(error));
-};
+async function showPosition(position) {
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
 
-if (localStorage.getItem("locationPermissionGranted") === "true") {
-  showPosition({
-    coords: {
-      latitude: parseFloat(localStorage.getItem("latitude")),
-      longitude: parseFloat(localStorage.getItem("longitude")),
-    },
+  const container = document.getElementById('map');
+  const options = {
+    center: new kakao.maps.LatLng(latitude, longitude),
+    level: 3
+  };
+  const map = new kakao.maps.Map(container, options);
+  const marker = new kakao.maps.Marker({
+    position: new kakao.maps.LatLng(latitude, longitude)
   });
-} else {
-  navigator.geolocation.getCurrentPosition(
-    (position) => showPositionWithRestaurants(position),
-    (error) => console.log("Geolocation error:", error),
-    geolocationOptions
-  );
-}
+  marker.setMap(map);
 
-async function getNearbyRestaurants(latitude, longitude) {
-  try {
-    const response = await fetch(
-      `${window.location.origin}/.netlify/functions/get-nearby-api`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ latitude, longitude }),
-      }
-    );
+  localStorage.setItem("locationPermissionGranted", "true");
+  localStorage.setItem("latitude", position.coords.latitude);
+  localStorage.setItem("longitude", position.coords.longitude);
+  
+  const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
 
-    if (response.status === 204) {
-      console.error("Error: No nearby restaurants found.");
-      return;
-    }
-
-    const data = await response.json();
-
-    if (!data.documents || data.documents.length === 0) {
-      console.error("Error: No nearby restaurants found.");
-      return;
-    }
-
-    const maxRestaurants = 15;
-    const selectedRestaurants = data.documents
-      .sort(() => Math.random() - 0.5)
-      .slice(0, maxRestaurants);
-
-    return { documents: selectedRestaurants };
-  } catch (error) {
-    console.error("Error:", error);
+  if (nearbyRestaurants && nearbyRestaurants.documents && nearbyRestaurants.documents.length > 0) {
+    const restaurantImages = await getRandomRestaurantImages(nearbyRestaurants.documents);
+    // 여기서 restaurantImages를 사용하여 백그라운드 이미지를 설정할 수 있습니다.
+  } else {
+    console.log("근처 음식점을 찾을 수 없습니다.");
   }
 }
 
-async function getRandomRestaurantImages(restaurants) {
-  const images = await Promise.all(
-    restaurants.map((restaurant) => getRestaurantImage(restaurant.place_name))
-  );
-  return images;
-}
+// 기존의 코드를 유지하면서 에러 출력 부분을 제거하였습니다.
+// 이렇게 하면 근처 음식점을 찾을 수 없는 경우에 대한 메시지만 출력됩니다.
 
-async function getRestaurantImage(restaurantName) {
-  try {
-    const response = await fetch(
-      `${window.location.origin}/.netlify/functions/get-image-api`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ restaurantName }),
-      }
-    );
 
-    const data = await response.json();
 
-    if (!data.imageUrl) {
-      console.error("Error: No image found.");
-      return;
-    }
 
-    return data.imageUrl;
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
+
+
 function getScoreForRestaurant(restaurant) {
-  if (!restaurant?.place_name) {
+  if (!restaurant || !restaurant.place_name) {
     console.log("음식점 정보가 없습니다.");
     return 0;
   }
@@ -126,30 +69,45 @@ function getScoreForRestaurant(restaurant) {
   console.log("시간 점수:", timeScore);
   console.log("인기 트렌드 점수:", TrendScore);
   console.log("최종 점수:", score);
-
+  
   return score;
 }
+
 async function getRestaurantImage(placeName) {
-  const SERVERLESS_FUNCTION_URL = `${window.location.origin}/.netlify/functions/get-nearby-restaurants`;
-  try {
-    const response = await fetch(SERVERLESS_FUNCTION_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ restaurantName: placeName }),
-    });
-    const data = await response.json();
-    const imageUrl = data.documents[0]?.place_photo?.[0]?.thumbnail_url || "./images/ys.jpg";
-    return imageUrl;
-  } catch (error) {
-    console.error(error);
-  }
+  const SERVERLESS_FUNCTION_URL = `${window.location.origin}/.netlify/functions/get-nearby-restaurants`; // 서버리스 함수 URL
+
+  const response = await fetch(SERVERLESS_FUNCTION_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ restaurantName: placeName }),
+  });
+
+  const data = await response.json();
+
+  const imageUrl = data.documents[0]?.place_photo?.[0]?.thumbnail_url || "./images/ys.jpg";
+  return imageUrl;
 }
 
+
+
+
+
+
+// 위치 정보 제공에 동의하지 않은 경우 처리
 function handleLocationPermissionDenied() {
-  localStorage.setItem("locationPermissionGranted", "false");
+// 위치 정보를 사용할 수 없는 경우 처리
+// ...
+
+// 위치 정보 제공에 동의하지 않은 것으로 표시
+localStorage.setItem("locationPermissionGranted", "false");
 }
+
+
 
 function initMap() {
+  // 사용자의 위치를 얻기 위한 geolocation API 사용
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition, showError);
   } else {
@@ -158,7 +116,20 @@ function initMap() {
 }
 
 function showError(error) {
-  console.log(`Error occurred: ${error.message}`);
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      console.log("User denied the request for Geolocation.");
+      break;
+    case error.POSITION_UNAVAILABLE:
+      console.log("Location information is unavailable.");
+      break;
+    case error.TIMEOUT:
+      console.log("The request to get user location timed out.");
+      break;
+    case error.UNKNOWN_ERROR:
+      console.log("An unknown error occurred.");
+      break;
+  }
 }
 
 async function displayRestaurantInfo(restaurant) {
@@ -202,49 +173,5 @@ async function displayRestaurantInfo(restaurant) {
 
   } catch (error) {
     console.error(error);
-  }
-}
-
-// 웹 페이지에 표시할 음식점을 선택합니다.
-const chosenRestaurant = nearbyRestaurants.documents.reduce((best, current) => {
-  const bestScore = getScoreForRestaurant(best);
-  const currentScore = getScoreForRestaurant(current);
-  return currentScore > bestScore ? current : best;
-}, nearbyRestaurants.documents[0]);
-
-// 선택된 음식점의 정보를 웹 페이지에 표시합니다.
-displayRestaurantInfo(chosenRestaurant);
-
-// 음식점 정보를 웹 페이지에 표시합니다.
-document.querySelector("#restaurant-name").innerText = restaurantName;
-document.querySelector("#restaurant-address").innerText = restaurant.address_name;
-document.querySelector("#restaurant-phone").innerText = restaurant.phone;
-document.querySelector("#restaurant-category").innerText = restaurant.category_name;
-
-
-async function showPosition(position) {
-  const { latitude, longitude } = position.coords;
-
-  const container = document.getElementById('map');
-  const options = {
-    center: new kakao.maps.LatLng(latitude, longitude),
-    level: 3
-  };
-  const map = new kakao.maps.Map(container, options);
-  const marker = new kakao.maps.Marker({
-    position: new kakao.maps.LatLng(latitude, longitude)
-  });
-  marker.setMap(map);
-
-  localStorage.setItem("locationPermissionGranted", "true");
-  localStorage.setItem("latitude", latitude);
-  localStorage.setItem("longitude", longitude);
-
-  const nearbyRestaurants = await getNearbyRestaurants(latitude, longitude);
-
-  if (nearbyRestaurants?.documents?.length > 0) {
-    const restaurantImages = await getRandomRestaurantImages(nearbyRestaurants.documents);
-  } else {
-    console.log("근처 음식점을 찾을 수 없습니다.");
   }
 }
