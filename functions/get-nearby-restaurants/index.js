@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 exports.getRestaurantDetails = async function (event, context) {
-  const KAKAO_API_KEY = process.env.KAKAO_API_KEY;
+  const KAKAO_APP_KEY = process.env.KAKAO_API_KEY;
   const KAKAO_SEARCH_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
   const KAKAO_DETAIL_API_URL = "https://dapi.kakao.com/v2/local/search/place.json";
 
@@ -17,7 +17,7 @@ exports.getRestaurantDetails = async function (event, context) {
     return { statusCode: 400, body: JSON.stringify({ error: "Invalid JSON body" }) };
   }
 
-  const headers = { "Authorization": `KakaoAK ${KAKAO_API_KEY}`, "Content-Type": "application/json" };
+  const headers = { "Authorization": `KakaoAK ${KAKAO_APP_KEY}`, "Content-Type": "application/json" };
 
   try {
     const query = encodeURIComponent(restaurantName);
