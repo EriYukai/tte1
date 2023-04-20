@@ -440,6 +440,21 @@ function displayRestaurantInfo(restaurant) {
 
 });
 
+async function getRecommendedRestaurant(restaurants) {
+  // 여기에 추천 로직을 구현하십시오.
+  // 예를 들어, 가장 높은 평점을 가진 음식점을 반환하려면 다음과 같이 작성할 수 있습니다.
+  let highestRatedRestaurant = restaurants[0];
+
+  for (let i = 1; i < restaurants.length; i++) {
+    if (restaurants[i].rating > highestRatedRestaurant.rating) {
+      highestRatedRestaurant = restaurants[i];
+    }
+  }
+
+  return highestRatedRestaurant;
+}
+
+
 
 function hideClass(className) {
 const elements = document.getElementsByClassName(className);
