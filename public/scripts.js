@@ -24,13 +24,17 @@ function createRaindrop() {
   raindrop.style.animationDuration = `${Math.random() * 1 + 1}s`;
   raindrop.style.animationName = "raindropRise";
 
-  return raindrop || null;
+  return raindrop;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const recommendationButton = document.getElementById("recommendation-button");
-  const raindrops = [];
   const MAX_RAINDROPS = 50;
+
+  for (let i = 0; i < MAX_RAINDROPS; i++) {
+    const raindrop = createRaindrop();
+    recommendationButton.appendChild(raindrop);
+  }
 
 
     // 모든 createRaindrop 클래스를 가진 요소에 대해 물방울 효과 적용
