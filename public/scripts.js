@@ -16,18 +16,19 @@ function createRaindrop() {
   raindrop.classList.add("raindrop");
   raindrop.style.backgroundColor = getRandomColor();
 
-  const xPosition = Math.random() * recommendationButton.offsetWidth;
-  const yPosition = Math.random() * recommendationButton.offsetHeight;
+  const xPosition = buttonRect.left + Math.random() * recommendationButton.offsetWidth;
+  const yPosition = buttonRect.top + Math.random() * recommendationButton.offsetHeight;
   raindrop.style.left = `${xPosition}px`;
   raindrop.style.top = `${yPosition}px`;
 
   raindrop.style.animationDuration = `${Math.random() * 1 + 1}s`;
   raindrop.style.animationName = "raindropRise";
 
-  recommendationButton.parentNode.appendChild(raindrop);
+  document.body.appendChild(raindrop); // Change this line
 
   return raindrop;
 }
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
