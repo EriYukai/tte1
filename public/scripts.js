@@ -326,7 +326,12 @@ button.addEventListener("click", async function () {
     });
   }
 
-  const recommendedRestaurant = await getRecommendedRestaurant(nearbyRestaurants.documents);
+  // Make sure that nearbyRestaurants is defined before calling the function
+  if (typeof nearbyRestaurants !== 'undefined') {
+    const recommendedRestaurant = await getRecommendedRestaurant(nearbyRestaurants.documents);
+  } else {
+    console.error('nearbyRestaurants is not defined');
+  }
   displayRestaurantInfo(recommendedRestaurant);
 
   const audio = new Audio("ok.mp3");
