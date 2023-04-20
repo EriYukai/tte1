@@ -267,7 +267,9 @@ header h1 {
   }
   
 
-
+  .createRaindrop {
+    z-index: 20;
+}
 
 /* 물방울 효과 스타일 */
 @keyframes raindropRise {
@@ -282,13 +284,13 @@ header h1 {
 }
 
 .raindrop {
-    position: absolute;
-    width: 3px;
-    height: 10px;
-    border-radius: 50%;
-    animation-name: raindropRise;
-    animation-timing-function: linear;
-    z-index: 3; /* 추가: z-index 값을 설정 */
+  position: absolute;
+  width: 3px;
+  height: 10px;
+  border-radius: 50%;
+  animation-name: raindropRise;
+  animation-timing-function: linear;
+  z-index: 30;
 }
 
 .new-button {
