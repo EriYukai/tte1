@@ -59,6 +59,21 @@ document.addEventListener("DOMContentLoaded", () => {
   updateRaindrops();
 });
 
+  const menuButton = document.getElementById('menu-button');
+  const menuList = document.getElementById('menu-list');
+
+  let menuOpen = false;
+
+  menuButton.addEventListener('click', function () {
+    if (!menuOpen) {
+      menuList.style.display = 'block';
+      menuOpen = true;
+    } else {
+      menuList.style.display = 'none';
+      menuOpen = false;
+    }
+  });
+
 function createShimmerDot(angle, radius) {
   const shimmerDot = document.createElement("div");
   shimmerDot.classList.add("shimmer-dot");
@@ -246,21 +261,6 @@ function displayRestaurants(restaurant) {
   phoneElement.textContent = restaurantPhone;
 
 }
-
-
-
-// |이 코드는 버튼 클릭 이벤트를 처리하고, 위치 정보를 가져와서 해당 위치 주변의 음식점 정보를 가져와 화면에 표시하는 기능을 구현하고 있다.
-// |
-// |좋은 점:
-// |- 비동기 함수를 사용하여 API 호출을 처리하고 있다. 이를 통해 화면이 멈추지 않고 데이터를 가져올 수 있다.
-// |- 콜백 함수를 사용하여 위치 정보를 가져오는 기능을 구현하고 있다. 이를 통해 사용자의 위치 정보를 가져올 수 있다.
-// |- DOM 조작을 위한 createElement, setAttribute, classList, appendChild 등의 메서드를 사용하여 동적으로 버튼을 생성하고 추가하는 기능을 구현하고 있다.
-// |
-// |나쁜 점:
-// |- 코드가 길고 복잡하다. 코드를 간결하게 리팩토링할 필요가 있다.
-// |- 함수와 변수의 이름이 명확하지 않다. 함수와 변수의 이름을 명확하게 지어 가독성을 높일 필요가 있다.
-// |- 코드 중간에 있는 오버레이 페이드 인 효과와 관련된 코드가 이해하기 어렵다. 이 코드를 주석으로 설명하거나 함수로 분리하여 가독성을 높일 필요가 있다.
-// |
 
 // 버튼클릭 이벤트
 const button = document.getElementById("recommendation-button");
