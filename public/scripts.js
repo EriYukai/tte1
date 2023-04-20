@@ -294,8 +294,7 @@ function displayRestaurants(restaurant) {
 // 버튼클릭 이벤트
 const button = document.getElementById("recommendation-button");
 
-
-button.addEventListener("click", async function() {
+button.addEventListener("click", async function () {
   if (localStorage.getItem("locationPermissionGranted") === "true") {
     const latitude = localStorage.getItem("latitude");
     const longitude = localStorage.getItem("longitude");
@@ -316,9 +315,9 @@ button.addEventListener("click", async function() {
   const recommendedRestaurant = await getRecommendedRestaurant(nearbyRestaurants.documents);
   displayRestaurantInfo(recommendedRestaurant);
 
-    const audio = new Audio("ok.mp3");
-    audio.volume = 0.2; // 볼륨을 10%로 설정
-    audio.play();
+  const audio = new Audio("ok.mp3");
+  audio.volume = 0.2; // 볼륨을 20%로 설정
+  audio.play();
 
 // 오버레이 페이드 인 효과 시작
 let overlay = document.getElementById("overlay");
@@ -441,6 +440,7 @@ function displayRestaurantInfo(restaurant) {
 
 });
 
+
 function hideClass(className) {
 const elements = document.getElementsByClassName(className);
 for (let i = 0; i < elements.length; i++) {
@@ -451,6 +451,3 @@ for (let i = 0; i < elements.length; i++) {
 function hideFunction(functionName) {
 window[functionName] = function() {};
 }
-
-
-
