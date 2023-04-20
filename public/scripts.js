@@ -9,72 +9,44 @@ function init() {
   // ... 나머지 코드 ...
 }
 
-function createRaindrop() {
-  const recommendationButton = document.getElementById("recommendation-button");
-  const buttonRect = recommendationButton.getBoundingClientRect();
-
-  const raindrop = document.createElement("div");
-  raindrop.classList.add("raindrop");
-  raindrop.style.backgroundColor = getRandomColor();
-
-  const xPosition = buttonRect.left + Math.random() * recommendationButton.offsetWidth;
-  const yPosition = buttonRect.top + Math.random() * recommendationButton.offsetHeight;
-  raindrop.style.left = `${xPosition}px`;
-  raindrop.style.top = `${yPosition}px`;
-
-  raindrop.style.animationDuration = `${Math.random() * 1 + 1}s`;
-  raindrop.style.animationName = "raindropRise";
-
-  return raindrop || null;
-}
-
 document.addEventListener("DOMContentLoaded", () => {
-  const recommendationButton = document.getElementById("recommendation-button");
-  const raindrops = [];
-  const MAX_RAINDROPS = 50;
+  // 물방울 효과 적용할 버튼 선택
+  const raindropButtons = document.querySelectorAll(".recommendation-button");
+  raindropButtons.forEach((button) => {
+    const raindrops = [];
+    const MAX_RAINDROPS = 50;
 
+    for (let i = 0; i < MAX_RAINDROPS; i++) {
+      const raindrop = document.createElement("div");
+      raindrop.classList.add("raindrop");
+      raindrops.push(raindrop);
+    }
 
-    // 모든 createRaindrop 클래스를 가진 요소에 대해 물방울 효과 적용
-    const raindropButtons = document.querySelectorAll(".createRaindrop");
-    raindropButtons.forEach((button) => {
-      const raindrops = [];
-      const MAX_RAINDROPS = 50;
-  
-      for (let i = 0; i < MAX_RAINDROPS; i++) {
-        const raindrop = document.createElement("div");
-        raindrop.classList.add("raindrop");
-        raindrops.push(raindrop);
-      }
-  
-      function updateRaindrops() {
-        raindrops.forEach((raindrop) => {
-          if (!raindrop.parentNode) {
-            button.appendChild(raindrop);
-            raindrop.style.left = `${Math.random() * 100}%`;
-            raindrop.style.animationDelay = `${Math.random() * 3}s`;
-          }
-        });
-        requestAnimationFrame(updateRaindrops);
-      }
-  
-      const shimmerBorder = document.createElement("div");
-      shimmerBorder.classList.add("shimmer-border");
-      button.appendChild(shimmerBorder);
-      shimmerBorder.style.width = "calc(100% + 20px)";
-      shimmerBorder.style.height = "calc(100% + 20px)";
-  
-      updateRaindrops();
-    });
+    function updateRaindrops() {
+      raindrops.forEach((raindrop) => {
+        if (!raindrop.parentNode) {
+          button.appendChild(raindrop);
+          raindrop.style.left = `${Math.random() * 100}%`;
+          raindrop.style.animationDelay = `${Math.random() * 3}s`;
+        }
+      });
+      requestAnimationFrame(updateRaindrops);
+    }
+
+    const shimmerBorder = document.createElement("div");
+    shimmerBorder.classList.add("shimmer-border");
+    button.appendChild(shimmerBorder);
+    shimmerBorder.style.width = "calc(100% + 20px)";
+    shimmerBorder.style.height = "calc(100% + 20px)";
+
+    updateRaindrops();
+  });
 
   for (let i = 0; i < MAX_RAINDROPS; i++) {
     const raindrop = document.createElement("div");
     raindrop.classList.add("raindrop");
     raindrops.push(raindrop);
   }
-  const newButton = document.getElementById("recommendation-button3");
-  newButton.addEventListener("click", () => {
-    console.log("새 버튼 클릭됨");
-  });
   function updateRaindrops() {
     raindrops.forEach((raindrop) => {
       if (!raindrop.parentNode) {
