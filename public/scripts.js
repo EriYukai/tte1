@@ -8,7 +8,6 @@ function init() {
   }
   // ... 나머지 코드 ...
 }
-
 function createRaindrop() {
   const recommendationButton = document.getElementById("recommendation-button");
   const buttonRect = recommendationButton.getBoundingClientRect();
@@ -34,8 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const MAX_RAINDROPS = 50;
 
   for (let i = 0; i < MAX_RAINDROPS; i++) {
-    const raindrop = document.createElement("div");
-    raindrop.classList.add("raindrop");
+    const raindrop = createRaindrop();
     raindrops.push(raindrop);
   }
 
