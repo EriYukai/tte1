@@ -24,10 +24,11 @@ function createRaindrop() {
   raindrop.style.animationDuration = `${Math.random() * 1 + 1}s`;
   raindrop.style.animationName = "raindropRise";
 
-  document.body.appendChild(raindrop); // Change this line
+  recommendationButton.parentNode.appendChild(raindrop);
 
   return raindrop;
 }
+
 
 
 
