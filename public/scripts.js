@@ -8,6 +8,7 @@ function init() {
   }
   // ... 나머지 코드 ...
 }
+
 function createRaindrop() {
   const recommendationButton = document.getElementById("recommendation-button");
   const buttonRect = recommendationButton.getBoundingClientRect();
@@ -33,10 +34,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const MAX_RAINDROPS = 50;
 
   for (let i = 0; i < MAX_RAINDROPS; i++) {
-    const raindrop = createRaindrop();
+    const raindrop = document.createElement("div");
+    raindrop.classList.add("raindrop");
     raindrops.push(raindrop);
   }
-
+  const newButton = document.getElementById("recommendation-button3");
+  newButton.addEventListener("click", () => {
+    console.log("새 버튼 클릭됨");
+  });
   function updateRaindrops() {
     raindrops.forEach((raindrop) => {
       if (!raindrop.parentNode) {
