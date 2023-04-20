@@ -16,8 +16,8 @@ function createRaindrop() {
   raindrop.classList.add("raindrop");
   raindrop.style.backgroundColor = getRandomColor();
 
-  const xPosition = buttonRect.left + Math.random() * recommendationButton.offsetWidth;
-  const yPosition = buttonRect.top + Math.random() * recommendationButton.offsetHeight;
+  const xPosition = Math.random() * recommendationButton.offsetWidth;
+  const yPosition = Math.random() * recommendationButton.offsetHeight;
   raindrop.style.left = `${xPosition}px`;
   raindrop.style.top = `${yPosition}px`;
 
@@ -28,6 +28,7 @@ function createRaindrop() {
 
   return raindrop;
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const recommendationButton = document.getElementById("recommendation-button");
