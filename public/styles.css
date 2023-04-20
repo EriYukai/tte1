@@ -288,8 +288,7 @@ header h1 {
   width: 3px;
   height: 10px;
   border-radius: 50%;
-  animation-name: raindropRise;
-  animation-timing-function: linear;
+  animation: raindropRise 5s infinite;
   z-index: 30;
 }
 
