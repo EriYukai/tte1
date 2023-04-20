@@ -30,50 +30,13 @@ function createRaindrop() {
 document.addEventListener("DOMContentLoaded", () => {
   const recommendationButton = document.getElementById("recommendation-button");
   const MAX_RAINDROPS = 50;
+  const raindrops = [];
 
   for (let i = 0; i < MAX_RAINDROPS; i++) {
     const raindrop = createRaindrop();
     recommendationButton.appendChild(raindrop);
   }
 
-
-    // 모든 createRaindrop 클래스를 가진 요소에 대해 물방울 효과 적용
-    const raindropButtons = document.querySelectorAll(".createRaindrop");
-    raindropButtons.forEach((button) => {
-      const raindrops = [];
-      const MAX_RAINDROPS = 50;
-  
-      for (let i = 0; i < MAX_RAINDROPS; i++) {
-        const raindrop = document.createElement("div");
-        raindrop.classList.add("raindrop");
-        raindrops.push(raindrop);
-      }
-  
-      function updateRaindrops() {
-        raindrops.forEach((raindrop) => {
-          if (!raindrop.parentNode) {
-            button.appendChild(raindrop);
-            raindrop.style.left = `${Math.random() * 100}%`;
-            raindrop.style.animationDelay = `${Math.random() * 3}s`;
-          }
-        });
-        requestAnimationFrame(updateRaindrops);
-      }
-  
-      const shimmerBorder = document.createElement("div");
-      shimmerBorder.classList.add("shimmer-border");
-      button.appendChild(shimmerBorder);
-      shimmerBorder.style.width = "calc(100% + 20px)";
-      shimmerBorder.style.height = "calc(100% + 20px)";
-  
-      updateRaindrops();
-    });
-
-  for (let i = 0; i < MAX_RAINDROPS; i++) {
-    const raindrop = document.createElement("div");
-    raindrop.classList.add("raindrop");
-    raindrops.push(raindrop);
-  }
   function updateRaindrops() {
     raindrops.forEach((raindrop) => {
       if (!raindrop.parentNode) {
@@ -84,15 +47,41 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     requestAnimationFrame(updateRaindrops);
   }
-
-  const shimmerBorder = document.createElement("div");
-  shimmerBorder.classList.add("shimmer-border");
-  recommendationButton.appendChild(shimmerBorder);
-  shimmerBorder.style.width = "calc(100% + 20px)";
-  shimmerBorder.style.height = "calc(100% + 20px)";
-
   updateRaindrops();
+
+  // 모든 createRaindrop 클래스를 가진 요소에 대해 물방울 효과 적용
+  const raindropButtons = document.querySelectorAll(".createRaindrop");
+  raindropButtons.forEach((button) => {
+    const raindrops = [];
+    const MAX_RAINDROPS = 50;
+
+    for (let i = 0; i < MAX_RAINDROPS; i++) {
+      const raindrop = document.createElement("div");
+      raindrop.classList.add("raindrop");
+      raindrops.push(raindrop);
+    }
+
+    function updateRaindrops() {
+      raindrops.forEach((raindrop) => {
+        if (!raindrop.parentNode) {
+          button.appendChild(raindrop);
+          raindrop.style.left = `${Math.random() * 100}%`;
+          raindrop.style.animationDelay = `${Math.random() * 3}s`;
+        }
+      });
+      requestAnimationFrame(updateRaindrops);
+    }
+
+    const shimmerBorder = document.createElement("div");
+    shimmerBorder.classList.add("shimmer-border");
+    button.appendChild(shimmerBorder);
+    shimmerBorder.style.width = "calc(100% + 20px)";
+    shimmerBorder.style.height = "calc(100% + 20px)";
+
+    updateRaindrops();
+  });
 });
+
 
   const menuButton = document.getElementById('menu-button');
   const menuList = document.getElementById('menu-list');
