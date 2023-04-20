@@ -144,60 +144,47 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
-
 function createShimmerDot(angle, radius) {
   const shimmerDot = document.createElement("div");
   shimmerDot.classList.add("shimmer-dot");
-
   setShimmerDotSize(shimmerDot);
-  
+
   const recommendationButton = document.getElementById("recommendation-button");
   const buttonRect = recommendationButton.getBoundingClientRect();
-
   const x = Math.cos(angle) * radius + buttonRect.left + radius - shimmerDot.offsetWidth / 2;
   const y = Math.sin(angle) * radius + buttonRect.top + radius - shimmerDot.offsetHeight / 2;
-
   shimmerDot.style.left = x + "px";
   shimmerDot.style.top = y + "px";
-
-
   return shimmerDot;
 }
 
 function updateShimmerDot(shimmerDot, progress) {
   const recommendationButton = document.getElementById("recommendation-button");
   const buttonRect = recommendationButton.getBoundingClientRect();
-
-  let x, y;
-
   const left = buttonRect.left;
   const right = buttonRect.right;
   const top = buttonRect.top;
   const bottom = buttonRect.bottom;
-
   const width = right - left;
   const height = bottom - top;
-
   const perimeter = 2 * (width + height);
   const distance = progress * perimeter;
-
+  let x, y;
   if (distance <= width) {
-      x = left + distance;
-      y = top;
+    x = left + distance;
+    y = top;
   } else if (distance <= width + height) {
-      x = right;
-      y = top + (distance - width);
+    x = right;
+    y = top + (distance - width);
   } else if (distance <= 2 * width + height) {
-      x = right - (distance - width - height);
-      y = bottom;
+    x = right - (distance - width - height);
+    y = bottom;
   } else {
-      x = left;
-      y = top + (2 * width + 2 * height - distance);
+    x = left;
+    y = top + (2 * width + 2 * height - distance);
   }
-
   shimmerDot.style.left = x + "px";
   shimmerDot.style.top = y + "px";
-
   addFadingDot(x, y);
 }
 
