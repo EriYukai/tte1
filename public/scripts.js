@@ -9,53 +9,6 @@ function init() {
   // ... 나머지 코드 ...
 }
 
-
-
-function showPosition(position) {
-  var lat = position.coords.latitude;
-  var lng = position.coords.longitude;
-
-  // 지도를 초기화하고 사용자의 위치에 마커를 표시
-  var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-    mapOption = {
-      center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
-      level: 3 // 지도의 확대 레벨
-    };
-
-  // 지도를 생성
-  var map = new kakao.maps.Map(mapContainer, mapOption);
-
-  // 마커를 생성하고 지도에 표시
-  var markerPosition  = new kakao.maps.LatLng(lat, lng);
-  var marker = new kakao.maps.Marker({
-    position: markerPosition
-  });
-  marker.setMap(map);
-
-  // 지도 중심좌표를 사용자 위치로 이동
-  map.setCenter(new kakao.maps.LatLng(lat, lng));
-}
-
-function showError(error) {
-  switch (error.code) {
-    case error.PERMISSION_DENIED:
-      alert("User denied the request for Geolocation.");
-      break;
-    case error.POSITION_UNAVAILABLE:
-      alert("Location information is unavailable.");
-      break;
-    case error.TIMEOUT:
-      alert("The request to get user location timed out.");
-      break;
-    case error.UNKNOWN_ERROR:
-      alert("An unknown error occurred.");
-      break;
-  }
-}
-
-
-
-
 function createRaindrop() {
   const recommendationButton = document.getElementById("recommendation-button");
   const buttonRect = recommendationButton.getBoundingClientRect();
@@ -66,24 +19,17 @@ function createRaindrop() {
 
   const xPosition = buttonRect.left + Math.random() * recommendationButton.offsetWidth;
   const yPosition = buttonRect.top + Math.random() * recommendationButton.offsetHeight;
-  raindrop.style.left = xPosition + "px";
-  raindrop.style.top = yPosition + "px";
+  raindrop.style.left = `${xPosition}px`;
+  raindrop.style.top = `${yPosition}px`;
 
-  raindrop.style.animationDuration = (Math.random() * 1 + 1) + "s";
+  raindrop.style.animationDuration = `${Math.random() * 1 + 1}s`;
   raindrop.style.animationName = "raindropRise";
 
-  if (!raindrop) {
-      return null;
-  }
-
-  return raindrop;
+  return raindrop || null;
 }
 
-
-document.addEventListener("DOMContentLoaded", function () {
-  const body = document.querySelector("body");
+document.addEventListener("DOMContentLoaded", () => {
   const recommendationButton = document.getElementById("recommendation-button");
-
   const raindrops = [];
   const MAX_RAINDROPS = 50;
 
@@ -94,56 +40,25 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function updateRaindrops() {
-    for (let i = 0; i < raindrops.length; i++) {
-      const raindrop = raindrops[i];
+    raindrops.forEach((raindrop) => {
       if (!raindrop.parentNode) {
         recommendationButton.appendChild(raindrop);
         raindrop.style.left = `${Math.random() * 100}%`;
         raindrop.style.animationDelay = `${Math.random() * 3}s`;
       }
-    }
+    });
     requestAnimationFrame(updateRaindrops);
   }
 
-  function removeRaindrop(raindrop) {
-    raindrop.remove();
-  }
   const shimmerBorder = document.createElement("div");
   shimmerBorder.classList.add("shimmer-border");
   recommendationButton.appendChild(shimmerBorder);
   shimmerBorder.style.width = "calc(100% + 20px)";
   shimmerBorder.style.height = "calc(100% + 20px)";
-  
+
   updateRaindrops();
-  });
-
-  document.addEventListener('DOMContentLoaded', async function () {
-    if (localStorage.getItem("locationPermissionGranted") === "true") {
-      const latitude = localStorage.getItem("latitude");
-      const longitude = localStorage.getItem("longitude");
-      const nearbyRestaurants = await getScoreForRestaurant(latitude, longitude);
-      if (nearbyRestaurants && nearbyRestaurants.length > 0) {
-        // 여기에서 적절한 음식점을 선택할 수 있습니다. 예를 들어 첫 번째 음식점을 사용하려면 다음과 같이 합니다.
-        const selectedRestaurant = nearbyRestaurants[0];
-        getScoreForRestaurant(selectedRestaurant);
-      }
-    }
-
-  const menuButton = document.getElementById('menu-button');
-  const menuList = document.getElementById('menu-list');
-
-  let menuOpen = false;
-
-  menuButton.addEventListener('click', function () {
-    if (!menuOpen) {
-      menuList.style.display = 'block';
-      menuOpen = true;
-    } else {
-      menuList.style.display = 'none';
-      menuOpen = false;
-    }
-  });
 });
+
 function createShimmerDot(angle, radius) {
   const shimmerDot = document.createElement("div");
   shimmerDot.classList.add("shimmer-dot");
