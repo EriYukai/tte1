@@ -309,7 +309,6 @@ function displayRestaurants(restaurant) {
 
 // 버튼클릭 이벤트
 const button = document.getElementById("recommendation-button");
-displayRestaurantInfo(restaurant); 
 button.addEventListener("click", async function () {
   if (localStorage.getItem("locationPermissionGranted") === "true") {
     const latitude = localStorage.getItem("latitude");
