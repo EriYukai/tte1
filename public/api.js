@@ -70,7 +70,7 @@ function getScoreForRestaurant(restaurant) {
 }
 
 async function getRestaurantImage(placeName) {
-  const SERVERLESS_FUNCTION_URL = `${window.location.origin}/.netlify/functions/get-nearby-restaurants`; // 서버리스 함수 URL
+  const SERVERLESS_FUNCTION_URL = `https://whateat.netlify.app/.netlify/functions/get-nearby-restaurants`; // 서버리스 함수 URL
 
   const response = await fetch(SERVERLESS_FUNCTION_URL, {
     method: "POST",
@@ -79,6 +79,7 @@ async function getRestaurantImage(placeName) {
     },
     body: JSON.stringify({ restaurantName: placeName }),
   });
+  
 
   const data = await response.json();
 
