@@ -328,9 +328,8 @@ button.addEventListener("click", async function () {
     const latitude = localStorage.getItem("latitude");
     const longitude = localStorage.getItem("longitude");
     const restaurants = await getScoreForRestaurant(latitude, longitude);
-    const SERVERLESS_FUNCTION_URL = "https://your-serverless-function-url";
     displayRestaurants(restaurants, latitude, longitude);
-    displayRestaurantInfo(restaurants);
+    await displayRestaurantInfo(restaurants[0]); // 첫 번째 음식점 정보를 표시합니다.
   } else {
     navigator.geolocation.getCurrentPosition(async function (position) {
       const latitude = position.coords.latitude;
@@ -338,86 +337,86 @@ button.addEventListener("click", async function () {
       showPosition(position);
       const restaurants = await getScoreForRestaurant(latitude, longitude);
       displayRestaurants(restaurants, latitude, longitude);
-      displayRestaurantInfo(restaurants);
+      await displayRestaurantInfo(restaurants[0]); // 첫 번째 음식점 정보를 표시합니다.
     });
   }
-
-  // Make sure that nearbyRestaurants is defined before calling the function
-  if (typeof nearbyRestaurants !== 'undefined') {
-    const recommendedRestaurant = await getRecommendedRestaurant(nearbyRestaurants.documents);
-    displayRestaurantInfo(recommendedRestaurant); // 이 부분을 수정합니다.
-  } else {
-    console.error('nearbyRestaurants is not defined');
-  }
-  displayRestaurantInfo(recommendedRestaurant);
 
   const audio = new Audio("ok.mp3");
   audio.volume = 0.2; // 볼륨을 20%로 설정
   audio.play();
 
-// 오버레이 페이드 인 효과 시작
-let overlay = document.getElementById("overlay");
-overlay.classList.add("fade-out");
+  // 오버레이 페이드 인 효과 시작
+  let overlay = document.getElementById("overlay");
+  overlay.classList.add("fade-out");
 
-setTimeout(function() {
-  overlay.classList.add("fade-in");
-  overlay.classList.remove("fade-out");
+  setTimeout(function () {
+    overlay.classList.add("fade-in");
+    overlay.classList.remove("fade-out");
 
-  setTimeout(function() {
-    overlay.classList.remove("fade-in");
-  }, 1000); // 2000ms (2초) 후에 페이드 인 효과가 끝납니다.
-}, 1000); // 2000ms (2초) 후에 페이드 인 효과를 시작합니다.
+    setTimeout(function () {
+      overlay.classList.remove("fade-in");
+    }, 1000); // 2000ms (2초) 후에 페이드 인 효과가 끝납니다.
+  }, 1000); // 2000ms (2초) 후에 페이드 인 효과를 시작합니다.
 
-// 현재 버튼 요소 가져오기
-const currentButton = document.getElementById("recommendation-button");
+  // 현재 버튼 요소 가져오기
+  const currentButton = document.getElementById("recommendation-button");
 
-// 버튼 숨기기
-currentButton.style.display = "none";
+  // 버튼 숨기기
+  currentButton.style.display = "none";
 
-// 새 버튼 생성
-const newButton = document.createElement("button");
-newButton.setAttribute("id", "recommendation-button3");
-newButton.classList.add("recommendation-button", "new-button", "createRaindrop"); // new-button 클래스 추가
-newButton.innerHTML = "정보확인";
+  // 새 버튼 생성
+  const newButton = document.createElement("button");
+  newButton.setAttribute("id", "recommendation-button3");
+  newButton.classList.add("recommendation-button", "new-button", "createRaindrop"); // new-button 클래스 추가
+  newButton.innerHTML = "정보확인";
 
-// 새 버튼2 생성
-const newButton2 = document.createElement("button");
-newButton2.setAttribute("id", "recommendation-button2");
-newButton2.classList.add("recommendation-button", "new-button2"); // new-button2 클래스 추가
-newButton2.innerHTML = "&#x21bb;";
+  // 새 버튼2 생성
+  const newButton2 = document.createElement("button");
+  newButton2.setAttribute("id", "recommendation-button2");
+  newButton2.classList.add("recommendation-button", "new-button2"); // new-button2 클래스 추가
+  newButton2.innerHTML = "&#x21bb;";
 
+  // 버튼2 클릭 이벤트
+  newButton2.addEventListener("click", function () {
+    location.reload();
+  });
 
-// 버튼2 클릭 이벤트
-newButton2.addEventListener("click", function() {
-  location.reload();
-});
+  // 버튼 컨테이너 생성
+  const buttonContainer = document.createElement("div");
+  buttonContainer.classList.add("button-container");
 
+  // 생성한 버튼 추가
+  buttonContainer.appendChild(newButton);
+  buttonContainer.appendChild(newButton2);
 
-// 버튼 컨테이너 생성
-const buttonContainer = document.createElement("div");
-buttonContainer.classList.add("button-container");
+  const body = document.querySelector("body");
+  body.appendChild(buttonContainer);
 
-// 생성한 버튼 추가
-buttonContainer.appendChild(newButton);
-buttonContainer.appendChild(newButton2);
-
-const body = document.querySelector("body");
-body.appendChild(buttonContainer);
-
-
-// 숨겨진 클래스와 함수 호출
-hideClass("raindrop");
-hideClass("shimmer-border");
-hideClass("shimmer-dot");
-hideClass("fading-dot");
-hideFunction("createRaindrop");
-hideFunction("createShimmerDot");
-hideFunction("updateShimmerDot");
-hideFunction("setShimmerDotSize");
-hideFunction("createFadingDot");
-hideFunction("addFadingDot");
-
-
+  // 숨겨진 클래스와 함수 호출
+  hideClass("raindrop");
+  hideClass("shimmer-border");
+  hideClass("shimmer-dot");
+  hideClass("fading-dot");
+  hideFunction("createRaindrop");
+  hideFunction("createShimmerDot");
+  hideFunction("updateShimmerDot");
+  hideFunction("setShimmerDotSize");
+  hideFunction("createFadingDot");
+  hideFunction("updateFadingDot");
+  
+  // 새 버튼 클릭 이벤트
+  newButton.addEventListener("click", async function () {
+  const selectedRestaurant = document.querySelector(".selected");
+  if (selectedRestaurant) {
+  const restaurant = {
+  title: selectedRestaurant.querySelector(".title").innerText,
+  };
+  await displayRestaurantInfo(restaurant);
+  } else {
+  alert("음식점을 선택해 주세요.");
+  }
+  });
+  });
 
 // 위치 정보 확인 및 주변 음식점 이미지 표시 로직
 function getLocation(map) {
@@ -442,39 +441,6 @@ function showPosition(position, map) {
   marker.setMap(map);
 }
 
-
-function displayRestaurantInfo(restaurant) {
-  const restaurantName = restaurant.title;
-
-  // 이미지를 삽입할 div를 선택합니다.
-  const contentArea = document.querySelector(".content-area");
-  contentArea.innerHTML = ""; // 이전 이미지를 제거합니다.
-
-  // 음식점 이미지 출력
-  const imageElement = document.createElement("img");
-  imageElement.src = restaurantImageUrl;
-  imageElement.alt = restaurantName;
-
-  // 이미지를 content-area div에 추가합니다.
-  contentArea.appendChild(imageElement);
-
-  const restaurantAddress = restaurant.address;
-  const restaurantPhone = restaurant.telephone;
-
-  // 음식점 이름 출력
-  const nameElement = document.querySelector("#restaurant-name");
-  nameElement.textContent = restaurantName;
-
-  // 음식점 주소 출력
-  const addressElement = document.querySelector("#restaurant-address");
-  addressElement.textContent = restaurantAddress;
-
-  // 음식점 전화번호 출력
-  const phoneElement = document.querySelector("#restaurant-phone");
-  phoneElement.textContent = restaurantPhone;
-}
-
-});
 
 function hideClass(className) {
 const elements = document.getElementsByClassName(className);
