@@ -130,6 +130,7 @@ function showError(error) {
 }
 
 async function displayRestaurantInfo(restaurant) {
+  const restaurantName = restaurant.title;
 
   // 서버리스 함수를 호출하여 음식점 상세 정보를 가져옵니다.
   const response = await fetch(`https://whateat.netlify.app/.netlify/functions/get-nearby-restaurants`, {
@@ -139,12 +140,11 @@ async function displayRestaurantInfo(restaurant) {
     },
     body: JSON.stringify({ restaurantName }),
   });
-  
 
   const data = await response.json();
-  const detailData = data.data;
+  const detailData = data; // 수정된 부분
   const imageElement = document.querySelector("#restaurant-image-tag");
-  imageElement.src = detailData.restaurantImageUrl;  
+  imageElement.src = detailData.restaurantImageUrl;
 
   // 음식점 정보를 출력합니다.
   console.log("음식점 이름:", restaurantName);
