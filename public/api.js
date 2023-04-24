@@ -145,7 +145,7 @@ async function displayRestaurantInfo(restaurant) {
   const data = await response.json();
   const detailData = data.data;
   const imageElement = document.querySelector("#restaurant-image-tag");
-  imageElement.src = detailData.imageUrl;
+  imageElement.src = detailData.restaurantImageUrl;  
 
   // 음식점 정보를 출력합니다.
   console.log("음식점 이름:", restaurantName);
