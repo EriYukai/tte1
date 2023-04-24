@@ -201,3 +201,21 @@ async function displayRestaurantInfo(restaurant) {
   console.log("최종 점수:", score);
   console.log("추천 이유:", reason);
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const newButton = document.getElementById("recommendation-button3");
+
+  if (newButton) {
+    newButton.addEventListener("click", async function () {
+      const selectedRestaurant = document.querySelector(".selected");
+      if (selectedRestaurant) {
+        const restaurant = {
+          title: selectedRestaurant.querySelector(".title").innerText,
+        };
+        await displayRestaurantInfo(restaurant);
+      } else {
+        alert("음식점을 선택해 주세요.");
+      }
+    });
+  }
+});
