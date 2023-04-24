@@ -17,7 +17,7 @@ async function getRestaurantDetails(placeId, headers) {
 exports.handler = async function (event, context) {
   const KAKAO_API_KEY = process.env.KAKAO_API_KEY;
 
-  if (!event.body) {
+  if (!event.body || event.body.trim() === "") {
     console.error("Empty request body");
     return {
       statusCode: 400,
