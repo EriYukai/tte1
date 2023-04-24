@@ -127,8 +127,11 @@ function showError(error) {
       break;
   }
 }
+
 async function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.title;
+
+  // 서버리스 함수를 호출하여 음식점 상세 정보를 가져옵니다.
   const response = await fetch(`${window.location.origin}/.netlify/functions/get-nearby-restaurants`, {
     method: 'POST',
     headers: {
@@ -136,16 +139,21 @@ async function displayRestaurantInfo(restaurant) {
     },
     body: JSON.stringify({ restaurantName }),
   });
+
   const data = await response.json();
   const detailData = data.data;
   const imageElement = document.querySelector("#restaurant-image-tag");
   imageElement.src = detailData.imageUrl;
+
+  // 음식점 정보를 출력합니다.
   console.log("음식점 이름:", restaurantName);
   console.log("음식점 주소:", detailData.address_name);
   console.log("음식점 전화번호:", detailData.phone);
   console.log("음식점 카테고리:", detailData.category_name);
   console.log("음식점 위도:", detailData.y);
   console.log("음식점 경도:", detailData.x);
+
+  // 추천 이유와 점수를 계산합니다.
   const today = new Date();
   const hour = today.getHours();
   const month = today.getMonth() + 1;
@@ -153,33 +161,42 @@ async function displayRestaurantInfo(restaurant) {
   const isAnniversary = restaurantName.includes(`${month}월 ${date}일`);
   const isLunchTime = hour >= 11 && hour <= 14;
   const isDinnerTime = hour >= 17 && hour <= 21;
+
   let reason = "";
   let score = 0;
+
   if (isAnniversary) {
     score++;
     reason = "오늘은 기념일이어서 ";
   }
+
   if (isLunchTime || isDinnerTime) {
     score++;
     reason += "지금은 점심이나 저녁시간이어서 ";
   }
+
   const TrendScore = Math.random() * 0.5;
   score += TrendScore;
   reason += `${restaurantName}은(는)`;
+
   if (score >= 2.5) {
     reason += " 추천할 만한 음식점입니다.";
   } else {
     reason += " 추천하기에는 좀 부족한 음식점입니다.";
   }
+
+  // 이전 풍선을 제거하고 새 풍선을 추가합니다.
   const previousBalloons = document.querySelectorAll('.balloon');
   for (let i = 0; i < previousBalloons.length; i++) {
     previousBalloons[i].remove();
   }
+
   const contentArea = document.querySelector('.content-area');
   const balloon = document.createElement('div');
   balloon.className = 'balloon';
   balloon.innerText = reason;
   contentArea.insertBefore(balloon, contentArea.firstChild);
+
   console.log("최종 점수:", score);
   console.log("추천 이유:", reason);
 }

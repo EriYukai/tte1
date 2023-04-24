@@ -345,6 +345,7 @@ button.addEventListener("click", async function () {
   // Make sure that nearbyRestaurants is defined before calling the function
   if (typeof nearbyRestaurants !== 'undefined') {
     const recommendedRestaurant = await getRecommendedRestaurant(nearbyRestaurants.documents);
+    displayRestaurantInfo(recommendedRestaurant); // 이 부분을 수정합니다.
   } else {
     console.error('nearbyRestaurants is not defined');
   }
