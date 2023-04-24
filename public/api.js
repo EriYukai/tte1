@@ -132,13 +132,14 @@ async function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.title;
 
   // 서버리스 함수를 호출하여 음식점 상세 정보를 가져옵니다.
-  const response = await fetch(`${window.location.origin}/.netlify/functions/get-nearby-restaurants`, {
+  const response = await fetch(`https://whateat.netlify.app/.netlify/functions/get-nearby-restaurants`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ restaurantName }),
   });
+  
 
   const data = await response.json();
   const detailData = data.data;
