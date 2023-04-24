@@ -2,11 +2,26 @@ function getRandomColor() {
   return `hsl(${Math.random() * 360}, 100%, 50%)`;
 }
 
-function init() {
-  if (localStorage.getItem("locationPermissionGranted") === "true") {
-    getScoreForRestaurant(localStorage.getItem("latitude"), localStorage.getItem("longitude"));
+async function getScoreForRestaurant(latitude, longitude) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ restaurantName: "레스토랑 이름" }) // 원하는 음식점 이름으로 변경
+  };
+
+  try {
+    const response = await fetch(SERVERLESS_FUNCTION_URL, requestOptions);
+    if (!response.ok) {
+      throw new Error("Error fetching data from serverless function");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
   }
 }
+
 
 function createRaindrop() {
   const recommendationButton = document.getElementById("recommendation-button");
@@ -313,6 +328,7 @@ button.addEventListener("click", async function () {
     const latitude = localStorage.getItem("latitude");
     const longitude = localStorage.getItem("longitude");
     const restaurants = await getScoreForRestaurant(latitude, longitude);
+    const SERVERLESS_FUNCTION_URL = "https://your-serverless-function-url";
     displayRestaurants(restaurants, latitude, longitude);
     displayRestaurantInfo(restaurants);
   } else {
