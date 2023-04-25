@@ -102,6 +102,10 @@ localStorage.setItem("locationPermissionGranted", "false");
 }
 
 
+async function getRestaurantDetails(restaurantName) {
+  // ...
+}
+
 
 function initMap() {
   // 사용자의 위치를 얻기 위한 geolocation API 사용
@@ -135,6 +139,7 @@ const restaurantInfo = await getRestaurantDetails(restaurant);
 
 export async function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.title;
+  const details = await getRestaurantDetails(restaurantName);
 
   // 서버리스 함수를 호출하여 음식점 상세 정보를 가져옵니다.
   const response = await fetch(`https://whateat.netlify.app/.netlify/functions/get-nearby-restaurants`, {
