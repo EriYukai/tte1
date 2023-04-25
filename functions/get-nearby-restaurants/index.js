@@ -28,7 +28,7 @@ exports.handler = async function (event, context) {
   let data, restaurantName;
   try {
     data = JSON.parse(event.body);
-    restaurantName = data.restaurantName;
+    restaurantName = data.restaurant.title;
   } catch (error) {
     console.error("Error parsing JSON body:", event.body);
     return {

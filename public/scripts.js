@@ -1,3 +1,7 @@
+import { displayRestaurantInfo } from './api.js';
+
+const restaurantInfo = await getRestaurantDetails(restaurant);
+
 function getRandomColor() {
   return `hsl(${Math.random() * 360}, 100%, 50%)`;
 }
