@@ -134,7 +134,7 @@ function showError(error) {
 }
 
 
-export async function displayRestaurantInfo(restaurant) {
+export async function getRestaurantDetails(restaurant) {
   const restaurantName = restaurant.title;
   const details = await getRestaurantDetails(restaurantName);
 
@@ -144,7 +144,7 @@ export async function displayRestaurantInfo(restaurant) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ restaurantName }),
+    body: JSON.stringify({ restaurant: { title: restaurantName } }),
   });
 
   const data = await response.json();

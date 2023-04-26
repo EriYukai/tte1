@@ -49,9 +49,9 @@ function createRaindrop() {
 }
 
 
+import { getRestaurantDetails } from './api.js';
 
-
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
   const recommendationButton = document.getElementById("recommendation-button");
   const MAX_RAINDROPS = 50;
   const raindrops = [];
