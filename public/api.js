@@ -133,9 +133,6 @@ function showError(error) {
   }
 }
 
-// 주석을 제거하고 서버리스 함수를 호출하도록 수정
-const restaurantInfo = await getRestaurantDetails(restaurant);
-
 
 export async function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.title;
