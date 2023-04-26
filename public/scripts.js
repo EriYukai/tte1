@@ -1,4 +1,4 @@
-import { displayRestaurantInfo } from './api.js';
+
 
 const restaurantInfo = await getRestaurantDetails(restaurant);
 
@@ -49,7 +49,7 @@ function createRaindrop() {
 }
 
 
-import { getRestaurantDetails } from './api.js';
+import { displayRestaurantInfo } from './api.js';
 
 document.addEventListener("DOMContentLoaded", function () {
   const recommendationButton = document.getElementById("recommendation-button");
