@@ -221,10 +221,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const restaurant = {
           title: selectedRestaurant.querySelector(".title").innerText,
         };
-        await displayRestaurantInfo(restaurant);
+        const restaurantInfo = await getRestaurantDetails(restaurant); // 이제 여기서 await를 사용할 수 있습니다.
       } else {
         alert("음식점을 선택해 주세요.");
       }
     });
   }
 });
+
