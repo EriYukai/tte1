@@ -134,7 +134,7 @@ function showError(error) {
 }
 
 
-export async function getRestaurantDetails(restaurant) {
+export async function displayRestaurantInfo(restaurant) {
   const restaurantName = restaurant.title;
   const details = await getRestaurantDetails(restaurantName);
 
