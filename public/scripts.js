@@ -489,6 +489,16 @@ function displayRestaurants(restaurant) {
   const restaurantName = restaurant.title;
   const restaurantImageUrl = restaurant.image_url;
 
+  if (restaurants.length === 0) {
+    console.error("음식점 목록이 비어 있습니다.");
+    return;
+  }
+  if (index < 0 || index >= restaurants.length) {
+    console.error("올바르지 않은 인덱스입니다:", index);
+    return;
+  }
+  selectedRestaurant = restaurants[index];
+
   // 이미지를 삽입할 div를 선택합니다.
   const contentArea = document.querySelector(".content-area");
   contentArea.innerHTML = ""; // 이전 이미지를 제거합니다.
