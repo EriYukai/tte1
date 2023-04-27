@@ -260,7 +260,6 @@ function createRaindrop() {
 
 
 
-const restaurantInfo = await displayRestaurantInfo(selectedRestaurant);
 
 document.addEventListener("DOMContentLoaded", function () {
   const recommendationButton = document.getElementById("recommendation-button");
