@@ -632,16 +632,6 @@ function getLocation(map) {
 }
 
 
-function showPosition(position, map) {
-  const lat = position.coords.latitude;
-  const lng = position.coords.longitude;
-
-  const latlng = new kakao.maps.LatLng(lat, lng);
-  const marker = new kakao.maps.Marker({ position: latlng });
-
-  marker.setMap(map);
-}
-
 
 function hideClass(className) {
 const elements = document.getElementsByClassName(className);
