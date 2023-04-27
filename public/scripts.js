@@ -235,25 +235,6 @@ function getRandomColor() {
   return `hsl(${Math.random() * 360}, 100%, 50%)`;
 }
 
-async function getScoreForRestaurant(latitude, longitude) {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ restaurantName: "레스토랑 이름" }) // 원하는 음식점 이름으로 변경
-  };
-
-  try {
-    const response = await fetch(SERVERLESS_FUNCTION_URL, requestOptions);
-    if (!response.ok) {
-      throw new Error("Error fetching data from serverless function");
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
 
 
 function createRaindrop() {
