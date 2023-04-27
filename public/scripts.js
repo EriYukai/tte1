@@ -46,7 +46,7 @@ function createRaindrop() {
 
 
 import { displayRestaurantInfo } from './api.js';
-const restaurantInfo = await displayRestaurantInfo(restaurant);
+const restaurantInfo = await displayRestaurantInfo(selectedRestaurant);
 
 document.addEventListener("DOMContentLoaded", function () {
   const recommendationButton = document.getElementById("recommendation-button");
