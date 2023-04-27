@@ -145,7 +145,7 @@ export async function displayRestaurantInfo(restaurant) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ restaurant: { title: restaurantName } }),
-  });
+  });  
 
   const data = await response.json();
   const detailData = data; // 수정된 부분
@@ -259,6 +259,8 @@ function createRaindrop() {
 }
 
 
+
+const restaurantInfo = await displayRestaurantInfo(selectedRestaurant);
 
 
 document.addEventListener("DOMContentLoaded", function () {
