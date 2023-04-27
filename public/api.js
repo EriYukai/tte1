@@ -213,16 +213,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (newButton) {
     newButton.addEventListener("click", async function () {
-      const selectedRestaurant = document.querySelector(".selected");
-      if (selectedRestaurant) {
+      const selectedRestaurantElement = document.querySelector(".selected");
+      if (selectedRestaurantElement) {
         const restaurant = {
-          title: selectedRestaurant.querySelector(".title").innerText,
+          title: selectedRestaurantElement.querySelector(".title").innerText,
         };
-        const restaurantInfo = await displayRestaurantInfo(restaurant); // 이제 여기서 await를 사용할 수 있습니다.
+        const restaurantInfo = await displayRestaurantInfo(restaurant);
       } else {
         alert("음식점을 선택해 주세요.");
       }
     });
   }
 });
+
 
