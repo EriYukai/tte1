@@ -1,3 +1,5 @@
+import { displayRestaurantInfo } from './api.js';
+
 function getRandomColor() {
   return `hsl(${Math.random() * 360}, 100%, 50%)`;
 }
@@ -45,7 +47,7 @@ function createRaindrop() {
 }
 
 
-import { displayRestaurantInfo } from './api.js';
+
 const restaurantInfo = await displayRestaurantInfo(selectedRestaurant);
 
 document.addEventListener("DOMContentLoaded", function () {
