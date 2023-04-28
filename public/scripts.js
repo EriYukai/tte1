@@ -134,23 +134,14 @@ function showError(error) {
 }
 
 
-export async function displayRestaurantInfo(restaurant) {
-  const restaurantName = restaurant.title;
-  const details = await getRestaurantDetails(restaurantName);
+async function displayRestaurantInfo(placeId) {
+  const response = await fetch(`/api/get-nearby-restaurants?place_id=${placeId}`);
+  const detailData = await response.json(); // 수정된 부분
 
-  // 서버리스 함수를 호출하여 음식점 상세 정보를 가져옵니다.
-  const response = await fetch(`https://whateat.netlify.app/.netlify/functions/get-nearby-restaurants`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ restaurant: { title: restaurantName } }),
-  });  
-
-  const data = await response.json();
-  const detailData = data; // 수정된 부분
+  const restaurantName = detailData.documents[0].place_name;
   const imageElement = document.querySelector("#restaurant-image-tag");
   imageElement.src = detailData.restaurantImageUrl;
+
 
   // 음식점 정보를 출력합니다.
   console.log("음식점 이름:", restaurantName);
@@ -208,23 +199,27 @@ export async function displayRestaurantInfo(restaurant) {
   console.log("추천 이유:", reason);
 }
 
+// scripts.js
 document.addEventListener("DOMContentLoaded", function () {
-  const newButton = document.getElementById("recommendation-button3");
-
+  const newButton = document.getElementById("recommendation-button2");
   if (newButton) {
     newButton.addEventListener("click", async function () {
-      const selectedRestaurantElement = document.querySelector(".selected");
-      if (selectedRestaurantElement) {
-        const restaurant = {
-          title: selectedRestaurantElement.querySelector(".title").innerText,
-        };
-        const restaurantInfo = await displayRestaurantInfo(restaurant);
-      } else {
-        alert("음식점을 선택해 주세요.");
+      const restaurants = await getRestaurants();
+      displayRestaurants(restaurants);
+    });
+  }
+
+  const restaurantList = document.getElementById("restaurant-list");
+  if (restaurantList) {
+    restaurantList.addEventListener("click", function (event) {
+      if (event.target.tagName === "BUTTON") {
+        const placeId = event.target.dataset.placeId;
+        displayRestaurantInfo(placeId); // 변경된 부분
       }
     });
   }
 });
+
 
 
 
@@ -499,7 +494,8 @@ async function displayRestaurants(restaurants) {
     console.error("음식점 목록이 비어 있습니다.");
     return;
   }
-  if (index < 0 || index >= restaurants.length) {
+  for (let i = 0; i < restaurants.length; i++) {
+    const newButton = createButton(restaurants[i].title, restaurants[i].place_id);
     console.error("올바르지 않은 인덱스입니다:", index);
     return;
   }
