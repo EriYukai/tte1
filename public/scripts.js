@@ -166,7 +166,13 @@ function updateShimmerDot(shimmerDot, progress) {
 document.addEventListener("DOMContentLoaded", function () {
   const body = document.querySelector("body");
   const recommendationButton = document.getElementById("recommendation-button");
-
+  const newButton = document.getElementById("recommendation-button2");
+  if (newButton) {
+    newButton.addEventListener("click", async function () {
+      const restaurants = await getRestaurants();
+      displayRestaurants(restaurants);
+    });
+  }
   let shimmerDot;
   let updateInterval;
 
@@ -273,7 +279,7 @@ function addFadingDot(x, y) {
 }
 
 
-function displayRestaurants(restaurant) {
+async function displayRestaurants(restaurants) {
   const restaurantName = restaurant.title;
   const restaurantImageUrl = restaurant.image_url;
 
