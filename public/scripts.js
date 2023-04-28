@@ -135,21 +135,20 @@ function showError(error) {
 
 
 async function displayRestaurantInfo(placeId) {
-  const response = await fetch(`/api/get-nearby-restaurants?place_id=${placeId}`);
-  const detailData = await response.json(); // 수정된 부분
+  const response = await fetch(`/api/restaurant-details?place_id=${placeId}`);
+  const detailData = await response.json();
 
   const restaurantName = detailData.documents[0].place_name;
   const imageElement = document.querySelector("#restaurant-image-tag");
   imageElement.src = detailData.restaurantImageUrl;
 
-
   // 음식점 정보를 출력합니다.
   console.log("음식점 이름:", restaurantName);
-  console.log("음식점 주소:", detailData.address_name);
-  console.log("음식점 전화번호:", detailData.phone);
-  console.log("음식점 카테고리:", detailData.category_name);
-  console.log("음식점 위도:", detailData.y);
-  console.log("음식점 경도:", detailData.x);
+  console.log("음식점 주소:", detailData.documents[0].address_name);
+  console.log("음식점 전화번호:", detailData.documents[0].phone);
+  console.log("음식점 카테고리:", detailData.documents[0].category_name);
+  console.log("음식점 위도:", detailData.documents[0].y);
+  console.log("음식점 경도:", detailData.documents[0].x);
 
   // 추천 이유와 점수를 계산합니다.
   const today = new Date();
