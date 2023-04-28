@@ -1,6 +1,8 @@
 async function showPosition(position) {
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
+  const lat = position.coords.latitude;
+  const lon = position.coords.longitude;
+  const restaurants = await getRestaurants(lat, lon); // 수정된 부분
+  displayRestaurants(restaurants);
 
   const container = document.getElementById('map');
   const options = {
@@ -488,6 +490,20 @@ function addFadingDot(x, y) {
 async function displayRestaurants(restaurants) {
   const restaurantName = restaurant.title;
   const restaurantImageUrl = restaurant.image_url;
+  const restaurantList = document.getElementById("restaurant-list");
+  restaurantList.innerHTML = "";
+
+  for (let i = 0; i < restaurants.length; i++) {
+    const restaurant = restaurants[i]; // 추가된 부분
+    const listItem = document.createElement("li");
+    listItem.innerHTML = `
+      <h3>${restaurant.title}</h3>
+      <p>${restaurant.address}</p>
+      <p>${restaurant.category}</p>
+      <button data-place-id="${restaurant.id}">자세히 보기</button>
+    `;
+    restaurantList.appendChild(listItem);
+  }
 
   if (restaurants.length === 0) {
     console.error("음식점 목록이 비어 있습니다.");
