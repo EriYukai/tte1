@@ -503,7 +503,7 @@ async function displayRestaurants(restaurants, latitude, longitude) {
       <h3>${restaurant.title}</h3>
       <p>${restaurant.address}</p>
       <p>${restaurant.category}</p>
-      <button data-place-id="${restaurant.id}">자세히 보기</button>
+      <button data-index="${i}" data-place-id="${restaurant.id}">자세히 보기</button>
     `;
     restaurantList.appendChild(listItem);
   }
@@ -635,7 +635,8 @@ button.addEventListener("click", async function () {
   
   // 새 버튼 클릭 이벤트
   newButton.addEventListener("click", async function () {
-    const selectedRestaurant = document.querySelector(".selected");
+    const selectedRestaurantIndex = document.querySelector(".selected").dataset.index;
+    const selectedRestaurant = restaurants[selectedRestaurantIndex];
     let restaurants = [];
     if (selectedRestaurant) {
       
