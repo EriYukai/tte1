@@ -138,19 +138,19 @@ function showError(error) {
 
 async function displayRestaurantInfo(placeId) {
   const response = await fetch(`/api/restaurant-details?place_id=${placeId}`);
-  const detailData = await response.json();
+  const data = await response.json();
+  const restaurant = data.documents[0]; // 수정된 부분
 
-  const restaurantName = detailData.documents[0].place_name;
   const imageElement = document.querySelector("#restaurant-image-tag");
-  imageElement.src = detailData.restaurantImageUrl;
+  imageElement.src = restaurant.restaurantImageUrl;
 
   // 음식점 정보를 출력합니다.
-  console.log("음식점 이름:", restaurantName);
-  console.log("음식점 주소:", detailData.documents[0].address_name);
-  console.log("음식점 전화번호:", detailData.documents[0].phone);
-  console.log("음식점 카테고리:", detailData.documents[0].category_name);
-  console.log("음식점 위도:", detailData.documents[0].y);
-  console.log("음식점 경도:", detailData.documents[0].x);
+  console.log("음식점 이름:", restaurant.place_name);
+  console.log("음식점 주소:", restaurant.address_name);
+  console.log("음식점 전화번호:", restaurant.phone);
+  console.log("음식점 카테고리:", restaurant.category_name);
+  console.log("음식점 위도:", restaurant.y);
+  console.log("음식점 경도:", restaurant.x);
 
   // 추천 이유와 점수를 계산합니다.
   const today = new Date();
@@ -488,13 +488,11 @@ function addFadingDot(x, y) {
 
 
 async function displayRestaurants(restaurants) {
-  const restaurantName = restaurant.title;
-  const restaurantImageUrl = restaurant.image_url;
   const restaurantList = document.getElementById("restaurant-list");
   restaurantList.innerHTML = "";
 
   for (let i = 0; i < restaurants.length; i++) {
-    const restaurant = restaurants[i]; // 추가된 부분
+    const restaurant = restaurants[i];
     const listItem = document.createElement("li");
     listItem.innerHTML = `
       <h3>${restaurant.title}</h3>
@@ -504,6 +502,7 @@ async function displayRestaurants(restaurants) {
     `;
     restaurantList.appendChild(listItem);
   }
+
 
   if (restaurants.length === 0) {
     console.error("음식점 목록이 비어 있습니다.");
