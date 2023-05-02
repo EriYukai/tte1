@@ -136,7 +136,7 @@ function showError(error) {
 }
 
 
-async function displayRestaurantInfo(placeId) {
+const displayRestaurantInfo = async (placeId) => {
   if (!placeId) {
     console.error("올바르지 않은 placeId입니다.");
     return;
