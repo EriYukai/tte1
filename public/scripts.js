@@ -492,7 +492,7 @@ function addFadingDot(x, y) {
   }, 35);
 }
 
-async function displayRestaurants(restaurants, latitude, longitude) {
+async function displayRestaurants(restaurantsData, latitude, longitude) {
   const restaurantList = document.getElementById("restaurant-list");
   restaurantList.innerHTML = "";
   restaurants = restaurantsData;
@@ -508,6 +508,11 @@ async function displayRestaurants(restaurants, latitude, longitude) {
     `;
     restaurantList.appendChild(listItem);
   }
+
+  // 버튼 클릭 이벤트에서 displayRestaurants 호출 시 변수 전달
+  const restaurantsData = await getScoreForRestaurant(latitude, longitude);
+  displayRestaurants(restaurantsData, latitude, longitude);
+  await displayRestaurantInfo(restaurantsData[0].id, latitude, longitude);
 
   // 이 부분을 추가하세요.
   const detailButtons = document.querySelectorAll("[data-place-id]");
