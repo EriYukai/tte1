@@ -508,14 +508,44 @@ async function displayRestaurants(restaurants, latitude, longitude) {
     restaurantList.appendChild(listItem);
   }
 
+  // 이 부분을 추가하세요.
   const detailButtons = document.querySelectorAll("[data-place-id]");
   for (const button of detailButtons) {
     button.addEventListener("click", async (e) => {
-      const placeId = e.target.getAttribute("data-place-id");
-      await displayRestaurantInfo(placeId, latitude, longitude);
+      const placeId = e.target.dataset.placeId;
+      await displayRestaurantInfo(placeId);
     });
   }
+  
+  // 첫 번째 음식점 정보를 선택합니다.
+  const selectedRestaurant = restaurants[0];
+
+  // 이미지를 삽입할 div를 선택합니다.
+  const contentArea = document.querySelector(".content-area");
+  contentArea.innerHTML = ""; // 이전 이미지를 제거합니다.
+
+  // 음식점 이미지 출력
+  const imageElement = document.createElement("img");
+  imageElement.id = "restaurant-image-tag";
+  imageElement.src = selectedRestaurant.image_url;
+  imageElement.alt = selectedRestaurant.title;
+
+  // 이미지를 content-area div에 추가합니다.
+  contentArea.appendChild(imageElement);
+
+  // 음식점 이름 출력
+  const nameElement = document.querySelector("#restaurant-name");
+  nameElement.textContent = selectedRestaurant.title;
+
+  // 음식점 주소 출력
+  const addressElement = document.querySelector("#restaurant-address");
+  addressElement.textContent = selectedRestaurant.address;
+
+  // 음식점 전화번호 출력
+  const phoneElement = document.querySelector("#restaurant-phone");
+  phoneElement.textContent = selectedRestaurant.telephone;
 }
+
 
 
 // 버튼클릭 이벤트
