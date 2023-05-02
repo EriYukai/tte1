@@ -495,6 +495,11 @@ function addFadingDot(x, y) {
 async function displayRestaurants(restaurants, latitude, longitude) {
   const restaurantList = document.getElementById("restaurant-list");
   restaurantList.innerHTML = "";
+  
+  
+  // 첫 번째 음식점 정보를 선택합니다.
+  const selectedRestaurant = restaurants[0];
+
 
   for (let i = 0; i < restaurants.length; i++) {
     const restaurant = restaurants[i];
@@ -516,10 +521,6 @@ async function displayRestaurants(restaurants, latitude, longitude) {
       await displayRestaurantInfo(placeId);
     });
   }
-
-  
-  // 첫 번째 음식점 정보를 선택합니다.
-  const selectedRestaurant = restaurants[0];
 
   // 이미지를 삽입할 div를 선택합니다.
   const contentArea = document.querySelector(".content-area");
