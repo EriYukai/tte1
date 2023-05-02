@@ -492,13 +492,12 @@ function addFadingDot(x, y) {
   }, 35);
 }
 
-async function displayRestaurants(restaurantsData, latitude, longitude) {
+async function displayRestaurants(restaurants, latitude, longitude) {
   const restaurantList = document.getElementById("restaurant-list");
   restaurantList.innerHTML = "";
-  restaurants = restaurantsData;
 
-  for (let i = 0; i < restaurantsData.length; i++) {
-    const restaurant = restaurantsData[i];
+  for (let i = 0; i < restaurants.length; i++) {
+    const restaurant = restaurants[i];
     const listItem = document.createElement("li");
     listItem.innerHTML = `
       <h3>${restaurant.title}</h3>
@@ -509,11 +508,6 @@ async function displayRestaurants(restaurantsData, latitude, longitude) {
     restaurantList.appendChild(listItem);
   }
 
-  // 버튼 클릭 이벤트에서 displayRestaurants 호출 시 변수 전달
-  const restaurantsData = await getScoreForRestaurant(latitude, longitude);
-  displayRestaurants(restaurantsData, latitude, longitude);
-  await displayRestaurantInfo(restaurantsData[0].id, latitude, longitude);
-
   // 이 부분을 추가하세요.
   const detailButtons = document.querySelectorAll("[data-place-id]");
   for (const button of detailButtons) {
@@ -522,6 +516,7 @@ async function displayRestaurants(restaurantsData, latitude, longitude) {
       await displayRestaurantInfo(placeId);
     });
   }
+
   
   // 첫 번째 음식점 정보를 선택합니다.
   const selectedRestaurant = restaurants[0];
@@ -560,9 +555,9 @@ button.addEventListener("click", async function () {
   if (localStorage.getItem("locationPermissionGranted") === "true") {
     const latitude = localStorage.getItem("latitude");
     const longitude = localStorage.getItem("longitude");
-    const restaurantsData = await getScoreForRestaurant(latitude, longitude);
-    displayRestaurants(restaurantsData, latitude, longitude);
-    await displayRestaurantInfo(restaurantsData[0].id, latitude, longitude);
+    const restaurants = await getScoreForRestaurant(latitude, longitude);
+    displayRestaurants(restaurants, latitude, longitude);
+    await displayRestaurantInfo(restaurants[0].id); // 첫 번째 음식점 정보를 표시합니다.
   } else {
     navigator.geolocation.getCurrentPosition(async function (position) {
       const latitude = position.coords.latitude;
@@ -570,9 +565,10 @@ button.addEventListener("click", async function () {
       showPosition(position);
       const restaurants = await getScoreForRestaurant(latitude, longitude);
       displayRestaurants(restaurants, latitude, longitude);
-      await displayRestaurantInfo(restaurants[0].id, latitude, longitude); // 첫 번째 음식점 정보를 표시합니다.
+      await displayRestaurantInfo(restaurants[0].id); // 첫 번째 음식점 정보를 표시합니다.
     });
   }
+
 
   const audio = new Audio("ok.mp3");
   audio.volume = 0.2; // 볼륨을 20%로 설정
