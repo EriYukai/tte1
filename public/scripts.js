@@ -494,27 +494,36 @@ function addFadingDot(x, y) {
 
 async function displayRestaurants(restaurants) {
   const restaurantList = document.getElementById("restaurant-list");
-  if (!restaurantList) {
-    console.error("음식점 목록 요소를 찾을 수 없습니다.");
-    return;
-  }
   restaurantList.innerHTML = "";
 
+  for (let i = 0; i < restaurants.length; i++) {
+    const restaurant = restaurants[i];
+    const listItem = document.createElement("li");
+    listItem.innerHTML = `
+      <h3>${restaurant.title}</h3>
+      <p>${restaurant.address}</p>
+      <p>${restaurant.category}</p>
+      <button data-place-id="${restaurant.id}">자세히 보기</button>
+    `;
+    restaurantList.appendChild(listItem);
+  }
 
   if (restaurants.length === 0) {
     console.error("음식점 목록이 비어 있습니다.");
     return;
   }
-  for (let i = 0; i < restaurants.length; i++) {
-    const listItem = document.createElement("li");
-    listItem.innerHTML = `
-      <h3>${restaurants[i].title}</h3>
-      <p>${restaurants[i].address}</p>
-      <p>${restaurants[i].category}</p>
-      <button data-place-id="${restaurants[i].id}" onclick="displayRestaurantInfo('${restaurants[i].id}')">자세히 보기</button>
-    `;
-    restaurantList.appendChild(listItem);
-  }
+  
+  const buttons = document.querySelectorAll("[data-place-id]");
+  buttons.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      if (restaurants[index]) {
+        displayRestaurantInfo(restaurants[index].id);
+      } else {
+        console.error("올바르지 않은 인덱스입니다:", index);
+      }
+    });
+  });
+
   
   selectedRestaurant = restaurants[index];
 
