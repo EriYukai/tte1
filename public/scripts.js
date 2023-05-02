@@ -507,11 +507,11 @@ async function displayRestaurants(restaurants) {
     restaurantList.appendChild(listItem);
   }
 
-  // 이 부분을 추가하세요.
+  // 이 부분을 수정하세요.
   const detailButtons = document.querySelectorAll("[data-place-id]");
   for (const button of detailButtons) {
     button.addEventListener("click", async (e) => {
-      const placeId = e.target.dataset.placeId;
+      const placeId = e.target.getAttribute("data-place-id");
       await displayRestaurantInfo(placeId);
     });
   }
