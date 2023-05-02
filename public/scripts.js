@@ -500,29 +500,22 @@ async function displayRestaurants(restaurants) {
   }
   restaurantList.innerHTML = "";
 
-  for (let i = 0; i < restaurants.length; i++) {
-    const listItem = document.createElement("li");
-    listItem.innerHTML = `
-      <h3>${restaurants[i].title}</h3>
-      <p>${restaurants[i].address}</p>
-      <p>${restaurants[i].category}</p>
-      <button data-place-id="${restaurants[i].id}">자세히 보기</button>
-    `;
-    restaurantList.appendChild(listItem);
-  }
-  
-
-
 
   if (restaurants.length === 0) {
     console.error("음식점 목록이 비어 있습니다.");
     return;
   }
   for (let i = 0; i < restaurants.length; i++) {
-    const newButton = createButton(restaurants[i].title, restaurants[i].place_id);
-    console.error("올바르지 않은 인덱스입니다:", index);
-    return;
+    const listItem = document.createElement("li");
+    listItem.innerHTML = `
+      <h3>${restaurants[i].title}</h3>
+      <p>${restaurants[i].address}</p>
+      <p>${restaurants[i].category}</p>
+      <button data-place-id="${restaurants[i].id}" onclick="displayRestaurantInfo('${restaurants[i].id}')">자세히 보기</button>
+    `;
+    restaurantList.appendChild(listItem);
   }
+  
   selectedRestaurant = restaurants[index];
 
   // 이미지를 삽입할 div를 선택합니다.
