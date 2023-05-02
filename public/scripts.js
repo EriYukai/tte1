@@ -136,11 +136,6 @@ function showError(error) {
 }
 
 
-async function displayRestaurantInfo(placeId) {
-  if (!placeId) {
-    console.error("올바르지 않은 placeId입니다.");
-    return;
-  }
 
   const response = await fetch(`/api/restaurant-details?place_id=${placeId}`);
   const data = await response.json();
