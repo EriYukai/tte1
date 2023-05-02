@@ -137,6 +137,11 @@ function showError(error) {
 
 
 async function displayRestaurantInfo(placeId) {
+  if (!placeId) {
+    console.error("올바르지 않은 placeId입니다.");
+    return;
+  }
+
   const response = await fetch(`/api/restaurant-details?place_id=${placeId}`);
   const data = await response.json();
   const restaurant = data.documents[0]; // 수정된 부분
@@ -489,6 +494,12 @@ function addFadingDot(x, y) {
 
 async function displayRestaurants(restaurants) {
   const restaurantList = document.getElementById("restaurant-list");
+  
+  if (!restaurantList) {
+    console.error("음식점 목록 요소를 찾을 수 없습니다.");
+    return;
+  }
+  
   restaurantList.innerHTML = "";
 
   for (let i = 0; i < restaurants.length; i++) {
@@ -502,6 +513,7 @@ async function displayRestaurants(restaurants) {
     `;
     restaurantList.appendChild(listItem);
   }
+
 
 
   if (restaurants.length === 0) {
