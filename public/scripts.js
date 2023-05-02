@@ -495,6 +495,7 @@ function addFadingDot(x, y) {
 async function displayRestaurants(restaurants, latitude, longitude) {
   const restaurantList = document.getElementById("restaurant-list");
   restaurantList.innerHTML = "";
+  restaurants = restaurantsData;
 
   for (let i = 0; i < restaurants.length; i++) {
     const restaurant = restaurants[i];
@@ -634,6 +635,7 @@ button.addEventListener("click", async function () {
   // 새 버튼 클릭 이벤트
   newButton.addEventListener("click", async function () {
   const selectedRestaurant = document.querySelector(".selected");
+  let restaurants = [];
   if (selectedRestaurant) {
   const restaurant = {
   title: selectedRestaurant.querySelector(".title").innerText,
