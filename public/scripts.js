@@ -136,6 +136,11 @@ function showError(error) {
 }
 
 
+async function displayRestaurantInfo(placeId) {
+  if (!placeId) {
+    console.error("올바르지 않은 placeId입니다.");
+    return;
+  }
 
   const response = await fetch(`/api/restaurant-details?place_id=${placeId}`);
   const data = await response.json();
@@ -198,6 +203,7 @@ function showError(error) {
 
   console.log("최종 점수:", score);
   console.log("추천 이유:", reason);
+  
 }
 
 // scripts.js
@@ -509,46 +515,6 @@ async function displayRestaurants(restaurants) {
       await displayRestaurantInfo(placeId);
     });
   }
-}
-
-async function displayRestaurantInfo(placeId) {
-  // 이 부분을 추가하세요.
-  const selectedRestaurant = restaurants.find(restaurant => restaurant.id === placeId);
-
-  if (!selectedRestaurant) {
-    console.error("음식점 정보가 없습니다.");
-    return;
-  }
-
-  const restaurantImageUrl = selectedRestaurant.image_url;
-  const restaurantName = selectedRestaurant.title;
-  const restaurantAddress = selectedRestaurant.address;
-  const restaurantPhone = selectedRestaurant.telephone;
-
-  // 이미지를 삽입할 div를 선택합니다.
-  const contentArea = document.querySelector(".content-area");
-  contentArea.innerHTML = ""; // 이전 이미지를 제거합니다.
-
-  // 음식점 이미지 출력
-  const imageElement = document.createElement("img");
-  imageElement.id = "restaurant-image-tag";
-  imageElement.src = restaurantImageUrl;
-  imageElement.alt = restaurantName;
-
-  // 이미지를 content-area div에 추가합니다.
-  contentArea.appendChild(imageElement);
-
-  // 음식점 이름 출력
-  const nameElement = document.querySelector("#restaurant-name");
-  nameElement.textContent = restaurantName;
-
-  // 음식점 주소 출력
-  const addressElement = document.querySelector("#restaurant-address");
-  addressElement.textContent = restaurantAddress;
-
-  // 음식점 전화번호 출력
-  const phoneElement = document.querySelector("#restaurant-phone");
-  phoneElement.textContent = restaurantPhone;
 }
 
 
