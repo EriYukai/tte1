@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
     restaurantList.addEventListener("click", function (event) {
       if (event.target.tagName === "BUTTON") {
         const placeId = event.target.dataset.placeId;
-        displayRestaurantInfo(placeId); // 변경된 부분
+        displayRestaurantInfo(restaurants[0].id); // 변경된 부분
       }
     });
   }
@@ -557,7 +557,7 @@ button.addEventListener("click", async function () {
     const longitude = localStorage.getItem("longitude");
     const restaurants = await getScoreForRestaurant(latitude, longitude);
     displayRestaurants(restaurants, latitude, longitude);
-    await displayRestaurantInfo(placeId[0]); // 첫 번째 음식점 정보를 표시합니다.
+    await displayRestaurantInfo(restaurants[0].id); // 첫 번째 음식점 정보를 표시합니다.
   } else {
     navigator.geolocation.getCurrentPosition(async function (position) {
       const latitude = position.coords.latitude;
@@ -565,7 +565,7 @@ button.addEventListener("click", async function () {
       showPosition(position);
       const restaurants = await getScoreForRestaurant(latitude, longitude);
       displayRestaurants(restaurants, latitude, longitude);
-      await displayRestaurantInfo(placeId[0]); // 첫 번째 음식점 정보를 표시합니다.
+      await displayRestaurantInfo(restaurants[0].id); // 첫 번째 음식점 정보를 표시합니다.
     });
   }
 
@@ -639,7 +639,7 @@ button.addEventListener("click", async function () {
   const restaurant = {
   title: selectedRestaurant.querySelector(".title").innerText,
   };
-  await displayRestaurantInfo(placeId);
+  await displayRestaurantInfo(restaurants[0].id);;
   } else {
   alert("음식점을 선택해 주세요.");
   }
