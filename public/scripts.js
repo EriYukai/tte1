@@ -490,8 +490,6 @@ function addFadingDot(x, y) {
       fadingDot.remove();
   }, 35);
 }
-
-
 async function displayRestaurants(restaurants) {
   const restaurantList = document.getElementById("restaurant-list");
   restaurantList.innerHTML = "";
@@ -508,22 +506,29 @@ async function displayRestaurants(restaurants) {
     restaurantList.appendChild(listItem);
   }
 
-  if (restaurants.length === 0) {
-    console.error("음식점 목록이 비어 있습니다.");
+  // 이 부분을 추가하세요.
+  const detailButtons = document.querySelectorAll("[data-place-id]");
+  for (const button of detailButtons) {
+    button.addEventListener("click", async (e) => {
+      const placeId = e.target.dataset.placeId;
+      await displayRestaurantInfo(placeId);
+    });
+  }
+}
+
+async function displayRestaurantInfo(placeId) {
+  // 이 부분을 추가하세요.
+  const selectedRestaurant = restaurants.find(restaurant => restaurant.id === placeId);
+
+  if (!selectedRestaurant) {
+    console.error("음식점 정보가 없습니다.");
     return;
   }
 
-  const buttons = document.querySelectorAll("button[data-place-id]");
-  buttons.forEach(button => {
-    button.addEventListener("click", async () => {
-      const placeId = button.getAttribute("data-place-id");
-      await displayRestaurantInfo(placeId);
-    });
-  });
-
-
-  
-  selectedRestaurant = restaurants[index];
+  const restaurantImageUrl = selectedRestaurant.image_url;
+  const restaurantName = selectedRestaurant.title;
+  const restaurantAddress = selectedRestaurant.address;
+  const restaurantPhone = selectedRestaurant.telephone;
 
   // 이미지를 삽입할 div를 선택합니다.
   const contentArea = document.querySelector(".content-area");
@@ -534,13 +539,9 @@ async function displayRestaurants(restaurants) {
   imageElement.id = "restaurant-image-tag";
   imageElement.src = restaurantImageUrl;
   imageElement.alt = restaurantName;
-  
 
   // 이미지를 content-area div에 추가합니다.
   contentArea.appendChild(imageElement);
-
-  const restaurantAddress = restaurant.address;
-  const restaurantPhone = restaurant.telephone;
 
   // 음식점 이름 출력
   const nameElement = document.querySelector("#restaurant-name");
@@ -553,8 +554,8 @@ async function displayRestaurants(restaurants) {
   // 음식점 전화번호 출력
   const phoneElement = document.querySelector("#restaurant-phone");
   phoneElement.textContent = restaurantPhone;
-
 }
+
 
 // 버튼클릭 이벤트
 const button = document.getElementById("recommendation-button");
