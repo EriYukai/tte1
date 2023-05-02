@@ -512,17 +512,15 @@ async function displayRestaurants(restaurants) {
     console.error("음식점 목록이 비어 있습니다.");
     return;
   }
-  
-  const buttons = document.querySelectorAll("[data-place-id]");
-  buttons.forEach((button, index) => {
-    button.addEventListener("click", () => {
-      if (restaurants[index]) {
-        displayRestaurantInfo(restaurants[index].id);
-      } else {
-        console.error("올바르지 않은 인덱스입니다:", index);
-      }
+
+  const buttons = document.querySelectorAll("button[data-place-id]");
+  buttons.forEach(button => {
+    button.addEventListener("click", async () => {
+      const placeId = button.getAttribute("data-place-id");
+      await displayRestaurantInfo(placeId);
     });
   });
+
 
   
   selectedRestaurant = restaurants[index];
