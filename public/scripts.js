@@ -497,8 +497,8 @@ async function displayRestaurants(restaurantsData, latitude, longitude) {
   restaurantList.innerHTML = "";
   restaurants = restaurantsData;
 
-  for (let i = 0; i < restaurants.length; i++) {
-    const restaurant = restaurants[i];
+  for (let i = 0; i < restaurantsData.length; i++) {
+    const restaurant = restaurantsData[i];
     const listItem = document.createElement("li");
     listItem.innerHTML = `
       <h3>${restaurant.title}</h3>
@@ -560,9 +560,9 @@ button.addEventListener("click", async function () {
   if (localStorage.getItem("locationPermissionGranted") === "true") {
     const latitude = localStorage.getItem("latitude");
     const longitude = localStorage.getItem("longitude");
-    const restaurants = await getScoreForRestaurant(latitude, longitude);
-    displayRestaurants(restaurants, latitude, longitude);
-    await displayRestaurantInfo(restaurants[0].id, latitude, longitude); // 첫 번째 음식점 정보를 표시합니다.
+    const restaurantsData = await getScoreForRestaurant(latitude, longitude);
+    displayRestaurants(restaurantsData, latitude, longitude);
+    await displayRestaurantInfo(restaurantsData[0].id, latitude, longitude);
   } else {
     navigator.geolocation.getCurrentPosition(async function (position) {
       const latitude = position.coords.latitude;
