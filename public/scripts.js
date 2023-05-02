@@ -2,7 +2,7 @@ async function showPosition(position) {
   const lat = position.coords.latitude;
   const lon = position.coords.longitude;
   const restaurants = await getRestaurants(lat, lon); // 수정된 부분
-  displayRestaurants(restaurants);
+  displayRestaurants(restaurants, latitude, longitude);
 
   const container = document.getElementById('map');
   const options = {
@@ -212,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (newButton) {
     newButton.addEventListener("click", async function () {
       const restaurants = await getRestaurants();
-      displayRestaurants(restaurants);
+      displayRestaurants(restaurants, latitude, longitude);
     });
   }
 
@@ -384,7 +384,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (newButton) {
     newButton.addEventListener("click", async function () {
       const restaurants = await getRestaurants();
-      displayRestaurants(restaurants);
+      displayRestaurants(restaurants, latitude, longitude);
     });
   }
   let shimmerDot;
@@ -491,7 +491,8 @@ function addFadingDot(x, y) {
       fadingDot.remove();
   }, 35);
 }
-async function displayRestaurants(restaurants) {
+
+async function displayRestaurants(restaurants, latitude, longitude) {
   const restaurantList = document.getElementById("restaurant-list");
   restaurantList.innerHTML = "";
 
