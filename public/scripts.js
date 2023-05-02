@@ -494,25 +494,23 @@ function addFadingDot(x, y) {
 
 async function displayRestaurants(restaurants) {
   const restaurantList = document.getElementById("restaurant-list");
-  
   if (!restaurantList) {
     console.error("음식점 목록 요소를 찾을 수 없습니다.");
     return;
   }
-  
   restaurantList.innerHTML = "";
 
   for (let i = 0; i < restaurants.length; i++) {
-    const restaurant = restaurants[i];
     const listItem = document.createElement("li");
     listItem.innerHTML = `
-      <h3>${restaurant.title}</h3>
-      <p>${restaurant.address}</p>
-      <p>${restaurant.category}</p>
-      <button data-place-id="${restaurant.id}">자세히 보기</button>
+      <h3>${restaurants[i].title}</h3>
+      <p>${restaurants[i].address}</p>
+      <p>${restaurants[i].category}</p>
+      <button data-place-id="${restaurants[i].id}">자세히 보기</button>
     `;
     restaurantList.appendChild(listItem);
   }
+  
 
 
 
