@@ -635,16 +635,37 @@ button.addEventListener("click", async function () {
   
   // 새 버튼 클릭 이벤트
   newButton.addEventListener("click", async function () {
-  const selectedRestaurant = document.querySelector(".selected");
-  let restaurants = [];
-  if (selectedRestaurant) {
-  const restaurant = {
-  title: selectedRestaurant.querySelector(".title").innerText,
-  };
-  await displayRestaurantInfo(restaurants[0].id, latitude, longitude);
+    const selectedRestaurant = document.querySelector(".selected");
+    let restaurants = [];
+    if (selectedRestaurant) {
+      
+    // 이미지를 삽입할 div를 선택합니다.
+    const contentArea = document.querySelector(".content-area");
+    contentArea.innerHTML = ""; // 이전 이미지를 제거합니다.
+  
+    // 음식점 이미지 출력
+    const imageElement = document.createElement("img");
+    imageElement.id = "restaurant-image-tag";
+    imageElement.src = selectedRestaurant.image_url;
+    imageElement.alt = selectedRestaurant.title;
+  
+    // 이미지를 content-area div에 추가합니다.
+    contentArea.appendChild(imageElement);
+  
+    // 음식점 이름 출력
+    const nameElement = document.querySelector("#restaurant-name");
+    nameElement.textContent = selectedRestaurant.title;
+  
+    // 음식점 주소 출력
+    const addressElement = document.querySelector("#restaurant-address");
+    addressElement.textContent = selectedRestaurant.address;
+  
+    // 음식점 전화번호 출력
+    const phoneElement = document.querySelector("#restaurant-phone");
+    phoneElement.textContent = selectedRestaurant.telephone;
   } else {
-  alert("음식점을 선택해 주세요.");
-  }
+    alert("음식점을 선택해 주세요.");
+  }  
   });
   });
 
