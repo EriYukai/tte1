@@ -525,7 +525,7 @@ button.addEventListener("click", async function () {
     const longitude = localStorage.getItem("longitude");
     const restaurants = await getScoreForRestaurant(latitude, longitude);
     displayRestaurants(restaurants, latitude, longitude);
-    await displayRestaurantInfo(restaurants[0].id); // 첫 번째 음식점 정보를 표시합니다.
+    await displayRestaurantInfo(restaurants[0].id, latitude, longitude); // 첫 번째 음식점 정보를 표시합니다.
   } else {
     navigator.geolocation.getCurrentPosition(async function (position) {
       const latitude = position.coords.latitude;
