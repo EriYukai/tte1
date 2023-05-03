@@ -58,7 +58,7 @@ function getScoreForRestaurant(restaurant) {
   // 인기 트렌드 포인트
   const TrendScore = Math.random() * 0.5;
 
-  // 최종 점수
+  // 최종 점수 ㅋㅋㅋㅋㅋㅋㅋㅋㅋ
   const score = anniversaryScore + timeScore + TrendScore;
 
   console.log("음식점 이름:", restaurant.place_name);
