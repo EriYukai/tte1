@@ -495,6 +495,37 @@ function addFadingDot(x, y) {
   }, 35);
 }
 
+async function fetchNearbyRestaurants(latitude, longitude) {
+  const response = await fetch('/.netlify/functions/get-nearby-restaurants', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      latitude,
+      longitude,
+    }),
+  });
+
+  return await response.json();
+}
+
+async function displayRestaurantInfo(placeId) {
+  const response = await fetch('/.netlify/functions/get-restaurant-details', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      place_id: placeId,
+    }),
+  });
+
+  const restaurant = await response.json();
+
+  // Update the UI with restaurant details
+}
+
 async function displayRestaurants(restaurants, latitude, longitude) {
   const restaurantList = document.getElementById("restaurant-list");
   restaurantList.innerHTML = "";
@@ -552,6 +583,17 @@ async function displayRestaurants(restaurants, latitude, longitude) {
   const phoneElement = document.querySelector("#restaurant-phone");
   phoneElement.textContent = selectedRestaurant.telephone;
 }
+
+async function init() {
+  const latitude = 37.5665;
+  const longitude = 126.9780;
+
+  const restaurants = await fetchNearbyRestaurants(latitude, longitude);
+  displayRestaurants(restaurants, latitude, longitude);
+}
+
+init();
+
 
 
 
