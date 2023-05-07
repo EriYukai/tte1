@@ -509,6 +509,37 @@ async function fetchNearbyRestaurants(latitude, longitude) {
 
   return await response.json();
 }
+async function fetchNearbyRestaurants(latitude, longitude) {
+  const response = await fetch('/.netlify/functions/get-nearby-restaurants', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      latitude,
+      longitude,
+    }),
+  });
+
+  const data = await response.json();
+  return data.results;
+}
+
+async function displayRestaurantInfo(placeId) {
+  const response = await fetch('/.netlify/functions/get-restaurant-details', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      place_id: placeId,
+    }),
+  });
+
+  const restaurant = await response.json();
+
+  // Update the UI with restaurant details
+}
 
 async function displayRestaurants(restaurants, latitude, longitude) {
   const restaurantList = document.getElementById("restaurant-list");
@@ -517,7 +548,6 @@ async function displayRestaurants(restaurants, latitude, longitude) {
   for (let i = 0; i < restaurants.length; i++) {
     const restaurant = restaurants[i];
 
-    // 음식점 객체 유효성 검사
     if (restaurant && restaurant.image_url && restaurant.id) {
       const listItem = document.createElement("li");
       listItem.innerHTML = `
@@ -530,10 +560,8 @@ async function displayRestaurants(restaurants, latitude, longitude) {
     }
   }
 
-  // 첫 번째 음식점 정보를 선택합니다.
   const selectedRestaurant = restaurants[0];
 
-  // 이 부분을 추가하세요.
   const detailButtons = document.querySelectorAll("[data-place-id]");
   for (const button of detailButtons) {
     button.addEventListener("click", async (e) => {
@@ -542,28 +570,22 @@ async function displayRestaurants(restaurants, latitude, longitude) {
     });
   }
 
-  // 이미지를 삽입할 div를 선택합니다.
   const contentArea = document.querySelector(".content-area");
-  contentArea.innerHTML = ""; // 이전 이미지를 제거합니다.
+  contentArea.innerHTML = "";
 
-  // 음식점 이미지 출력
   const imageElement = document.createElement("img");
   imageElement.id = "restaurant-image-tag";
   imageElement.src = selectedRestaurant.image_url;
   imageElement.alt = selectedRestaurant.title;
 
-  // 이미지를 content-area div에 추가합니다.
   contentArea.appendChild(imageElement);
 
-  // 음식점 이름 출력
   const nameElement = document.querySelector("#restaurant-name");
   nameElement.textContent = selectedRestaurant.title;
 
-  // 음식점 주소 출력
   const addressElement = document.querySelector("#restaurant-address");
   addressElement.textContent = selectedRestaurant.address;
 
-  // 음식점 전화번호 출력
   const phoneElement = document.querySelector("#restaurant-phone");
   phoneElement.textContent = selectedRestaurant.telephone;
 }
@@ -577,7 +599,6 @@ async function init() {
 }
 
 init();
-
 
 
 
