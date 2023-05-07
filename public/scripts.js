@@ -109,6 +109,15 @@ async function getRestaurantDetails(restaurantName) {
 }
 
 
+async function getRestaurantDetails(id) {
+  const position = await new Promise((resolve) => navigator.geolocation.getCurrentPosition(resolve));
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+  const response = await getNearbyRestaurants({ latitude, longitude });
+  const restaurants = response.data;
+  return restaurants.find((restaurant) => restaurant.id === id);
+}
+
 function initMap() {
   // 사용자의 위치를 얻기 위한 geolocation API 사용
   if (navigator.geolocation) {
@@ -636,10 +645,10 @@ button.addEventListener("click", async function () {
   
   // 새 버튼 클릭 이벤트
   newButton.addEventListener("click", async function () {
-    const selectedRestaurantIndex = document.querySelector(".selected").dataset.index;
-    const selectedRestaurant = restaurants[selectedRestaurantIndex];
-    let restaurants = [];
+    const selectedRestaurant = document.querySelector(".selected");
     if (selectedRestaurant) {
+      const id = selectedRestaurant.id;
+      const restaurant = await getRestaurantDetails(id);
       
     // 이미지를 삽입할 div를 선택합니다.
     const contentArea = document.querySelector(".content-area");
