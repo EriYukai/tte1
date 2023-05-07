@@ -65,11 +65,12 @@ exports.handler = async function (event, context) {
       };
     }
 
-    const restaurantImageUrl = detailData.documents[0].photo && detailData.documents[0].photo[0].url ? detailData.documents[0].photo[0].url : "";
+    const restaurant = detailData.documents[0];
+    const restaurantImageUrl = restaurant.photo && restaurant.photo.length > 0 ? restaurant.photo[0].url : "";
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ ...detailData, restaurantImageUrl }),
+      body: JSON.stringify({ ...restaurant, restaurantImageUrl }),
     };
   } catch (error) {
     console.error(error);
