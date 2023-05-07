@@ -1,3 +1,7 @@
+// scripts.js
+const getNearbyRestaurants = firebase.functions().httpsCallable("getNearbyRestaurants");
+
+
 async function showPosition(position) {
   const lat = position.coords.latitude;
   const lon = position.coords.longitude;
