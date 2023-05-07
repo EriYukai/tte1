@@ -103,13 +103,7 @@ function handleLocationPermissionDenied() {
 localStorage.setItem("locationPermissionGranted", "false");
 }
 
-
-async function getRestaurantDetails(restaurantName) {
-  // ...
-}
-
-
-async function getRestaurantDetails(id) {
+async function getRestaurantDetails(id, restaurantName) {
   const position = await new Promise((resolve) => navigator.geolocation.getCurrentPosition(resolve));
   const latitude = position.coords.latitude;
   const longitude = position.coords.longitude;
