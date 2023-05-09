@@ -546,15 +546,6 @@ async function displayRestaurants(restaurants, latitude, longitude) {
     }
   }
 
-  const selectedRestaurant = restaurants[0];
-
-  const detailButtons = document.querySelectorAll("[data-place-id]");
-  for (const button of detailButtons) {
-    button.addEventListener("click", async (e) => {
-      const placeId = e.target.dataset.placeId;
-      await displayRestaurantInfo(placeId);
-    });
-  }
 
   const contentArea = document.querySelector(".content-area");
   contentArea.innerHTML = "";
