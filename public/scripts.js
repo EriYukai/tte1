@@ -507,8 +507,7 @@ async function fetchNearbyRestaurants(latitude, longitude) {
     }),
   });
 
-  const data = await response.json();
-  return data.results;
+  return await response.json();
 }
 
 async function displayRestaurantInfo(placeId) {
@@ -523,48 +522,49 @@ async function displayRestaurantInfo(placeId) {
   });
 
   const restaurant = await response.json();
-
   // Update the UI with restaurant details
 }
 
-async function displayRestaurants(restaurants, latitude, longitude) {
+async function displayRestaurants(restaurants) {
   const restaurantList = document.getElementById("restaurant-list");
   restaurantList.innerHTML = "";
 
-  for (let i = 0; i < restaurants.length; i++) {
-    const restaurant = restaurants[i];
-
+  restaurants.forEach((restaurant, index) => {
     if (restaurant && restaurant.image_url && restaurant.id) {
       const listItem = document.createElement("li");
       listItem.innerHTML = `
         <h3>${restaurant.title}</h3>
         <p>${restaurant.address}</p>
         <p>${restaurant.category}</p>
-        <button data-index="${i}" data-place-id="${restaurant.id}">자세히 보기</button>
+        <button data-index="${index}" data-place-id="${restaurant.id}">자세히 보기</button>
       `;
       restaurantList.appendChild(listItem);
     }
-  }
+  });
 
+  const detailButtons = document.querySelectorAll("[data-place-id]");
+  detailButtons.forEach(button => {
+    button.addEventListener("click", async (e) => {
+      const placeId = e.target.dataset.placeId;
+      await displayRestaurantInfo(placeId);
+    });
+  });
 
   const contentArea = document.querySelector(".content-area");
   contentArea.innerHTML = "";
 
+  const selectedRestaurant = restaurants[0];
+  const { image_url, title, address, telephone } = selectedRestaurant;
+
   const imageElement = document.createElement("img");
   imageElement.id = "restaurant-image-tag";
-  imageElement.src = selectedRestaurant.image_url;
-  imageElement.alt = selectedRestaurant.title;
-
+  imageElement.src = image_url;
+  imageElement.alt = title;
   contentArea.appendChild(imageElement);
 
-  const nameElement = document.querySelector("#restaurant-name");
-  nameElement.textContent = selectedRestaurant.title;
-
-  const addressElement = document.querySelector("#restaurant-address");
-  addressElement.textContent = selectedRestaurant.address;
-
-  const phoneElement = document.querySelector("#restaurant-phone");
-  phoneElement.textContent = selectedRestaurant.telephone;
+  document.querySelector("#restaurant-name").textContent = title;
+  document.querySelector("#restaurant-address").textContent = address;
+  document.querySelector("#restaurant-phone").textContent = telephone;
 }
 
 async function init() {
@@ -572,11 +572,17 @@ async function init() {
   const longitude = 126.9780;
 
   const restaurants = await fetchNearbyRestaurants(latitude, longitude);
-  displayRestaurants(restaurants, latitude, longitude);
+  displayRestaurants(restaurants);
 }
 
 init();
 
+document.getElementById("뭐먹지").addEventListener("click", async () => {
+  const latitude = 37.5665;
+  const longitude = 126.9780;
+  const restaurants = await fetchNearbyRestaurants(latitude, longitude);
+  displayRestaurants(restaurants);
+});
 
 
 
