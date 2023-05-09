@@ -563,7 +563,7 @@ async function init() {
 
 init();
 
-document.getElementById("뭐먹지").addEventListener("click", async () => {
+document.getElementById("recommendation-button").addEventListener("click", async () => {
   const latitude = 37.5665;
   const longitude = 126.9780;
   const restaurants = await fetchNearbyRestaurants(latitude, longitude);
