@@ -510,20 +510,6 @@ async function fetchNearbyRestaurants(latitude, longitude) {
   return await response.json();
 }
 
-async function displayRestaurantInfo(placeId) {
-  const response = await fetch('/.netlify/functions/get-restaurant-details', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      place_id: placeId,
-    }),
-  });
-
-  const restaurant = await response.json();
-  // Update the UI with restaurant details
-}
 
 async function displayRestaurants(restaurants) {
   const restaurantList = document.getElementById("restaurant-list");
