@@ -444,4 +444,18 @@ async function showPosition(position) {
   window[functionName] = function() {};
   }
   
+  async function fetchNearbyRestaurants(latitude, longitude) {
+    const response = await fetch('/.netlify/functions/get-nearby-restaurants', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        latitude,
+        longitude,
+      }),
+    });
+  
+    return await response.json();
+  }
   
