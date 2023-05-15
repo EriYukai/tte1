@@ -1,4 +1,6 @@
-const fetch = (...args) => import('node-fetch').then(({default: f}) => f(...args));
+// index.js
+
+const fetch = require('node-fetch'); 
 const { getNearbyRestaurants, getRestaurantImage, getRestaurantRecommendation } = require('../api');
 
 exports.handler = async function(event, context) {
