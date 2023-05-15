@@ -1,4 +1,4 @@
-document.querySelector('#what-to-eat-button').addEventListener('click', async function() {
+document.querySelector('recommendation-button').addEventListener('click', async function() {
   if (!navigator.geolocation) {
     alert('Geolocation is not supported by your browser');
     return;
