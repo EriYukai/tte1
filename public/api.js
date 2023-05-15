@@ -1,4 +1,5 @@
-// api.js 파일에 추가
+// api.js
+
 export function getUserLocation() {
   return new Promise((resolve, reject) => {
     if (navigator.geolocation) {
@@ -14,33 +15,24 @@ export function getUserLocation() {
   });
 }
 
-import axios from 'axios';
-
 export async function getNearbyRestaurants(lat, lng, apiKey) {
-  const response = await axios.get(`https://dapi.kakao.com/v2/local/search/keyword.json`, {
-    params: {
-      query: '음식점',
-      radius: 2000,
-      x: lng,
-      y: lat
-    },
+  const response = await fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=음식점&radius=2000&x=${lng}&y=${lat}`, {
     headers: {
       Authorization: `KakaoAK ${apiKey}`
     }
   });
-  return response.data.documents.slice(0, 15);
+  const data = await response.json();
+  return data.documents.slice(0, 15);
 }
 
 export async function getRestaurantImage(placeId, apiKey) {
-  const response = await axios.get(`https://dapi.kakao.com/v2/local/search/place.json`, {
-    params: {
-      id: placeId
-    },
+  const response = await fetch(`https://dapi.kakao.com/v2/local/search/place.json?id=${placeId}`, {
     headers: {
       Authorization: `KakaoAK ${apiKey}`
     }
   });
-  return response.data.documents[0].photo.url;
+  const data = await response.json();
+  return data.documents[0].photo.url;
 }
 
 export async function getRestaurantRecommendation(restaurants) {
