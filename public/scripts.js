@@ -1,3 +1,45 @@
+document.querySelector('#what-to-eat-button').addEventListener('click', async function() {
+  if (!navigator.geolocation) {
+    alert('Geolocation is not supported by your browser');
+    return;
+  }
+  
+  navigator.geolocation.getCurrentPosition(async function(position) {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+    
+    const response = await fetch(`/get-nearby-restaurants?lat=${lat}&lng=${lng}`);
+    const data = await response.json();
+    
+    if (response.ok) {
+      // Show restaurant images on the background
+      const grid = document.querySelector('#background-grid');
+      grid.innerHTML = '';
+      for (let i = 0; i < data.restaurants.length; i++) {
+        const restaurant = data.restaurants[i];
+        const img = document.createElement('img');
+        img.src = restaurant.image;
+        grid.appendChild(img);
+      }
+      
+      // Show recommendation
+      const balloon = document.querySelector('#recommendation-balloon');
+      balloon.textContent = `I recommend ${data.recommendation.name} because ${data.recommendation.reason}`;
+      
+      // Show restaurant location on the map
+      // You should implement this part using Kakao Map JavaScript API
+      
+      // Show more info button
+      const moreInfoButton = document.querySelector('#more-info-button');
+      moreInfoButton.href = `https://map.kakao.com/link/to/${data.recommendation.name},${lat},${lng}`;
+      moreInfoButton.style.display = 'block';
+    } else {
+      alert('An error occurred: ' + data.error);
+    }
+  }, function() {
+    alert('Unable to retrieve your location');
+  });
+});
 
 
 
