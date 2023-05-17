@@ -7,14 +7,19 @@ exports.handler = async function(event, context) {
   // Dynamically import node-fetch
   const fetch = (await import('node-fetch')).default;
 
-  // Fetch nearby restaurants
-  const restaurantsResponse = await fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=음식점&radius=2000&x=${lng}&y=${lat}`, {
-    headers: {
-      Authorization: `KakaoAK ${apiKey}`
-    }
-  });
-  const restaurantsData = await restaurantsResponse.json();
-  const restaurants = restaurantsData.documents.slice(0, 15);
+// Fetch nearby restaurants
+const restaurantsResponse = await fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=음식점&radius=2000&x=${lng}&y=${lat}`, {
+  headers: {
+    Authorization: `KakaoAK ${apiKey}`
+  }
+});
+const restaurantsData = await restaurantsResponse.json();
+
+// Log the response data
+console.log('restaurantsData:', restaurantsData);
+
+const restaurants = restaurantsData.documents.slice(0, 15);
+
 
   // Fetch restaurant recommendations
   const YOUR_OPENAI_API_KEY = process.env.OPENAI_API_KEY;
