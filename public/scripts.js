@@ -8,7 +8,7 @@ document.querySelector('#recommendation-button').addEventListener('click', async
     const lat = position.coords.latitude;
     const lng = position.coords.longitude;
     
-    const response = await fetch(`/get-nearby-restaurants?lat=${lat}&lng=${lng}`);
+    const response = await fetch(`/.netlify/functions/get-nearby-restaurants?lat=${lat}&lng=${lng}`);
     const data = await response.json();
     
     if (response.ok) {
