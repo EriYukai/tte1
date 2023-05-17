@@ -1,28 +1,37 @@
-// index.js
+// get-nearby-restaurants.js
 
-const fetch = require('node-fetch'); 
-const { getNearbyRestaurants, getRestaurantImage, getRestaurantRecommendation } = require('../api');
+const fetch = require('node-fetch');
 
 exports.handler = async function(event, context) {
   const { lat, lng } = event.queryStringParameters;
 
-  try {
-    const restaurants = await getNearbyRestaurants(lat, lng, process.env.KAKAO_API_KEY);
-    for(let i = 0; i < restaurants.length; i++) {
-      const restaurant = restaurants[i];
-      restaurant.image = await getRestaurantImage(restaurant.id, process.env.KAKAO_API_KEY);
+  const url = `https://dapi.kakao.com/v2/local/search/keyword.json?y=${lat}&x=${lng}&radius=20000&query=음식점`;
+  const options = {
+    headers: {
+      'Authorization': `KakaoAK ${process.env.KAKAO_API_KEY}`
     }
+  };
 
-    const recommendation = await getRestaurantRecommendation(restaurants);
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    if (!response.ok) {
+      // Handle non-OK responses
+      console.error('An error occurred: ' + data.message);
+      return {
+        statusCode: response.status,
+        body: JSON.stringify({
+          error: 'An error occurred while fetching restaurant data: ' + data.message
+        })
+      };
+    }
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        restaurants,
-        recommendation
-      })
+      body: JSON.stringify(data)
     };
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     return {
       statusCode: 500,
