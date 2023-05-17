@@ -1,8 +1,10 @@
 // get-nearby-restaurants/index.js
-const fetch = require('node-fetch');
 
 exports.handler = async function(event, context) {
   const { lat, lng, apiKey } = JSON.parse(event.body);
+
+  // Dynamically import node-fetch
+  const fetch = (await import('node-fetch')).default;
 
   // Fetch nearby restaurants
   const restaurantsResponse = await fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=음식점&radius=2000&x=${lng}&y=${lat}`, {
