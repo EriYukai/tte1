@@ -1,5 +1,4 @@
 // api.js
-
 export function getUserLocation() {
   return new Promise((resolve, reject) => {
     if (navigator.geolocation) {
@@ -16,13 +15,15 @@ export function getUserLocation() {
 }
 
 export async function getNearbyRestaurants(lat, lng, apiKey) {
-  const response = await fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=음식점&radius=2000&x=${lng}&y=${lat}`, {
+  const response = await fetch('/.netlify/functions/get-nearby-restaurants', {
+    method: 'POST',
     headers: {
-      Authorization: `KakaoAK ${apiKey}`
-    }
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ lat, lng, apiKey })
   });
   const data = await response.json();
-  return data.documents.slice(0, 15);
+  return data;
 }
 
 export async function getRestaurantImage(placeId, apiKey) {
@@ -34,30 +35,3 @@ export async function getRestaurantImage(placeId, apiKey) {
   const data = await response.json();
   return data.documents[0].photo.url;
 }
-
-// api.js
-
-const fetch = require('node-fetch'); 
-
-export async function getRestaurantRecommendation(restaurants) {
-  const YOUR_OPENAI_API_KEY = process.env.OPENAI_API_KEY; 
-
-  const response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${YOUR_OPENAI_API_KEY}` 
-    },
-    body: JSON.stringify({
-      prompt: `Here are some restaurants: ${restaurants.map(r => r.name).join(', ')}. Which one should I choose?`,
-      max_tokens: 60
-    })
-  });
-
-  const data = await response.json();
-  return {
-    name: 'Recommended restaurant',  
-    reason: data.choices[0].text.trim()  
-  };
-}
-

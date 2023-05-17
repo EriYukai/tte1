@@ -1,43 +1,41 @@
-// get-nearby-restaurants.js
-
+// get-nearby-restaurants/index.js
 const fetch = require('node-fetch');
 
 exports.handler = async function(event, context) {
-  const { lat, lng } = event.queryStringParameters;
+  const { lat, lng, apiKey } = JSON.parse(event.body);
 
-  const url = `https://dapi.kakao.com/v2/local/search/keyword.json?y=${lat}&x=${lng}&radius=20000&query=음식점`;
-  const options = {
+  // Fetch nearby restaurants
+  const restaurantsResponse = await fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=음식점&radius=2000&x=${lng}&y=${lat}`, {
     headers: {
-      'Authorization': `KakaoAK ${process.env.KAKAO_API_KEY}`
+      Authorization: `KakaoAK ${apiKey}`
     }
+  });
+  const restaurantsData = await restaurantsResponse.json();
+  const restaurants = restaurantsData.documents.slice(0, 15);
+
+  // Fetch restaurant recommendations
+  const YOUR_OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+  const recommendationResponse = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${YOUR_OPENAI_API_KEY}`
+    },
+    body: JSON.stringify({
+      prompt: `Here are some restaurants: ${restaurants.map(r => r.place_name).join(', ')}. Which one should I choose?`,
+      max_tokens: 60
+    })
+  });
+  const recommendationData = await recommendationResponse.json();
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      restaurants,
+      recommendation: {
+        name: 'Recommended restaurant',
+        reason: recommendationData.choices[0].text.trim()
+      }
+    })
   };
-
-  try {
-    const response = await fetch(url, options);
-    const data = await response.json();
-
-    if (!response.ok) {
-      // Handle non-OK responses
-      console.error('An error occurred: ' + data.message);
-      return {
-        statusCode: response.status,
-        body: JSON.stringify({
-          error: 'An error occurred while fetching restaurant data: ' + data.message
-        })
-      };
-    }
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify(data)
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: 'An error occurred while fetching restaurant data'
-      })
-    };
-  }
-};
+}
